@@ -11,11 +11,11 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["quickstart", "index"]
-      },
+        "pages": ["index", "quickstart"]
+      }
       {
         "group": "Guides",
-        "pages": ["cli-guide", "skill-tests-wiki"]
+        "pages": ["skill-tests-wiki", "cli-guide"]
       },
       {
         "group": "Self-Hosting",
