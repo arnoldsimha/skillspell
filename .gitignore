@@ -60,10 +60,10 @@ docker/saml/mock-saml.crt
 .automation/
 
 # graphify scratch output dir (default GRAPHIFY_OUT). The committed knowledge
-# graph lives in docs/graph/ — graphify-out/ is regenerable working output.
+# graph lives in graph/ — graphify-out/ is regenerable working output.
 graphify-out/
 # graphify AST/semantic cache — regenerable, not tracked
-docs/graph/cache/
+graph/cache/
 
 # Internal code-review / migration working notes — kept locally, not shipped
 .review/

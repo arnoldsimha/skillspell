@@ -68,14 +68,14 @@ Follow existing patterns found in the codebase.
 
 ## Knowledge Graph
 
-The codebase knowledge graph exists at `/docs/graph/` and contains the full architectural map. Before making decisions about dependencies, placements, or refactors:
+The codebase knowledge graph exists at `/graph/` and contains the full architectural map. Before making decisions about dependencies, placements, or refactors:
 
-1. **Read GRAPH_REPORT.md first** — `/docs/graph/GRAPH_REPORT.md` contains key concepts, node summaries, and surprising connections
-2. **View the graph visually** — Open `/docs/graph/graph.html` for interactive exploration
+1. **Read GRAPH_REPORT.md first** — `/graph/GRAPH_REPORT.md` contains key concepts, node summaries, and surprising connections
+2. **View the graph visually** — Open `/graph/graph.html` for interactive exploration
 3. **Query the graph** — point graphify at the committed graph via `GRAPHIFY_OUT`:
 
    ```bash
-   export GRAPHIFY_OUT=docs/graph                      # graphify reads/writes here
+   export GRAPHIFY_OUT=graph                           # graphify reads/writes here
    graphify query "question about relationships"       # find connections
    graphify explain "ComponentName"                    # understand a component
    graphify path "Source" "Target"                     # trace dependency paths
@@ -89,11 +89,11 @@ The codebase knowledge graph exists at `/docs/graph/` and contains the full arch
 - Investigating architectural issues or circular dependencies
 - Making decisions about breaking changes or API contracts
 
-**Graph update workflow:** graphify has **no `--out`/`--output` flag** — its output dir is the `GRAPHIFY_OUT` env var (default `graphify-out/`). To regenerate into the tracked `docs/graph/` directly, set it for both steps, then commit:
+**Graph update workflow:** graphify has **no `--out`/`--output` flag** — its output dir is the `GRAPHIFY_OUT` env var (default `graphify-out/`). To regenerate into the tracked `graph/` directly, set it for both steps, then commit:
 
 ```bash
-GRAPHIFY_OUT=docs/graph graphify extract . --backend=claude-cli       # AST + semantic extraction
-GRAPHIFY_OUT=docs/graph graphify cluster-only . --backend=claude-cli  # builds GRAPH_REPORT.md + names communities
+GRAPHIFY_OUT=graph graphify extract . --backend=claude-cli       # AST + semantic extraction
+GRAPHIFY_OUT=graph graphify cluster-only . --backend=claude-cli  # builds GRAPH_REPORT.md + names communities
 ```
 
 (`--backend=claude-cli` uses the local authenticated Claude CLI / subscription — no API key needed.)
