@@ -298,6 +298,37 @@ All ports can be overridden via environment variables in `packages/backend/.env`
 
 ---
 
+## Roadmap
+
+Planned and proposed work. Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### MCP context enrichment
+- [ ] Connect skills to Model Context Protocol (MCP) servers so generation, refinement, and eval can pull live context (docs, code, tickets, APIs) from external tools
+- [ ] Let skill authors attach MCP resources/tools as named context sources
+- [ ] Feed MCP-provided context into the eval runner so grading reflects real runtime context
+- [ ] Expose SkillSpell itself as an MCP server so agents can search and install skills over MCP
+
+### CLI enhancements
+- [ ] `skillspell init` — scaffold a new skill locally from a template
+- [ ] `skillspell publish` / `push` — create or update a skill on your instance from local files
+- [ ] `skillspell validate` — lint a `SKILL.md` offline before publishing
+- [ ] `skillspell sync` — update all installed skills in one command
+- [ ] Version pinning + a lockfile for reproducible installs across a team
+- [ ] Shell completions (bash/zsh/fish) and a first-class non-interactive `--json` / CI mode
+- [ ] Interactive TUI to browse and search the marketplace
+
+### Also proposed
+- [ ] **Self-hosting** — official container image + Helm chart so teams can deploy without hand-writing manifests
+- [ ] **Second storage adapter** behind the existing repository ports (PostgreSQL is the only one today)
+- [ ] **Eval quality** — grader decomposition and multi-sample presets (Fast / Standard / Thorough) for more reliable, less noisy scores
+- [ ] **Marketplace** — ratings & reviews, category browsing, and a real "featured" feed
+- [ ] **Observability** — per-skill cost & latency dashboards on top of the existing Langfuse integration
+- [ ] **Security** — MFA/2FA and org-level audit logging
+- [ ] **Integrations** — outbound webhooks (skill published, benchmark completed) for CI pipelines
+- [ ] **Quality** — broader end-to-end test coverage and an accessibility / i18n pass on the UI
+
+---
+
 ## Third-Party Dependencies
 
 ### AI & LLM
