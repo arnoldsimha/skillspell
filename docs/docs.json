@@ -11,8 +11,19 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["index", "quickstart"]
-      }
+        "pages": [
+          "index",
+          {
+            "group": "Quick Start",
+            "pages": [
+              "quickstart/index",
+              "quickstart/installation",
+              "quickstart/environment-setup",
+              "quickstart/first-access"
+            ]
+          }
+        ]
+      },
       {
         "group": "Guides",
         "pages": ["skill-tests-wiki", "cli-guide"]
