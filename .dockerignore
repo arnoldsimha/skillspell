@@ -1,0 +1,51 @@
+# Dependencies (will be installed fresh in Docker)
+node_modules/
+packages/*/node_modules/
+
+# Build output (will be built fresh in Docker)
+dist/
+packages/*/dist/
+
+# Environment files (secrets must not be baked into the image)
+.env
+.env.local
+*.local
+packages/backend/.env
+packages/frontend/.env
+
+# Version control
+.git/
+.gitignore
+
+# IDE / Editor
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test / Coverage
+coverage/
+packages/backend/coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Plan documents (not needed inside the image)
+plans/
+
+# Agent output
+debug-response-*.txt
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore

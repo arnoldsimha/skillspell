@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SkillSpell — Production Docker Compose
+#
+# Extends the base docker-compose.yml with production-specific settings:
+# - No dev tools (pgAdmin, Mailpit, Aspire Dashboard)
+# - Migration init container runs before the app
+# - App health check for orchestrator-level monitoring
+# - Environment loaded from .env file with production secrets
+#
+# Usage:
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml --profile app up -d
+#
+# Or set COMPOSE_FILE in your environment:
+#   export COMPOSE_FILE=docker/docker-compose.yml:docker/docker-compose.prod.yml
+#   docker compose --profile app up -d
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  # Override: production app settings
+  skillspell:
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      # Disable debug prompt dumping in production
+      DEBUG_DUMP_PROMPTS: "false"
+      # Postgres SYNCHRONIZE must be false in production — use migrations
+      POSTGRES_SYNCHRONIZE: "false"
+    # Production: stricter resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 512M
+          cpus: "0.25"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Override: production migration settings
+  migrate:
+    restart: "no"
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  # Override: production Postgres settings
+  postgres:
+    restart: unless-stopped
+    # Production: persist data in a named volume (already in base)
+    # Consider backup strategy for pgdata volume
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

@@ -1,0 +1,43 @@
+{
+  "name": "@skillspell/cli",
+  "version": "1.0.0",
+  "description": "SkillSpell CLI — install AI agent skills",
+  "author": "Arnold Simha",
+  "license": "Apache-2.0",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "skillspell": "./dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "dev": "tsup --watch",
+    "test": "node --experimental-vm-modules ../../node_modules/.bin/jest",
+    "test:watch": "node --experimental-vm-modules ../../node_modules/.bin/jest --watch",
+    "test:cov": "node --experimental-vm-modules ../../node_modules/.bin/jest --coverage"
+  },
+  "dependencies": {
+    "@clack/prompts": "1.2.0",
+    "commander": "14.0.3",
+    "diff": "^9.0.0",
+    "open": "^11.0.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.15.26",
+    "@swc/jest": "^0.2.39",
+    "@types/diff": "^7.0.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.10.7",
+    "jest": "^30.0.0",
+    "tsup": "8.5.1",
+    "typescript": "^5.7.3"
+  }
+}

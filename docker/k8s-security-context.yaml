@@ -1,0 +1,173 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SkillSpell Kubernetes Deployment — Security Context Reference
+#
+# This file provides a security-hardened deployment template.
+# Adjust resource limits, replicas, and env vars for your environment.
+#
+# Finding 11: Enforces non-root execution, read-only root filesystem,
+# dropped capabilities, and resource limits.
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skillspell
+  labels:
+    app: skillspell
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: skillspell
+  template:
+    metadata:
+      labels:
+        app: skillspell
+    spec:
+      # Pod-level security context
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+
+      # Init container: run database migrations before the app starts.
+      # Uses the same image; exits after migration completes.
+      initContainers:
+        - name: migrate
+          image: skillspell:latest
+          command:
+            - node
+            - ../../node_modules/.bin/typeorm
+            - migration:run
+            - -d
+            - ../../packages/storage/postgres/dist/data-source.js
+          workingDir: /app/packages/backend
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          env:
+            - name: POSTGRES_HOST
+              value: "postgres-service"  # Adjust to your K8s service name
+            - name: POSTGRES_PORT
+              value: "5432"
+            # DB credentials should come from Secrets:
+            # - name: POSTGRES_DB
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: skillspell-db-secrets
+            #       key: database
+            # - name: POSTGRES_USER
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: skillspell-db-secrets
+            #       key: username
+            # - name: POSTGRES_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: skillspell-db-secrets
+            #       key: password
+
+      containers:
+        - name: skillspell
+          image: skillspell:latest
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+
+          # Container-level security context
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+
+          # Resource limits prevent DoS via resource exhaustion
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+
+          # Writable directories mounted as emptyDir volumes
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+
+          # Liveness and readiness probes
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 5
+
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+
+          # Startup probe — gives the app more time on first boot
+          # (NestJS module init + TypeORM connection can take a few seconds)
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            failureThreshold: 10
+            periodSeconds: 5
+
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: SKILLS_PROJECT_DIR
+              value: "/app"
+            - name: POSTGRES_SYNCHRONIZE
+              value: "false"
+            # All other env vars should come from Secrets/ConfigMaps:
+            # - name: JWT_SECRET
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: skillspell-secrets
+            #       key: jwt-secret
+
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 50Mi
+
+      # Prevent scheduling on the same node for HA
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - skillspell
+                topologyKey: kubernetes.io/hostname

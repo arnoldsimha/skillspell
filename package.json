@@ -1,0 +1,65 @@
+{
+  "name": "skillspell",
+  "version": "1.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "Arnold Simha",
+  "description": "SkillSpell - Create, modify, and optimize AI agent skills using natural language",
+  "workspaces": [
+    "packages/*",
+    "packages/storage/*"
+  ],
+  "scripts": {
+    "shared:build": "npm run build -w packages/shared",
+    "storage:build": "npm run shared:build && npm run build -w packages/storage/postgres",
+    "backend:dev": "npm run storage:build && concurrently -n shared,postgres,nest -c blue,magenta,green \"npm run build:watch -w packages/shared\" \"npm run build:watch -w packages/storage/postgres\" \"portless api.skillspell npm run start:dev -w packages/backend\"",
+    "backend:build": "npm run storage:build && npm run build -w packages/backend",
+    "frontend:dev": "portless skillspell npm run dev -w packages/frontend",
+    "frontend:build": "npm run build -w packages/frontend",
+    "db:setup": "npm run migration:run -w packages/storage/postgres",
+    "db:postgres:up": "docker compose -f docker/docker-compose.yml up -d",
+    "db:postgres:down": "docker compose -f docker/docker-compose.yml down",
+    "db:postgres:migrate": "npm run migration:run -w packages/storage/postgres",
+    "mail:up": "docker compose -f docker/docker-compose.yml --profile tools up mailpit -d",
+    "mail:down": "docker compose -f docker/docker-compose.yml --profile tools stop mailpit",
+    "otel:up": "docker compose -f docker/docker-compose.yml --profile tools up aspire -d",
+    "otel:down": "docker compose -f docker/docker-compose.yml --profile tools stop aspire",
+    "saml:up": "docker compose -f docker/docker-compose.yml --profile saml up keycloak -d",
+    "saml:down": "docker compose -f docker/docker-compose.yml --profile saml stop keycloak",
+    "saml:seed": "echo 'saml:seed is no longer needed — configure SSO via Admin UI → Organization Settings → SSO / SAML. See docs/dev-saml.md.'",
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "cli:build": "npm run build -w packages/cli",
+    "build": "npm run backend:build && npm run frontend:build",
+    "lint": "npm run lint -w packages/backend && npm run lint -w packages/frontend",
+    "test": "npm run test -w packages/backend && npm run test -w packages/frontend",
+    "docker:build": "docker build -t skillspell:latest .",
+    "docker:run": "docker run --rm -p 3000:3000 --env-file packages/backend/.env skillspell:latest",
+    "docker:up": "docker compose -f docker/docker-compose.yml --profile app up -d --build",
+    "docker:down": "docker compose -f docker/docker-compose.yml --profile app down",
+    "docker:up:all": "docker compose -f docker/docker-compose.yml --profile app --profile tools up -d --build",
+    "docker:prod:up": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml --profile app up -d --build",
+    "docker:prod:down": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml --profile app down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "portless": "^0.7.2"
+  },
+  "overrides": {
+    "@angular-devkit/core": {
+      "ajv": "8.18.0"
+    },
+    "@anthropic-ai/sdk": "^0.95.0",
+    "lodash": "4.18.1",
+    "lodash-es": "4.18.1",
+    "path-to-regexp": "8.4.2",
+    "picomatch": "4.0.4",
+    "protobufjs": ">=7.5.5",
+    "dompurify": ">=3.3.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "openai": "^6.45.0"
+  }
+}

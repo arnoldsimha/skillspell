@@ -1,0 +1,10 @@
+You have been invited to SkillSpell
+
+{{inviterName}} has invited you to join {{orgName}} on SkillSpell.
+
+Accept the invitation by visiting:
+{{inviteLink}}
+
+This invitation link expires in 1 hour.
+
+If you did not expect this invitation, you can safely ignore this email.

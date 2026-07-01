@@ -1,0 +1,276 @@
+# Docker Compose for local development services (Postgres, pgAdmin, Mailpit, etc.)
+# Usage: docker compose -f docker/docker-compose.yml up -d
+#
+# ⚠️  SECURITY: every credential, password, and encryption key in this file
+# (POSTGRES_PASSWORD, MINIO_ROOT_PASSWORD/miniosecret, LANGFUSE ENCRYPTION_KEY,
+# KEYCLOAK_ADMIN_PASSWORD, etc.) is a LOCAL-DEVELOPMENT DEFAULT ONLY. They are
+# intentionally weak for convenience. Production deployments run on separate
+# infrastructure (k8s) and MUST override all of these with real secrets — never
+# reuse these values or expose these ports publicly.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-skillspell}
+      POSTGRES_USER: ${POSTGRES_USER:-skillspell}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-skillspell_dev}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-skillspell}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@skillspell.dev}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-changeme}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - tools
+
+  # Redis — in-memory data store for caching (grading results) and state.
+  # No requirepass for local dev — set REDIS_PASSWORD in .env for staging/prod.
+  # Port is configurable via REDIS_PORT env var (default: 6379).
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Redis web UI — browse keys, monitor, flush cached data.
+  # Web UI: http://localhost:8081
+  # Usage: docker compose -f docker/docker-compose.yml --profile tools up redis-commander -d
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8081}:8081"
+    environment:
+      REDIS_HOSTS: "local:redis:6379"
+    depends_on:
+      redis:
+        condition: service_healthy
+    profiles:
+      - tools
+
+  # .NET Aspire Dashboard — OTEL traces, metrics, and logs viewer.
+  # Web UI: http://localhost:18888
+  # OTLP gRPC: http://localhost:18889  |  OTLP HTTP: http://localhost:18890
+  # Usage: docker compose -f docker/docker-compose.yml --profile tools up aspire -d
+  # Then set OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:18890 in .env
+  # @see https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/dashboard/standalone
+  aspire:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0
+    ports:
+      - "${ASPIRE_DASHBOARD_PORT:-18888}:18888"
+      - "${ASPIRE_OTLP_GRPC_PORT:-18889}:18889"
+      - "${ASPIRE_OTLP_HTTP_PORT:-18890}:18890"
+    environment:
+      # Allow anonymous access (no auth token needed for dev dashboard)
+      DASHBOARD__FRONTEND__AUTHMODE: Unsecured
+      # gRPC OTLP endpoint (port 18889)
+      DASHBOARD__OTLP__ENDPOINTURL: http://0.0.0.0:18889
+      # HTTP/protobuf OTLP endpoint (port 18890) — used by Node.js OTEL SDK
+      DASHBOARD__OTLP__HTTP__ENDPOINTURL: http://0.0.0.0:18890
+    profiles:
+      - tools
+
+  # Dev SMTP server — catches all outgoing emails and displays them in a web UI.
+  # Web UI: http://localhost:8025   SMTP: localhost:1025
+  # SMTP settings: host=localhost, port=1025, security=none, authMethod=none
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "${MAILPIT_UI_PORT:-8025}:8025"
+    environment:
+      # Max messages to store (oldest are pruned)
+      MP_MAX_MESSAGES: 500
+    profiles:
+      - tools
+
+  # Langfuse v3 LLM Observability — web UI at http://localhost:3001
+  # Start the whole stack (postgres + redis come up automatically):
+  #   docker compose -f docker/docker-compose.yml --profile langfuse up -d
+  # (Also reachable via the broader `--profile tools`.)
+  # One-time DB setup: docker compose -f docker/docker-compose.yml exec postgres psql -U ${POSTGRES_USER:-skillspell} -c "CREATE DATABASE langfuse;"
+  langfuse-web:
+    image: langfuse/langfuse:3
+    depends_on: [postgres, clickhouse, redis, minio]
+    ports:
+      - "${LANGFUSE_PORT:-3001}:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-skillspell}:${POSTGRES_PASSWORD:-skillspell_dev}@postgres:5432/langfuse
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse
+      REDIS_CONNECTION_STRING: redis://redis:6379/1
+      LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: miniosecret
+      LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+      NEXTAUTH_URL: http://localhost:${LANGFUSE_PORT:-3001}
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-dev-only-change-me}
+      SALT: ${LANGFUSE_SALT:-dev-only-change-me}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+    profiles:
+      - tools
+      - langfuse
+
+  langfuse-worker:
+    image: langfuse/langfuse-worker:3
+    depends_on: [postgres, clickhouse, redis, minio]
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-skillspell}:${POSTGRES_PASSWORD:-skillspell_dev}@postgres:5432/langfuse
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse
+      REDIS_CONNECTION_STRING: redis://redis:6379/1
+      LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: miniosecret
+      LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+      SALT: ${LANGFUSE_SALT:-dev-only-change-me}
+      ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+    profiles:
+      - tools
+      - langfuse
+
+  clickhouse:
+    # NOTE: must be the standard (non-alpine) image. Langfuse v3 migrations use
+    # `ON CLUSTER default` + ReplicatedMergeTree, which require the embedded
+    # Keeper + `default` cluster config that ships in config.d/ of this image.
+    # The -alpine variant strips those files → "no Zookeeper configuration" (code 139).
+    image: clickhouse/clickhouse-server:24.12
+    environment:
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse
+    volumes:
+      - clickhousedata:/var/lib/clickhouse
+      # Embedded single-node Keeper so Langfuse's ReplicatedMergeTree migrations work.
+      - ./clickhouse/keeper_config.xml:/etc/clickhouse-server/config.d/keeper_config.xml:ro
+    profiles:
+      - tools
+      - langfuse
+
+  minio:
+    image: minio/minio:latest
+    # Pre-create the `langfuse` bucket (path-style → a dir under /data) before
+    # starting the server. Langfuse v3 writes trace payloads to this bucket and
+    # does NOT auto-create it; without this every ingest fails "Failed to upload to S3".
+    entrypoint: sh
+    command: -c 'mkdir -p /data/langfuse && minio server /data --console-address ":9001"'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: miniosecret
+    ports:
+      - "${MINIO_PORT:-9090}:9000"
+    volumes:
+      - miniodata:/data
+    profiles:
+      - tools
+      - langfuse
+
+  # Keycloak Identity Provider — for testing SSO locally without a real IdP.
+  # Admin UI:       http://localhost:8080  (admin / admin)
+  # SAML metadata:  http://localhost:8080/realms/master/protocol/saml/descriptor
+  #
+  # Setup:
+  #   1. Start: npm run saml:up
+  #   2. Open http://localhost:8080 — log in with admin / admin
+  #   3. Create a realm (or use master), create a SAML client for SkillSpell
+  #   4. Configure SAML via Admin UI → Organization Settings → SSO / SAML
+  keycloak:
+    image: keycloak/keycloak:latest
+    command: start-dev
+    ports:
+      - "${KEYCLOAK_PORT:-8080}:8080"
+    environment:
+      KEYCLOAK_ADMIN: "${KEYCLOAK_ADMIN:-admin}"
+      KEYCLOAK_ADMIN_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD:-admin}"
+    profiles:
+      - saml
+
+  # Run database migrations before the app starts.
+  # Uses the same image as the app; only runs TypeORM migration:run.
+  # The app service depends on this completing successfully.
+  migrate:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: ["node", "../../node_modules/.bin/typeorm", "migration:run", "-d", "../../packages/storage/postgres/dist/data-source.js"]
+    working_dir: /app/packages/backend
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-skillspell}
+      POSTGRES_USER: ${POSTGRES_USER:-skillspell}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-skillspell_dev}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - app
+
+  # SkillSpell application (NestJS backend + React SPA).
+  # Only starts with the "app" profile:
+  #   docker compose -f docker/docker-compose.yml --profile app up -d
+  skillspell:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-skillspell}
+      POSTGRES_USER: ${POSTGRES_USER:-skillspell}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-skillspell_dev}
+      # Use the system CA certificate store (Node ≥ 20.12) so corporate
+      # proxy root CAs installed in the container are trusted.
+      NODE_USE_SYSTEM_CA: "1"
+      # Security: TLS verification is enabled by default.
+      # If you need to skip TLS for a corporate proxy, set this in your .env file — NOT here.
+      # NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    env_file:
+      - ../packages/backend/.env
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    profiles:
+      - app
+
+volumes:
+  pgdata:
+  clickhousedata:
+  miniodata:

@@ -1,0 +1,20 @@
+{
+  "name": "@skillspell/shared",
+  "version": "1.0.0",
+  "description": "Shared types for SkillSpell",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "build:watch": "tsc -p tsconfig.watch.json --watch --preserveWatchOutput"
+  },
+  "license": "Apache-2.0"
+}
