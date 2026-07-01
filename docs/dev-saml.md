@@ -1,3 +1,8 @@
+---
+title: "SSO / SAML (Local Dev)"
+description: "Set up SAML/OIDC single sign-on locally with Keycloak"
+---
+
 # Local SAML SSO Testing with Keycloak
 
 ## Overview
@@ -5,8 +10,6 @@
 SkillSpell's backend includes a full SAML 2.0 Service Provider (SP). During development you don't need a real corporate Identity Provider (IdP) — this guide walks you through running a local Keycloak container so you can test the complete SSO login flow — including `skillspell login --sso` — entirely on your local machine without any external dependency.
 
 Keycloak is a production-grade IdP with a real admin UI, real SAML metadata endpoints, and full support for arbitrary realm and client configuration. It replaces the previous containerized mock IdP that was used for local SAML testing.
-
-> **Note:** The key generation script (`scripts/generate-mock-saml-keys.sh`) is no longer needed. You may delete it if desired.
 
 ---
 
@@ -126,7 +129,9 @@ Click **Save SSO Configuration**.
 
 ## Testing the CLI SSO Flow
 
-Make sure the backend is running (`npm run backend:dev`) and Keycloak is up (`npm run saml:up`).
+Make sure the backend is running and Keycloak is up (`npm run saml:up`).
+
+> **Base URLs:** The default `npm run dev` (portless) setup serves the app at `http://skillspell.localhost:1355` and the backend at `http://api.skillspell.localhost:1355`. The examples below use these. `http://localhost:3000` is only the fallback when you run the backend/frontend individually (`npm run backend:dev` / `npm run frontend:dev`) without portless routing. The CLI does not hardcode a port — it uses a configurable base URL set via `skillspell config url`.
 
 ```bash
 skillspell login --sso
@@ -135,7 +140,7 @@ skillspell login --sso
 What happens:
 
 1. The CLI starts a local callback server and opens your browser to:
-   `http://localhost:3000/api/auth/saml/login?cli_redirect=http://localhost:<port>/callback`
+   `http://api.skillspell.localhost:1355/api/auth/saml/login?cli_redirect=http://localhost:<port>/callback`
 
 2. The backend generates a SAML AuthnRequest and redirects your browser to Keycloak:
    `http://localhost:8080/realms/{realm}/protocol/saml`
@@ -156,7 +161,7 @@ What happens:
 
 ## Testing the Browser SSO Flow
 
-1. Navigate to `http://localhost:3000` and click **Sign in with SSO**.
+1. Navigate to `http://skillspell.localhost:1355` and click **Sign in with SSO**.
 2. Enter the email of your test user and click **Continue**.
 3. You are redirected to the Keycloak login form.
 4. Enter your test user's email and password. Click **Sign in**.
@@ -263,10 +268,10 @@ Developer:
   SkillSpell Admin UI → SSO / SAML → Save   # provisions SAML config into DB
 
 SAML Login Flow:
-  Browser → backend :3000/api/auth/saml/login
+  Browser → backend api.skillspell.localhost:1355/api/auth/saml/login
          → Keycloak :8080/realms/{realm}/protocol/saml
          → (user enters test user credentials)
-         → backend :3000/api/auth/saml/callback
+         → backend api.skillspell.localhost:1355/api/auth/saml/callback
          → authenticated
 ```
 

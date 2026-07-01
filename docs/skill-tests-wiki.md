@@ -1,3 +1,8 @@
+---
+title: "Evaluating Skills"
+description: "Create test cases, grade skills, run benchmarks, and use the optimization loop"
+---
+
 # Skill Tests — Complete Guide
 
 > **Audience**: Users of SkillSpell who want to understand how to test, evaluate, and improve their AI skills using the built-in evaluation system.
@@ -139,7 +144,7 @@ To create a test case, navigate to a skill's **Tests** page and click **"Add Tes
 | **Prompt** | Yes | The input that will be sent to the AI model. This is what the model will respond to while following your skill's instructions. |
 | **Expected Output** | No | A reference answer. Used by the AI grader as comparison context — it doesn't need to be an exact match. |
 | **Assertions** | No (but recommended) | Rules that the output must satisfy. Without assertions, the test auto-passes. |
-| **Context** | No | Additional background information for the test. Provides extra detail for understanding the test's purpose. |
+| **Context** | No | Additional background/scenario setup for the test. This is **not** inert documentation: at run time the context is prepended to the user message, wrapped in a `<context>...</context>` block, before the prompt. The same context is included in **both** the with-skill and baseline runs, so the comparison stays fair. |
 
 ### Assertions — The Heart of Testing
 
@@ -330,7 +335,7 @@ The AI grader returns:
 - **Evidence** explaining why it passed or failed
 - **Confidence score** (0–1) for its assessment
 
-Grading results are **cached** so that re-running the exact same evaluation (same output + same assertions) returns cached results instantly without another AI call.
+Each AI grading pass makes a fresh Claude call — grading results are **not cached**, so re-running an evaluation always re-grades the output. (Prompt caching is used within a run to reduce the token cost of repeatedly sending the grader instructions and skill content, but this is a token optimization, not a results cache: the model is still invoked each time.)
 
 ### Grading Results
 
@@ -464,15 +469,17 @@ A table showing how each **individual test case** performs:
 
 ### Discrimination Analysis
 
-This is one of the most powerful analytical features. When you run tests with baseline comparison enabled, the system classifies each assertion into one of five categories:
+This is one of the most powerful analytical features. When you run tests with baseline comparison enabled, the system compares each assertion's **with-skill pass rate** against its **baseline pass rate** and classifies it into one of five categories. Classification is based on a **10-percentage-point delta** between the two pass rates, not on a single-run pass/fail flip — this makes the signal robust when you run each case multiple times.
 
-| Category | Meaning | Action |
-|----------|---------|--------|
-| **Skill Adds Value** | The assertion passes with the skill but fails without it | ✅ This assertion is working correctly — it validates something your skill contributes |
-| **Non-Discriminating** | The assertion passes both with and without the skill | ⚠️ This assertion isn't actually testing your skill — consider replacing it with something more specific |
-| **Skill Hurts** | The assertion fails with the skill but passes without it | 🔴 Your skill is making this worse — investigate what instruction is causing the regression |
-| **Broken** | The assertion fails in both configurations | ❌ The assertion may be testing beyond the model's capability or have an incorrect expected value |
-| **Inconclusive** | Not enough baseline data to determine | Run tests with baseline comparison enabled to get a classification |
+| Category | Meaning (pass rates as percentages) | Action |
+|----------|-------------------------------------|--------|
+| **Skill Adds Value** | With-skill pass rate is more than 10 points higher than baseline (`withSkillPassRate > baselinePassRate + 10`) | ✅ This assertion is working correctly — it validates something your skill contributes |
+| **Non-Discriminating** | Both pass rates are very high (both ≥ 95%) — the check passes regardless of the skill | ⚠️ This assertion isn't actually testing your skill — consider replacing it with something more specific |
+| **Skill Hurts** | Baseline pass rate is more than 10 points higher than with-skill (`baselinePassRate > withSkillPassRate + 10`) | 🔴 Your skill is making this worse — investigate what instruction is causing the regression |
+| **Broken** | Both pass rates are very low (both ≤ 5%) — the check fails in both configurations | ❌ The assertion may be testing beyond the model's capability or have an incorrect expected value |
+| **Inconclusive** | No baseline data, or the gap between pass rates is within ±10 points and neither "both high" nor "both low" applies | Run tests with baseline comparison enabled (and enough runs) to get a clearer classification |
+
+> **How the thresholds combine**: the system first checks the extremes — both pass rates ≥ 95% is **Non-Discriminating**, both ≤ 5% is **Broken**. Otherwise it looks at the delta: a with-skill lead greater than 10 points is **Skill Adds Value**, a baseline lead greater than 10 points is **Skill Hurts**. Anything else (including a difference of 10 points or less) is **Inconclusive**.
 
 **Why this matters**: Non-discriminating assertions waste evaluation resources and give a false sense of coverage. If 5 out of 8 assertions are non-discriminating, your skill might not be as well-tested as it appears.
 
@@ -605,7 +612,7 @@ The **"Generate Tests"** feature creates complete test cases (with prompts, asse
 - Prior eval failure patterns (to focus on known problem areas)
 - Grader feedback summaries (to target weak spots)
 
-For large batches (>20), the system automatically splits into sequential API calls, passing previously generated case names to ensure diversity across batches.
+For large batches (`>20`), the system automatically splits into sequential API calls, passing previously generated case names to ensure diversity across batches.
 
 ### Assertion Replacement Suggestions
 
@@ -715,7 +722,7 @@ After the loop finishes (either by reaching the target pass rate, hitting the ma
 3. Shows the improvement delta (how much better the best iteration is vs. the starting point)
 4. Lets you **approve** the improved skill or discard it
 
-A plateau is detected when the test score fails to improve for 2 consecutive iterations — at that point, further iterations are unlikely to help.
+A plateau is detected when the test score shows no improvement across a 3-iteration window (this requires at least 3 completed iterations): the loop compares the newest iteration's test score to the one from two iterations earlier, and if the newest is no higher, it stops — at that point, further iterations are unlikely to help.
 
 ---
 

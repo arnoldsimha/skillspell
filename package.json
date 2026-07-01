@@ -26,7 +26,6 @@
     "otel:down": "docker compose -f docker/docker-compose.yml --profile tools stop aspire",
     "saml:up": "docker compose -f docker/docker-compose.yml --profile saml up keycloak -d",
     "saml:down": "docker compose -f docker/docker-compose.yml --profile saml stop keycloak",
-    "saml:seed": "echo 'saml:seed is no longer needed — configure SSO via Admin UI → Organization Settings → SSO / SAML. See docs/dev-saml.md.'",
     "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
     "cli:build": "npm run build -w packages/cli",
     "build": "npm run backend:build && npm run frontend:build",

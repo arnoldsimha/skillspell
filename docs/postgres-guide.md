@@ -1,3 +1,8 @@
+---
+title: "PostgreSQL"
+description: "Database setup, migrations, and pgAdmin for self-hosting SkillSpell"
+---
+
 # PostgreSQL Storage Guide
 
 SkillSpell uses PostgreSQL as its storage backend. This guide covers local setup, configuration, migrations, and common operations.
@@ -32,10 +37,10 @@ SkillSpell uses PostgreSQL as its storage backend. This guide covers local setup
 ## Quick Start
 
 ```bash
-# 1. Start the Postgres container
+# 1. Start the Postgres + Redis containers
 npm run db:postgres:up
 
-# 2. Run schema migrations (creates all 15 tables)
+# 2. Run schema migrations (creates the full schema)
 npm run db:postgres:migrate
 
 # 3. Start the backend (watches for changes)
@@ -190,8 +195,10 @@ services:
 
 **Start / Stop:**
 
+`npm run db:postgres:up` brings up the default (no-profile) compose services, which include **both Postgres and Redis**. Redis backs the grading result cache and rate limiting (see [Supporting Infrastructure](#supporting-infrastructure)).
+
 ```bash
-# Start
+# Start (Postgres + Redis)
 npm run db:postgres:up
 
 # Stop (keeps data volume)
@@ -233,25 +240,15 @@ cd packages/storage/postgres
 npm run migration:revert
 ```
 
-### Current Tables (15 + migrations)
+### Schema Overview
 
-| Table | Description |
-|---|---|
-| `organizations` | Multi-tenancy orgs |
-| `users` | User accounts |
-| `user_credentials` | Password hashes, lockout state |
-| `refresh_tokens` | JWT refresh tokens |
-| `sso_links` | SSO provider links per user |
-| `setup_state` | First-run setup tracking |
-| `saml_configs` | SAML IdP configurations |
-| `skills` | AI skill definitions |
-| `skill_versions` | Version snapshots |
-| `skill_diagrams` | Mermaid diagrams per version |
-| `session_messages` | Chat session messages |
-| `eval_cases` | Eval test cases |
-| `eval_runs` | Eval execution runs |
-| `eval_feedback` | Human feedback on runs |
-| `eval_benchmarks` | Benchmark snapshots |
+Running the migrations creates the full schema (24+ tables) covering multi-tenancy and users, authentication and SSO, skills and versions, evaluations, and the marketplace. The exact set of tables is defined by the migrations in `packages/storage/postgres/src/migrations/` and the TypeORM entities they map to — treat those as the source of truth rather than a fixed list here, since the schema evolves with each migration.
+
+To inspect the live schema after migrating, list the tables directly:
+
+```bash
+docker exec -it docker-postgres-1 psql -U skillspell -d skillspell -c '\dt'
+```
 
 ---
 
@@ -288,7 +285,9 @@ docker compose -f docker/docker-compose.yml --profile tools up -d
 | Setting | Value |
 |---|---|
 | Email | `admin@skillspell.dev` |
-| Password | `admin` |
+| Password | `changeme` |
+
+> The pgAdmin login password defaults to `changeme` (`PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-changeme}` in the compose file). Override it by setting the `PGADMIN_PASSWORD` env var before starting the container.
 
 ### Connecting to the Database in pgAdmin
 

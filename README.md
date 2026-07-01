@@ -249,8 +249,7 @@ npm run docker:prod:down
 
 `docker/k8s-security-context.yaml` is a reference Kubernetes Deployment with a
 hardened security context (non-root, read-only root filesystem, dropped
-capabilities) you can adapt for your cluster. If you keep private deployment
-config, see [Maintaining a Downstream Fork](docs/maintaining-a-downstream-fork.md).
+capabilities) you can adapt for your cluster.
 
 ---
 
@@ -298,8 +297,6 @@ All ports can be overridden via environment variables in `packages/backend/.env`
 - [CLI Guide](docs/cli-guide.md) — skillspell CLI: install, commands, config, receipt system, troubleshooting
 - [PostgreSQL Guide](docs/postgres-guide.md) — database setup, migrations, pgAdmin
 - [Skill Tests Guide](docs/skill-tests-wiki.md) — eval system, grading, benchmarks, optimization loop
-- [NestJS Security Audit](docs/nestjs-security-audit.md) — security decisions and threat model
-- [Maintaining a Downstream Fork](docs/maintaining-a-downstream-fork.md) — run SkillSpell privately with your own deploy overlay, kept in sync with this project
 
 ---
 

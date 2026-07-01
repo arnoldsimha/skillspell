@@ -1,3 +1,8 @@
+---
+title: "CLI"
+description: "Install and manage SkillSpell skills from your terminal with @skillspell/cli"
+---
+
 <!-- generated-by: gsd-doc-writer -->
 # SkillSpell CLI Guide
 
@@ -34,7 +39,7 @@ The `skillspell` CLI lets you browse, install, update, and remove AI agent skill
 ## Installation
 
 ```bash
-npm install -g skillspell
+npm install -g @skillspell/cli
 ```
 
 **Requirements:** Node.js >= 20
@@ -43,7 +48,7 @@ After installing, verify the binary is available:
 
 ```bash
 skillspell --version
-# 0.1.0
+# prints the installed CLI version
 ```
 
 ---
@@ -84,12 +89,18 @@ These flags apply to every command:
 
 ### login
 
-Authenticate with SkillSpell. Stores a personal access token (PAT) in `~/.skillspell/credentials` for use by subsequent commands.
+Authenticate with SkillSpell. Supports three modes: interactive email/password, direct token storage via `--token`, and browser-based SSO via `--sso`.
 
 ```bash
+# Email/password (interactive prompts)
 skillspell login
 skillspell login <email> <password> --yes
+
+# Store a personal access token directly
 skillspell login --token <pat>
+
+# Browser-based SSO (SAML/OIDC)
+skillspell login --sso
 ```
 
 **Flags:**
@@ -97,8 +108,9 @@ skillspell login --token <pat>
 | Flag | Description |
 |------|-------------|
 | `--token <pat>` | Store a personal access token directly without prompting for email/password. The token must start with `sksp_`. |
+| `--sso` | Complete a SAML/OIDC single sign-on flow in your browser and store SSO credentials at `~/.skillspell/sso-credentials`. Requires an interactive terminal (not usable in CI). |
 
-**How it works:**
+**How it works (email/password):**
 
 In interactive mode (default), the CLI prompts for your email and password. It then:
 
@@ -106,6 +118,16 @@ In interactive mode (default), the CLI prompts for your email and password. It t
 2. Uses the JWT to create a named PAT via `POST /api/auth/tokens`. The PAT name is `skillspell-cli-<HOSTNAME>` and expires after one year.
 3. If a PAT with the same name already exists (from a previous login on this machine), it is revoked before creating a new one, so you never accumulate duplicate tokens.
 4. Stores the PAT in `~/.skillspell/credentials` (the JWT is never written to disk).
+
+**How it works (`--sso`):**
+
+The `--sso` flag runs a browser-based single sign-on flow that supports both SAML and OIDC (the active protocol is detected automatically):
+
+1. Starts a local callback server and opens your browser to the SSO login page.
+2. After you authenticate with your identity provider, the CLI exchanges the returned one-time code for an access/refresh token pair.
+3. Stores the SSO credentials separately at `~/.skillspell/sso-credentials`. The access token is refreshed automatically when it nears expiry, so you stay logged in without re-authenticating.
+
+This mode requires an interactive terminal; use `--token <pat>` for CI environments.
 
 **Non-interactive / CI usage:**
 
@@ -127,13 +149,13 @@ SKILLSPELL_TOKEN=sksp_... skillspell whoami
 
 ### logout
 
-Clear the stored credential from disk. Idempotent — exits 0 even if no credential file exists.
+Clear the stored credentials from disk. Idempotent — exits 0 even if no credential files exist.
 
 ```bash
 skillspell logout
 ```
 
-This deletes `~/.skillspell/credentials`. The SKILLSPELL_TOKEN environment variable is not affected.
+This deletes both `~/.skillspell/credentials` (PAT) and `~/.skillspell/sso-credentials` (SSO tokens). The SKILLSPELL_TOKEN environment variable is not affected.
 
 ---
 
@@ -181,7 +203,7 @@ The setting is saved to `~/.skillspell/config.json`. The default URL is `https:/
 
 ### list
 
-Browse published skills. Behavior depends on whether the terminal is interactive:
+Browse skills. Behavior depends on whether the terminal is interactive:
 
 - **TTY (no flags)**: Opens a keyboard-navigable picker. Selecting a skill immediately proceeds to the install flow.
 - **With `--search`**: Prints a table to stdout.
@@ -200,6 +222,14 @@ skillspell list --search commit
 | Flag | Description |
 |------|-------------|
 | `-s, --search <query>` | Filter skills by name. Prints a table instead of opening the interactive picker. |
+| `--token <pat>` | Use this token for the listing request (overrides the stored credential for this invocation). |
+
+**What gets listed:**
+
+The endpoint used depends on whether a token is resolved:
+
+- **Authenticated**: calls `GET /api/skills/discover`, which returns published skills from all users **plus the caller's own private skills**.
+- **Unauthenticated**: falls back to `GET /api/public/skills`, which returns published skills only.
 
 **Table output format:**
 
@@ -387,12 +417,17 @@ Each target tool writes skills to a different location. The `--workspace` flag c
 | `roo` | global | `~/.roo/skills/<name>/SKILL.md` |
 | `roo` | workspace | `.roo/skills/<name>/SKILL.md` |
 
-`<name>` is the skill's display name sanitized for safe filesystem use (special characters removed).
+`<name>` is the skill's display name sanitized for safe filesystem use: any character outside `[a-zA-Z0-9._-]` is replaced with an underscore (`_`). If nothing alphanumeric remains after sanitization, the literal `unnamed` is used.
 
-**Windsurf and Copilot require `--workspace`.** These targets use shared project-level instruction files — global installation is not supported. If you attempt a global install for these targets, the CLI exits with an error:
+**Windsurf and Copilot require `--workspace`.** These targets use shared project-level instruction files — global installation is not supported. If you attempt a global install for these targets, the CLI exits with an error naming the target:
 
 ```
 Windsurf uses project-local files only.
+Run with --workspace to install into the current project.
+```
+
+```
+Copilot uses project-local files only.
 Run with --workspace to install into the current project.
 ```
 
@@ -442,7 +477,8 @@ The CLI resolves which token to use in this priority order:
 
 1. `SKILLSPELL_TOKEN` environment variable (highest priority)
 2. `--token <pat>` flag on the command
-3. Token stored in `~/.skillspell/credentials`
+3. PAT stored in `~/.skillspell/credentials`
+4. SSO credentials in `~/.skillspell/sso-credentials` (the access token, refreshed automatically when it nears expiry)
 
 If no token is found in any of these sources, the command either exits with an error (for commands that require authentication) or emits a soft warning and proceeds with unauthenticated API requests (for commands that work with public endpoints).
 
@@ -519,7 +555,7 @@ skillspell update commit-message --yes
 
 ## Troubleshooting
 
-### "Cannot reach \<url\>. Check your network..."
+### "Cannot reach `<url>`. Check your network..."
 
 The CLI cannot connect to the API. Check:
 
@@ -527,7 +563,7 @@ The CLI cannot connect to the API. Check:
 2. Whether the URL is correct: `skillspell config url` to see the current setting.
 3. For self-hosted instances, run `skillspell config url https://your-instance.example.com` to set the correct base URL.
 
-### "Skill not found: \<slug\>"
+### "Skill not found: `<slug>`"
 
 The slug you specified does not match any published skill. Run `skillspell list --search <name>` to see available skills and their exact slugs.
 
@@ -543,7 +579,7 @@ The stored token has been revoked or expired. Run `skillspell login` again to ge
 
 Windsurf and GitHub Copilot targets do not support global installation. Add `--workspace` to install into the current project directory.
 
-### "Multiple installs found for \<slug\>"
+### "Multiple installs found for `<slug>`"
 
 The skill is installed for more than one target or scope. In interactive mode, a picker appears to select which installation to update or remove. In CI mode, this is an error — you need to run the command interactively.
 
