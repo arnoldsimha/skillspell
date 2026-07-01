@@ -1,10 +1,8 @@
 # SkillSpell ✨
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![CI](https://github.com/OWNER/skillspell/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/skillspell/actions/workflows/ci.yml)
+[![CI](https://github.com/arnoldsimha/skillspell/actions/workflows/ci.yml/badge.svg)](https://github.com/arnoldsimha/skillspell/actions/workflows/ci.yml)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](.nvmrc)
-
-<!-- Replace OWNER/skillspell above with your GitHub org/repo once the repository exists. -->
 
 **Create, refine, and manage AI agent skills using natural language — no CLI required.**
 
@@ -92,7 +90,7 @@ Install targets supported: Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Co
 ### 1. Clone & Install
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/arnoldsimha/skillspell.git
 cd skillspell
 npm install
 ```

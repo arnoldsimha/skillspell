@@ -27,13 +27,13 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/OWNER/skillspell"
+        "href": "https://github.com/arnoldsimha/skillspell"
       }
     ]
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/OWNER/skillspell"
+      "github": "https://github.com/arnoldsimha/skillspell"
     }
   }
 }
