@@ -12,7 +12,7 @@
       {
         "group": "Getting Started",
         "pages": ["index", "quickstart"]
-      }
+      },
       {
         "group": "Guides",
         "pages": ["skill-tests-wiki", "cli-guide"]
