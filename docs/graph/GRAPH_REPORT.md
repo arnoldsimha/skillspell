@@ -836,7 +836,7 @@ Nodes (3): devDependencies, concurrently, portless
 ## Knowledge Gaps
 - **986 isolated node(s):** `$schema`, `theme`, `name`, `primary`, `light` (+981 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **119 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **119 thin communities (fewer than 3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
