@@ -26,10 +26,31 @@ export default tseslint.config(
   },
   {
     rules: {
+      // This codebase predates the strict type-checked ruleset and uses `any`
+      // pervasively. The "unsafe" family and related strictness are downgraded
+      // to warnings so lint gates CI on genuine errors without a large retyping
+      // effort. Treat these as a tracked backlog — burn them down and promote
+      // back to "error" over time.
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
-      "prettier/prettier": ["error", { endOfLine: "auto" }],
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
+      '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unsafe-call': 'warn',
+      '@typescript-eslint/no-unsafe-return': 'warn',
+      '@typescript-eslint/no-unsafe-enum-comparison': 'warn',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+      '@typescript-eslint/unbound-method': 'warn',
+      '@typescript-eslint/require-await': 'warn',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/restrict-template-expressions': 'warn',
+      '@typescript-eslint/no-base-to-string': 'warn',
+      '@typescript-eslint/no-redundant-type-constituents': 'warn',
+      '@typescript-eslint/no-require-imports': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      'no-empty': 'warn',
+      // Team never enforced Prettier formatting; keep it advisory (warn) rather
+      // than reformatting the whole codebase during the open-source release.
+      'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     },
   },
 );

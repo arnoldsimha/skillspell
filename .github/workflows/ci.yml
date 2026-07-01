@@ -23,12 +23,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Lint
+        run: npm run lint
+
       - name: Test
         run: npm test
-
-      # Non-blocking: the existing codebase has known @typescript-eslint debt.
-      # Surfaces lint output without failing the build. Tighten to blocking once
-      # the backlog is cleared.
-      - name: Lint (informational)
-        run: npm run lint
-        continue-on-error: true

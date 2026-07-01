@@ -24,6 +24,15 @@ export default defineConfig([
       // in this codebase. The rule catches a React Compiler optimization hint,
       // not a correctness issue. Disable project-wide rather than 40 inline suppressions.
       'react-hooks/set-state-in-effect': 'off',
+      // Consistent with the backend config: existing type-safety / dev-tooling
+      // strictness is advisory (warn) rather than blocking during the OSS release.
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+      'react-refresh/only-export-components': 'warn',
       'no-restricted-syntax': [
         'error',
         {

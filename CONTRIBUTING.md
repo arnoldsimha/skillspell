@@ -20,10 +20,12 @@ Thank you for your interest in contributing to SkillSpell.
 
 - Keep PRs focused — one concern per PR.
 - Add or update tests for any changed behaviour.
-- Ensure `npm run build` and `npm test` pass at the repo root before submitting.
-- Run `npm run lint` and fix any issues in files you touched. (The existing
-  codebase has known `@typescript-eslint` lint debt, so lint is currently
-  informational in CI rather than blocking — please don't add new violations.)
+- Ensure `npm run build`, `npm run lint`, and `npm test` pass at the repo root
+  before submitting (CI enforces all three).
+- `npm run lint` must report **0 errors**. It will also print warnings for a
+  known type-safety backlog (`any` usage, etc.) — please don't add new ones, and
+  fixing existing warnings in files you touch is welcome. Use `npm run lint:fix`
+  in a package to auto-fix formatting.
 - Describe *what* the change does and *why* in the PR description.
 
 ## Reporting Issues
