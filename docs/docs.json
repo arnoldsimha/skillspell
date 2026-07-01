@@ -11,7 +11,7 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["index"]
+        "pages": ["quickstart", "index"]
       },
       {
         "group": "Guides",
