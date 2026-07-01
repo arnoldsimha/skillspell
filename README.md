@@ -1,5 +1,11 @@
 # SkillSpell ✨
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/OWNER/skillspell/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/skillspell/actions/workflows/ci.yml)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](.nvmrc)
+
+<!-- Replace OWNER/skillspell above with your GitHub org/repo once the repository exists. -->
+
 **Create, refine, and manage AI agent skills using natural language — no CLI required.**
 
 SkillSpell is a web platform that helps teams build high-quality AI agent skills: structured instruction sets that make Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, and other AI coding tools better at specific tasks. Describe what you need in plain English — SkillSpell generates, refines, evaluates, and distributes the skill for you.
@@ -230,6 +236,21 @@ npm run docker:down
 ```
 
 The app will be available at **http://localhost:3000**.
+
+### Production / Self-Hosting
+
+For a hardened production run, layer the production compose overlay (resource
+limits, `NODE_ENV=production`, JSON logging) on top of the base stack:
+
+```bash
+npm run docker:prod:up     # docker-compose.yml + docker-compose.prod.yml
+npm run docker:prod:down
+```
+
+`docker/k8s-security-context.yaml` is a reference Kubernetes Deployment with a
+hardened security context (non-root, read-only root filesystem, dropped
+capabilities) you can adapt for your cluster. If you keep private deployment
+config, see [Maintaining a Downstream Fork](docs/maintaining-a-downstream-fork.md).
 
 ---
 

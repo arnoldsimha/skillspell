@@ -1,0 +1,20 @@
+# Normalize line endings to LF across platforms
+* text=auto eol=lf
+
+# Shell scripts must stay LF even on Windows checkouts
+*.sh text eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
+# Generated knowledge graph — exclude from language stats and collapse in diffs
+docs/graph/graph.json linguist-generated=true
+docs/graph/graph.html linguist-generated=true
+docs/graph/GRAPH_REPORT.md linguist-generated=true
+
+# Lockfile — collapse in diffs
+package-lock.json linguist-generated=true

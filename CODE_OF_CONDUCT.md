@@ -44,8 +44,10 @@ individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by opening a GitHub issue or contacting the maintainer directly via
-the email listed in the repository profile.
+reported privately to the project maintainers via the repository's **Security**
+tab ("Report a vulnerability" provides a confidential channel), or through any
+maintainer contact listed in the repository. For non-sensitive matters you may
+also open an issue.
 
 All complaints will be reviewed and investigated promptly and fairly.
 
