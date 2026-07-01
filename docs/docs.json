@@ -11,13 +11,7 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": [
-          "index",
-          {
-            "group": "Quick Start",
-            "pages": ["quickstart/index", "quickstart/installation", "quickstart/environment-setup", "quickstart/first-access"]
-          }
-        ]
+        "pages": ["index", "quickstart"]
       },
       {
         "group": "Guides",
