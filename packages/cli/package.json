@@ -1,10 +1,28 @@
 {
   "name": "@skillspell/cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SkillSpell CLI — install AI agent skills",
   "author": "Arnold Simha",
   "license": "Apache-2.0",
   "private": false,
+  "homepage": "https://github.com/arnoldsimha/skillspell/tree/main/packages/cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnoldsimha/skillspell.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/arnoldsimha/skillspell/issues"
+  },
+  "keywords": [
+    "skillspell",
+    "cli",
+    "ai",
+    "agent",
+    "skills",
+    "claude",
+    "cursor"
+  ],
   "type": "module",
   "bin": {
     "skillspell": "dist/index.js"
