@@ -14,12 +14,15 @@ import { readConfig } from './lib/config.js';
 import { resolveToken } from './lib/auth.js';
 import { readReceipt } from './lib/installed-receipt.js';
 
+// Replaced at build time by tsup with the version from package.json.
+declare const __CLI_VERSION__: string;
+
 const program = new Command();
 
 program
   .name('skillspell')
   .description('SkillSpell CLI — install AI agent skills into your coding environment')
-  .version('1.0.2')
+  .version(__CLI_VERSION__)
   .option('--yes', 'skip interactive prompts (non-interactive / CI mode)');
 
 // skillspell config url [<url>]
