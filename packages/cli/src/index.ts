@@ -19,7 +19,7 @@ const program = new Command();
 program
   .name('skillspell')
   .description('SkillSpell CLI — install AI agent skills into your coding environment')
-  .version('1.0.1')
+  .version('1.0.2')
   .option('--yes', 'skip interactive prompts (non-interactive / CI mode)');
 
 // skillspell config url [<url>]
