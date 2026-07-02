@@ -7,7 +7,7 @@
   "private": false,
   "type": "module",
   "bin": {
-    "skillspell": "./dist/index.js"
+    "skillspell": "dist/index.js"
   },
   "engines": {
     "node": ">=20"
