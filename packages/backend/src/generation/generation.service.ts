@@ -11,12 +11,14 @@ import {
   type OptimizeDraftResponse,
   type SkillFileItem,
   type SkillGenerationResult,
+  isAtLeast,
 } from '@skillspell/shared';
 import { SkillGenerationService } from './skill/skill-generation.service.js';
 import { SkillValidatorService } from './skill/skill-validator.service.js';
 import { DiagramService } from './skill/diagram.service.js';
 import { SessionService } from './session/session.service.js';
 import { RequestContext } from '../common/context/request-context.service.js';
+import { OwnershipService } from '../ownership/ownership.service.js';
 
 @Injectable()
 export class GenerationService {
@@ -36,6 +38,7 @@ export class GenerationService {
     @Inject(SKILL_REPOSITORY)
     private readonly skillRepo: ISkillRepository,
     private readonly ctx: RequestContext,
+    private readonly ownershipService: OwnershipService,
   ) {}
 
   /**
@@ -364,6 +367,19 @@ export class GenerationService {
       | undefined;
 
     if (mode === 'optimize' && skillId) {
+      // Enforce ownership before loading private skill content. Unlike the
+      // sibling routes (refine, optimize-draft), skillId arrives in the request
+      // body — not a route param — so the @CheckOwnership/SkillOwnerGuard path
+      // never fires here. Privileged roles (admin and above — i.e. platform
+      // owner) bypass; everyone else must own the skill (throws Forbidden/
+      // NotFound otherwise). Uses the role hierarchy (isAtLeast) rather than a
+      // raw `=== 'admin'` check so the higher-privileged owner role is not
+      // accidentally locked out. Without this, any authenticated user could
+      // pass another user's skill id and receive LLM suggestions derived from
+      // that skill's private content.
+      if (!isAtLeast(this.ctx.userRole, 'admin')) {
+        await this.ownershipService.assertOwnership(skillId);
+      }
       const existing = await this.skillRepo.findById(skillId);
       if (existing) {
         skillContext = {

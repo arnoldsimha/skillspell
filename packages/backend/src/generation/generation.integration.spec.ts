@@ -8,6 +8,7 @@ import { SkillValidatorService } from './skill/skill-validator.service.js';
 import { DiagramService } from './skill/diagram.service.js';
 import { SessionService } from './session/session.service.js';
 import { RequestContext } from '../common/context/request-context.service.js';
+import { OwnershipService } from '../ownership/ownership.service.js';
 
 describe('Generation Pipeline - Strands Integration', () => {
   let generationService: GenerationService;
@@ -127,6 +128,10 @@ You are a document analysis expert.
         {
           provide: RequestContext,
           useValue: { userId: 'user-123', skill: null },
+        },
+        {
+          provide: OwnershipService,
+          useValue: { assertOwnership: jest.fn() },
         },
       ],
     }).compile();
