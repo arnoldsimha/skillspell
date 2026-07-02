@@ -70,7 +70,7 @@
     "nestjs-otel": "^8.0.2",
     "nodemailer": "^8.0.5",
     "openai": "^6.45.0",
-    "openid-client": "6.8.3",
+    "openid-client": "6.8.4",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
