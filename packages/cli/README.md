@@ -1,6 +1,6 @@
 # @skillspell/cli
 
-Install and manage [SkillSpell](https://skillspell.dev) AI agent skills — reusable, structured instruction sets — directly into your coding environment (Claude Code, Cursor, Windsurf, GitHub Copilot, Roo).
+Install and manage [SkillSpell](https://github.com/arnoldsimha/skillspell) AI agent skills — reusable, structured instruction sets — directly into your coding environment (Claude Code, Cursor, Windsurf, GitHub Copilot, Roo).
 
 ## Install
 
