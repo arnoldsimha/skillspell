@@ -1,0 +1,47 @@
+name: Update Knowledge Graph
+
+# Updates the project knowledge graph on merge to main.
+# The graph reflects the actual codebase architecture and is committed to the repo.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: update-graph
+  cancel-in-progress: false
+
+jobs:
+  update-graph:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for graphify context
+
+      - name: Install graphify
+        run: npm install -g graphify
+
+      - name: Extract codebase
+        env:
+          GRAPHIFY_OUT: graph
+        run: graphify extract . --backend=http
+
+      - name: Cluster and generate report
+        env:
+          GRAPHIFY_OUT: graph
+        run: graphify cluster-only . --backend=http
+
+      - name: Commit graph changes
+        run: |
+          if [ -n "$(git status --porcelain graph/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add graph/
+            git commit -m "chore: update knowledge graph"
+            git push
+          else
+            echo "No changes to graph"
+          fi

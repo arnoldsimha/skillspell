@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsOptional, IsIn, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsIn,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
 export class SuggestDto {
   @IsString()
@@ -12,8 +19,7 @@ export class SuggestDto {
   partialInput?: string;
 
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
+  @IsUUID()
   skillId?: string;
 
   @IsOptional()

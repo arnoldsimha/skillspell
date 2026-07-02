@@ -158,6 +158,20 @@ describe('SkillOwnerGuard', () => {
     expect(ctxMock.skill).toBe(summary);
   });
 
+  it('should bypass ownership check for owner (higher than admin) users', async () => {
+    const summary = makeSkillSummary();
+    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue('id');
+    ctxMock.userRole = 'owner';
+    ownershipMock.fetchSkillMetadata.mockResolvedValue(summary);
+
+    const result = await guard.canActivate(makeContext({ id: SKILL_ID }));
+
+    expect(result).toBe(true);
+    expect(ownershipMock.fetchSkillMetadata).toHaveBeenCalledWith(SKILL_ID);
+    expect(ownershipMock.assertOwnership).not.toHaveBeenCalled();
+    expect(ctxMock.skill).toBe(summary);
+  });
+
   it('should read metadata from both handler and class level', async () => {
     const getAllAndOverrideSpy = jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
