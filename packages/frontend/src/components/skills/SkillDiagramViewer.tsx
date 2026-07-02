@@ -1,12 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import mermaid from 'mermaid';
-// DOMPurify strips <div> content inside SVG <foreignObject> elements as a
-// namespace-confusion XSS defense, breaking mermaid v11 node labels. Use a
-// targeted sanitizer that only removes actual injection vectors instead.
+// Primary XSS defense is mermaid's own `securityLevel: 'strict'` (see
+// mermaid.initialize below): it sanitizes node-label *text* during rendering
+// while preserving the <foreignObject>/<div> structure that holds the label,
+// so box content still shows. (Running DOMPurify over the finished SVG cannot
+// be used here — it strips <div> inside <foreignObject> as a namespace-confusion
+// mXSS defense and blanks mermaid v11 labels.)
+//
+// This regex pass is defense-in-depth only: it removes <script> blocks and
+// inline event handlers, neither of which mermaid legitimately emits, so it can
+// never erase legitimate label content. The event-handler match tolerates any
+// non-name separator before `on…` (e.g. `<img src=x/onerror=…>`, not just a
+// space) and also neutralizes javascript:/data: URLs in href/src/xlink:href.
 function sanitizeSvg(svg: string): string {
   return svg
     .replace(/<script\b[\s\S]*?<\/script\s*>/gi, '')
-    .replace(/\son[a-z]\w*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '');
+    .replace(/[^a-zA-Z0-9]on[a-z][\w-]*\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, ' ')
+    .replace(/((?:href|src|xlink:href)\s*=\s*["']?)\s*(?:javascript|data)\s*:/gi, '$1');
 }
 import type { SkillDiagram } from '@skillspell/shared';
 import { generateDiagram } from '../../services/api/index.js';
@@ -23,10 +33,14 @@ interface SkillDiagramViewerProps {
 }
 
 // Initialize mermaid with a clean config
+// securityLevel: 'strict' — mermaid sanitizes label text (its bundled DOMPurify)
+// while keeping htmlLabels rendering intact, so box content still displays but
+// injected HTML/JS in a label is encoded to inert text. Do NOT set htmlLabels
+// to false: that changes the label render mechanism and breaks box layout.
 mermaid.initialize({
   startOnLoad: false,
   theme: 'default',
-  securityLevel: 'loose',
+  securityLevel: 'strict',
   flowchart: {
     useMaxWidth: true,
     htmlLabels: true,
