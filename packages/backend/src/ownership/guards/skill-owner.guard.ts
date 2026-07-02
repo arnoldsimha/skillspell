@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { isAtLeast } from '@skillspell/shared';
 import { CHECK_OWNERSHIP_KEY } from '../decorators/check-ownership.decorator.js';
 import { OwnershipService } from '../ownership.service.js';
 import { RequestContext } from '../../common/context/request-context.service.js';
@@ -57,9 +58,12 @@ export class SkillOwnerGuard implements CanActivate {
       throw new ForbiddenException('Ownership check parameter missing');
     }
 
-    // Admins bypass ownership checks — they can access any skill.
+    // Admins (and higher — i.e. platform owner) bypass ownership checks: they
+    // can access any skill. Uses the role hierarchy (isAtLeast) rather than a
+    // raw `=== 'admin'` check so the higher-privileged owner role is not
+    // accidentally locked out of skills it does not personally own.
     // Still fetch metadata so ctx.skill is populated for downstream services.
-    if (this.ctx.userRole === 'admin') {
+    if (isAtLeast(this.ctx.userRole, 'admin')) {
       this.ctx.skill = await this.ownership.fetchSkillMetadata(skillId);
       return true;
     }
