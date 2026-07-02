@@ -5,6 +5,7 @@ import { fetchSkill, fetchVersionHistory, fetchBenchmark as apiFetchBenchmark } 
 import { buildSkillPath } from '../../utils/parseVersionParam.js';
 import { EvalCaseEditor } from '../eval/EvalCaseEditor.js';
 import { EvalCaseList } from '../eval/EvalCaseList.js';
+import { BlindedSplitHint } from '../eval/BlindedSplitHint.js';
 import { EvalHelpDialog } from '../eval/EvalHelpDialog.js';
 import { GenerateTestEvalsDialog } from '../eval/GenerateTestEvalsDialog.js';
 import { EvalOutputsTab } from '../eval/EvalOutputsTab.js';
@@ -517,6 +518,7 @@ export default function SkillTestsPage({
         {/* Test Cases tab */}
         {testsTab === 'cases' && (
           <div className="h-full overflow-y-auto">
+            <BlindedSplitHint caseCount={evalCases.length} />
             <EvalCaseList
               evalCases={filteredEvalCases}
               loading={evalsLoading}
