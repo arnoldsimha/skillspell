@@ -28,11 +28,11 @@
     "@skillspell/shared": "*"
   },
   "devDependencies": {
-    "@types/node": "^22.10.7",
+    "@types/node": "^26.1.0",
     "@types/pg": "^8.11.0",
     "@types/uuid": "^10.0.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.3"
+    "typescript": "^6.0.3"
   }
 }
