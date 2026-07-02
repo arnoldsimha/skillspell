@@ -86,6 +86,8 @@ export type {
   CoverageGapReport,
 } from './types/skill-optimization.js';
 
+export { MIN_EVAL_CASES_FOR_BLINDED_SPLIT } from './types/skill-optimization.js';
+
 export type {
   Organization,
   UserRole,

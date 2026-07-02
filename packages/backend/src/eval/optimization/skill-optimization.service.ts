@@ -14,6 +14,7 @@ import type {
 } from '@skillspell/shared';
 import {
   EVAL_REPOSITORY,
+  MIN_EVAL_CASES_FOR_BLINDED_SPLIT,
   type IEvalRepository,
 } from '@skillspell/shared';
 import { SkillsService } from '../../skills/skills.service.js';
@@ -693,15 +694,15 @@ export class SkillOptimizationService implements OnModuleDestroy {
     const sorted = [...cases].sort((a, b) => a.id.localeCompare(b.id));
 
     // A 60/40 split needs enough cases for the test set to be meaningful. Below
-    // 5 cases the holdout is empty (≤2 cases) or a single case, which makes the
-    // test score a coarse 0/100 and the regression guard fire on noise. For tiny
-    // suites, evaluate on the full set for both phases (no blinding) so the score
-    // is at least stable — and warn the author to add more cases.
-    const MIN_FOR_SPLIT = 5;
-    if (sorted.length < MIN_FOR_SPLIT) {
+    // MIN_EVAL_CASES_FOR_BLINDED_SPLIT the holdout is empty (≤2 cases) or a single
+    // case, which makes the test score a coarse 0/100 and the regression guard
+    // fire on noise. For tiny suites, evaluate on the full set for both phases
+    // (no blinding) so the score is at least stable — and warn the author to add
+    // more cases.
+    if (sorted.length < MIN_EVAL_CASES_FOR_BLINDED_SPLIT) {
       this.logger.warn(
         `Only ${sorted.length} eval case(s) — too few for a train/test holdout. ` +
-          `Using the full set for both phases (results are not blinded; add ≥${MIN_FOR_SPLIT} cases for a proper split).`,
+          `Using the full set for both phases (results are not blinded; add ≥${MIN_EVAL_CASES_FOR_BLINDED_SPLIT} cases for a proper split).`,
       );
       // Separate array copies (not the same reference) so downstream logic can't
       // accidentally mutate train and see it reflected in test, or vice versa.
