@@ -490,11 +490,11 @@ The benchmark system automatically generates **human-readable observations** abo
 1. **Non-discriminating assertions** — Identifies assertions that pass regardless of skill
 2. **Skill-hurts assertions** — Flags assertions that perform worse with the skill
 3. **Broken assertions** — Flags assertions that fail everywhere
-4. **High variance in pass rate** — Alerts to flaky or inconsistent tests
-5. **Score variance** — Highlights when runs score inconsistently
-6. **Consistently hard/easy cases** — Identifies test cases that always fail or always pass
-7. **Duration/token tradeoffs** — Notes if the skill adds significant processing time
-8. **Statistical outliers** — Flags runs that are more than 2 standard deviations from the mean
+4. **High variance in pass rate** — Alerts to flaky or inconsistent tests (fires when pass-rate standard deviation exceeds **20 points**)
+5. **Score variance** — Highlights when runs score inconsistently (fires when score standard deviation exceeds **15 points**)
+6. **Consistently hard/easy cases** — Flags a case as *hard* when its pass rate is **below 30%** with **at least 2 runs**; the *easy* note appears only when **every** case passes **100%** of the time
+7. **Duration/token tradeoffs** — Notes when the skill runs meaningfully slower (with-skill duration more than **2×** baseline) or uses more tokens (more than **1.5×** baseline)
+8. **Statistical outliers** — Flags runs more than 2 standard deviations from the mean (requires **at least 3 runs** to compute)
 
 These notes appear as cards at the bottom of the benchmark tab, providing actionable insights without requiring you to interpret raw statistics.
 
@@ -508,11 +508,13 @@ Each iteration shows:
 - **Win/loss/tie** compared to the previous iteration
 - **Delta** — how much the pass rate and score changed
 
+The **win/loss/tie** verdict uses a **±1 point** threshold on *either* the pass rate or the average score: it's a **win** if pass rate or score rose by more than 1 point, a **loss** if either fell by more than 1 point, and a **tie** otherwise (both changes within ±1).
+
 ```
 Iteration 1 (v1) — 60% pass rate, score 72     [Baseline]
 Iteration 2 (v2) — 75% pass rate, score 85     [Won: +15%, +13]
-Iteration 3 (v3) — 73% pass rate, score 84     [Tied: -2%, -1]
-Iteration 4 (v4) — 90% pass rate, score 93     [Won: +17%, +9]
+Iteration 3 (v3) — 74% pass rate, score 84     [Tied: -1%, -1]
+Iteration 4 (v4) — 90% pass rate, score 93     [Won: +16%, +9]
 ```
 
 This timeline makes it easy to see if your changes are actually improving the skill.
@@ -552,10 +554,12 @@ After reviewing a test run's output, you can provide feedback:
 
 ### Suggested Fixes
 
-When you provide a suggested fix with your feedback, it gets stored alongside the run data. This information is later used by:
+When you provide a suggested fix with your feedback, it gets stored alongside the run data. It is later fed into skill improvement through the **automated optimization loop**:
 
-- The **"Improve from Feedback"** feature — which reads all negative/neutral feedback and attempts to fix the skill automatically
-- The **automated optimization loop** — which optionally includes user feedback in its first improvement iteration
+- Enabling the **"Include feedback"** option (surfaced in the UI as **"Improve from Feedback"**) gathers all negative/neutral feedback and failed/partial runs and injects them into the loop's **first** improvement iteration.
+- Subsequent iterations use only fresh eval failures from the current loop.
+
+> **Note**: "Improve from Feedback" is not a separate one-shot action — it is the same optimization loop described below, run with the feedback option turned on. Feedback influences skill improvement only through this loop.
 
 ---
 
@@ -674,7 +678,7 @@ The system splits your test cases into two groups:
 
 This split prevents **overfitting** — the skill can't be tuned to pass specific tests while failing on new ones. The test set acts as an independent validation.
 
-> **Important**: You need at least 3 test cases for this feature (2 for training, 1 for testing).
+> **Important**: A proper blinded train/test split requires **at least 5 test cases**. With fewer than 5, the holdout would be too small to produce a meaningful score, so the loop falls back to using the **full set for both phases** — the improvement AI effectively sees every case, so the overfitting protection above does **not** apply. Add 5 or more test cases to get a genuine independent validation.
 
 ### Real-Time Progress
 
@@ -700,8 +704,10 @@ This ensures that user knowledge captured through the feedback system is incorpo
 | Setting | Default | Description |
 |---------|---------|-------------|
 | **Max Iterations** | 3 | Maximum number of improve → eval cycles |
-| **Target Pass Rate** | 100% | Stop early if the training pass rate reaches this threshold |
+| **Target Pass Rate** | 100% | Stop early when the **test** (holdout) pass rate reaches this threshold **and** the result is stable — see note below |
 | **Include Feedback** | Off | Whether to include user feedback in the first iteration |
+
+> **How early stopping actually works**: the loop stops when the **test** pass rate (not the training pass rate) reaches the target, but only once that result is confirmed stable — specifically, it will *not* stop on the iteration that sets a new best score (it runs one more to verify the gain holds), and it will not stop while there is still first-iteration feedback left to apply. It will also stop on a detected plateau.
 
 ### Cost Tracking
 
