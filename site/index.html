@@ -188,12 +188,13 @@
           <h2 class="reveal">One command from <span class="grad-accent">spell</span> to shipped</h2>
           <p class="sub reveal">Publish from the web app, install from the terminal. The <code>@skillspell/cli</code> puts every approved skill one command away from any AI coding tool.</p>
           <div class="term reveal js-terminal"
-            data-lines='[{"p":"$","c":"npm install -g @skillspell/cli"},{"p":"$","c":"skillspell install api-design-review"},{"ok":"✓ installed → Claude Code, Cursor, Windsurf"}]'>
+            data-lines='[{"p":"$","c":"npm install -g @skillspell/cli"},{"p":"$","c":"skillspell login --sso"},{"p":"$","c":"skillspell install api-design-review -t claude"},{"ok":"✓ Installed to .claude/skills/api-design-review"}]'>
             <div class="t-bar"><span></span><span></span><span></span></div>
             <div class="t-body">
               <div class="t-line"><span class="p">$</span> npm install -g @skillspell/cli</div>
-              <div class="t-line"><span class="p">$</span> skillspell install api-design-review</div>
-              <div class="t-line ok">✓ installed → Claude Code, Cursor, Windsurf<span class="caret"></span></div>
+              <div class="t-line"><span class="p">$</span> skillspell login --sso</div>
+              <div class="t-line"><span class="p">$</span> skillspell install api-design-review -t claude</div>
+              <div class="t-line ok">✓ Installed to .claude/skills/api-design-review<span class="caret"></span></div>
             </div>
           </div>
         </div>
