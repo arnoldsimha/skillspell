@@ -77,7 +77,26 @@ html.js .reveal.in { opacity: 1; transform: none; }
 .nav-gh { margin-left: auto; font-size: 13px; padding: 8px 16px; }
 
 /* ── Hero ─────────────────────────────────────────────────────────────── */
-.hero { position: relative; overflow: hidden; padding: 104px 0 0; }
+.hero { position: relative; overflow: hidden; padding: 104px 0 0;
+  background:
+    radial-gradient(ellipse 980px 560px at 74% -12%, rgba(99,102,241,.30), transparent 65%),
+    radial-gradient(ellipse 720px 430px at 8% 4%, rgba(124,58,237,.14), transparent 60%),
+    linear-gradient(180deg, #151834 0%, #12142380 46%, transparent 100%); }
+/* faint star field over the glow, fading out toward the seam */
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 11% 22%, rgba(199,203,255,.7), transparent),
+    radial-gradient(1px 1px at 27% 9%, rgba(199,203,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 41% 30%, rgba(167,139,250,.6), transparent),
+    radial-gradient(1px 1px at 56% 14%, rgba(199,203,255,.55), transparent),
+    radial-gradient(1px 1px at 68% 42%, rgba(199,203,255,.4), transparent),
+    radial-gradient(1.5px 1.5px at 84% 24%, rgba(129,140,248,.55), transparent),
+    radial-gradient(1px 1px at 93% 55%, rgba(199,203,255,.45), transparent),
+    radial-gradient(1px 1px at 18% 58%, rgba(199,203,255,.35), transparent),
+    radial-gradient(1px 1px at 48% 66%, rgba(167,139,250,.3), transparent),
+    radial-gradient(1px 1px at 76% 74%, rgba(199,203,255,.3), transparent);
+  -webkit-mask-image: linear-gradient(180deg, black 55%, transparent 100%);
+  mask-image: linear-gradient(180deg, black 55%, transparent 100%); }
 .sigil { position: absolute; top: 0; right: 0; width: 50%; max-width: 660px; height: auto; pointer-events: none; }
 .hero-copy { position: relative; max-width: 780px; }
 .hero-copy .kicker { margin: 0 0 28px; }
