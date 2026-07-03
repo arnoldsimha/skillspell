@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillSpell — Ship AI agent skills that actually work</title>
+  <meta name="description" content="SkillSpell turns plain-English descriptions into evaluated, versioned, production-ready skills for Claude Code, Cursor, Windsurf, GitHub Copilot, and Roo Code. Open source, Apache-2.0, self-hostable." />
+  <link rel="canonical" href="https://arnoldsimha.github.io/skillspell/" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SkillSpell — Ship AI agent skills that actually work" />
+  <meta property="og:description" content="Plain English in, evaluated production-ready agent skills out. Open source, self-hostable." />
+  <meta property="og:url" content="https://arnoldsimha.github.io/skillspell/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="SkillSpell — Ship AI agent skills that actually work" />
+  <meta name="twitter:description" content="Plain English in, evaluated production-ready agent skills out. Open source, self-hostable." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="nav" id="top">
+    <div class="container nav-inner">
+      <a class="logo" href="#top"><span class="spark">✦</span>SkillSpell</a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#features">Features</a><a href="#how">How it works</a>
+        <a href="#cli">CLI</a><a href="https://skillspell.mintlify.site/">Docs</a>
+      </nav>
+      <a class="btn-ghost nav-gh" href="https://github.com/arnoldsimha/skillspell">★ Star on GitHub</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <svg class="sigil" viewBox="0 0 600 480" fill="none" aria-hidden="true">
+        <g class="sigil-lines" stroke="#6366f1" stroke-opacity="0.22" stroke-width="1">
+          <path d="M 120 90 L 265 140 L 380 70 L 505 150 L 445 265 L 530 350" />
+          <path d="M 265 140 L 300 260 L 445 265" />
+          <path d="M 300 260 L 200 330 L 90 280" />
+          <path d="M 380 70 L 300 260" stroke-dasharray="3 5" />
+          <path d="M 200 330 L 310 415" stroke-dasharray="3 5" />
+        </g>
+        <g fill="#8b8ff5">
+          <circle cx="120" cy="90" r="2.5"/><circle cx="265" cy="140" r="3.5"/>
+          <circle cx="380" cy="70" r="2"/><circle cx="505" cy="150" r="3"/>
+          <circle cx="445" cy="265" r="2.5"/><circle cx="300" cy="260" r="4"/>
+          <circle cx="200" cy="330" r="2"/><circle cx="90" cy="280" r="2.5"/>
+          <circle cx="530" cy="350" r="2"/><circle cx="310" cy="415" r="2.5"/>
+        </g>
+        <g stroke="#a78bfa" stroke-opacity=".5">
+          <path d="M 300 252 v 16 M 292 260 h 16" stroke-width="1.2"/>
+          <path d="M 261 136 l 8 8 M 269 136 l -8 8" stroke-width="1"/>
+        </g>
+      </svg>
+      <div class="container hero-copy">
+        <p class="kicker reveal"><span class="k-accent">~/skills</span> $ open source · apache-2.0 · self-hostable</p>
+        <h1 class="reveal">Ship agent skills that <span class="grad-accent">actually&nbsp;work</span></h1>
+        <p class="sub reveal">SkillSpell turns plain-English descriptions into <b>evaluated, versioned, production-ready skills</b> for Claude Code, Cursor, Windsurf, GitHub Copilot, and Roo Code — with a built-in eval loop that proves they work before you ship.</p>
+        <div class="ctas reveal">
+          <a class="btn-primary" href="https://skillspell.mintlify.site/">Read the docs</a>
+          <a class="btn-ghost" href="https://github.com/arnoldsimha/skillspell">View on GitHub</a>
+          <code class="cta-note">npm i -g @skillspell/cli</code>
+        </div>
+      </div>
+    </section>
+
+    <section class="seam">
+      <div class="seam-light" aria-hidden="true"></div>
+      <div class="container">
+        <div class="app-mock reveal" role="img" aria-label="SkillSpell app: skill editor with evaluation benchmark scoring 92, up 14 points versus version 3">
+          <div class="app-side">
+            <div class="s-logo"><span class="spark">✦</span> SkillSpell</div>
+            <div class="s-label">Skills</div>
+            <div class="s-item active"><span class="ic"></span> api-design-review</div>
+            <div class="s-item"><span class="ic"></span> sql-migrations</div>
+            <div class="s-item"><span class="ic"></span> react-testing</div>
+            <div class="s-label">Workspace</div>
+            <div class="s-item"><span class="ic"></span> Evaluations</div>
+            <div class="s-item"><span class="ic"></span> Marketplace</div>
+          </div>
+          <div class="app-main">
+            <div class="m-head"><span class="m-title">api-design-review</span><span class="pill">v4 · published</span></div>
+            <div class="m-grid">
+              <div class="m-card">
+                <h5>SKILL.md</h5>
+                <div class="code-line w85"></div><div class="code-line w60"></div>
+                <div class="code-line w40 hl"></div><div class="code-line w75"></div>
+                <div class="code-line w60"></div><div class="code-line w85"></div>
+              </div>
+              <div class="m-card">
+                <h5>Eval Benchmark</h5>
+                <div class="score-row"><span class="score-num">92</span><span class="score-up">▲ +14 vs v3</span></div>
+                <div class="bar-label"><span>Accuracy</span><span>95</span></div>
+                <div class="bar"><i style="width:95%"></i></div>
+                <div class="bar-label"><span>Completeness</span><span>89</span></div>
+                <div class="bar"><i style="width:89%"></i></div>
+                <span class="opt-chip">⚡ 2 optimizations suggested</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <div class="container">
+        <p class="kicker l reveal">// how it works</p>
+        <h2 class="reveal">Generate. Evaluate. <span class="grad-accent l">Ship.</span></h2>
+        <div class="steps">
+          <div class="step reveal">
+            <h3>Describe it</h3>
+            <p>Say what you need in plain English. SkillSpell generates a complete, structured, multi-file skill.</p>
+            <div class="step-visual">
+              <div class="bubble">"Review my API designs for REST consistency and naming…"</div>
+              <div class="gen-file"><span class="gf-name">SKILL.md</span>
+                <div class="code-line w85"></div><div class="code-line w60"></div><div class="code-line w75"></div>
+              </div>
+            </div>
+          </div>
+          <div class="step reveal">
+            <h3>Prove it</h3>
+            <p>Test cases, automated grading, and benchmarks show whether the skill actually works — before anyone relies on it.</p>
+            <div class="step-visual">
+              <div class="eval-row"><span>handles versioned routes</span><span class="pass">PASS</span></div>
+              <div class="eval-row"><span>flags breaking changes</span><span class="pass">PASS</span></div>
+              <div class="eval-row"><span>suggests pagination style</span><span class="fail">FAIL</span></div>
+              <div class="eval-grade">Benchmark: <b>92 / 100</b></div>
+            </div>
+          </div>
+          <div class="step reveal">
+            <h3>Ship it</h3>
+            <p>Every version is snapshotted and benchmarked. Export to five formats or install anywhere with one command.</p>
+            <div class="step-visual">
+              <div class="chips"><span>Claude Code</span><span>Cursor</span><span>Windsurf</span><span>Copilot</span><span>Roo Code</span></div>
+              <code class="install-line">$ skillspell install api-design-review</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container">
+        <p class="kicker l reveal">// what's in the box</p>
+        <h2 class="reveal">Everything between <span class="grad-accent l">idea</span> and installed skill</h2>
+        <dl class="feat-list">
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg></span>
+            <dt>AI-powered generation</dt><dd>Describe a skill; get complete, structured, multi-file output.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H10l-5 4V6z"/><path d="M8 9h8M8 12h5"/></svg></span>
+            <dt>Conversational refinement</dt><dd>Iterate by talking to it — no manual prompt surgery.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></svg></span>
+            <dt>Eval system</dt><dd>Test cases, automated grading, benchmarks — proof over vibes.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7v10M18 10a8 8 0 01-8 8"/></svg></span>
+            <dt>Version history & diff</dt><dd>Snapshots, side-by-side diffs, benchmarks across versions.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 13v5a2 2 0 002 2h12a2 2 0 002-2v-5"/></svg></span>
+            <dt>Multi-format export</dt><dd>One click to Claude Code, Cursor, Windsurf, Copilot, Roo Code.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.5-7 9-4-1.5-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <dt>Organizations & SSO</dt><dd>Multi-tenant, SAML/OIDC, roles, email invitations.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1.5-5h13L20 9"/><path d="M5 9v10h14V9"/><path d="M4 9h16"/><path d="M10 19v-5h4v5"/></svg></span>
+            <dt>Marketplace</dt><dd>Browse, publish, and approve skills across your org.</dd>
+          </div>
+          <div class="feat reveal">
+            <span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M12 12l-6 4M12 12l6 4"/></svg></span>
+            <dt>Mermaid diagrams</dt><dd>Auto-generated visual diagrams for every skill.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="cli" id="cli">
+      <div class="container cli-grid">
+        <div class="cli-copy">
+          <p class="kicker reveal"><span class="k-accent">$</span> and when you're ready to distribute</p>
+          <h2 class="reveal">One command from <span class="grad-accent">spell</span> to shipped</h2>
+          <p class="sub reveal">Publish from the web app, install from the terminal. The <code>@skillspell/cli</code> puts every approved skill one command away from any AI coding tool.</p>
+          <div class="term reveal js-terminal"
+            data-lines='[{"p":"$","c":"npm install -g @skillspell/cli"},{"p":"$","c":"skillspell install api-design-review"},{"ok":"✓ installed → Claude Code, Cursor, Windsurf"}]'>
+            <div class="t-bar"><span></span><span></span><span></span></div>
+            <div class="t-body">
+              <div class="t-line"><span class="p">$</span> npm install -g @skillspell/cli</div>
+              <div class="t-line"><span class="p">$</span> skillspell install api-design-review</div>
+              <div class="t-line ok">✓ installed → Claude Code, Cursor, Windsurf<span class="caret"></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cmp reveal">
+          <table>
+            <caption>Manual authoring vs SkillSpell</caption>
+            <thead><tr><th></th><th>CLI / Manual</th><th>SkillSpell</th></tr></thead>
+            <tbody>
+              <tr><td>Skill creation</td><td>Write markdown by hand</td><td>Describe in natural language</td></tr>
+              <tr><td>Quality assurance</td><td>Manual review</td><td>Automated eval &amp; grading</td></tr>
+              <tr><td>Versioning</td><td>Git commits</td><td>Snapshots + benchmarks</td></tr>
+              <tr><td>Multi-format export</td><td>Copy &amp; adapt per tool</td><td>One click, 5 formats</td></tr>
+              <tr><td>Collaboration</td><td>Share files</td><td>Orgs, roles, SSO</td></tr>
+              <tr><td>Distribution</td><td>Manual file copy</td><td><code>skillspell install</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container foot-inner">
+      <a class="logo" href="#top"><span class="spark">✦</span>SkillSpell</a>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="https://skillspell.mintlify.site/">Docs</a>
+        <a href="https://github.com/arnoldsimha/skillspell">GitHub</a>
+        <a href="https://github.com/arnoldsimha/skillspell/blob/main/LICENSE">Apache-2.0</a>
+        <a href="https://github.com/arnoldsimha/skillspell/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/arnoldsimha/skillspell/blob/main/CONTRIBUTING.md">Contributing</a>
+      </nav>
+      <p class="foot-spec">Self-hostable · PostgreSQL · NestJS + React</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
