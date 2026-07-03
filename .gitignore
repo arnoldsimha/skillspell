@@ -67,3 +67,4 @@ graph/cache/
 
 # Internal code-review / migration working notes — kept locally, not shipped
 .review/
+docs/superpowers/
