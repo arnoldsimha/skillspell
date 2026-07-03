@@ -19,33 +19,16 @@ interface AuthLayoutProps {
   maxWidth?: string;
 }
 
-/** SkillSpell sparkle icon — reused from Header/App welcome screen. */
+/** SkillSpell wordmark — dark variant for the light auth surfaces. */
 function LogoIcon({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  const sizes = {
-    sm: { box: 'h-10 w-10', icon: 'h-5 w-5' },
-    md: { box: 'h-14 w-14', icon: 'h-7 w-7' },
-    lg: { box: 'h-16 w-16', icon: 'h-8 w-8' },
-  };
-  const s = sizes[size];
+  const sizes = { sm: 'h-10', md: 'h-14', lg: 'h-16' };
 
   return (
-    <div
-      className={`${s.box} flex items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl shadow-indigo-500/25`}
-    >
-      <svg
-        className={`${s.icon} text-white`}
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1}
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"
-        />
-      </svg>
-    </div>
+    <img
+      src="/logo-black.png"
+      alt="SkillSpell"
+      className={`${sizes[size]} w-auto`}
+    />
   );
 }
 
