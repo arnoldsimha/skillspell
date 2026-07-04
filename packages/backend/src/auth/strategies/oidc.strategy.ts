@@ -25,6 +25,8 @@ const CONFIG_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes — OIDC discovery refre
 export interface OidcPendingState {
   code_verifier: string;
   cliRedirect?: string;
+  /** CLI-generated state nonce, echoed on the localhost redirect (security finding #3). */
+  cliState?: string;
   expiresAt: number;
 }
 
@@ -148,6 +150,7 @@ export class OidcAuthService {
   async getLoginRedirectUrl(
     cliRedirect?: string,
     cliCodeVerifier?: string,
+    cliState?: string,
   ): Promise<{ redirectUrl: string; state: string }> {
     const org = await this.orgRepo.findSingleton();
     if (!org) throw new UnauthorizedException('Organization not found');
@@ -173,6 +176,7 @@ export class OidcAuthService {
     await this.storeOidcState(state, {
       code_verifier,
       cliRedirect,
+      cliState,
       expiresAt: Date.now() + OIDC_STATE_TTL_MS,
     });
 

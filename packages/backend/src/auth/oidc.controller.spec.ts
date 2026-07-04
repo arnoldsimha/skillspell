@@ -189,8 +189,53 @@ describe('OidcController (OIDC-01)', () => {
       expect(oidcAuthServiceMock.getLoginRedirectUrl).toHaveBeenCalledWith(
         'http://localhost:3001/callback',
         undefined,
+        undefined,
       );
       expect(result).toEqual({ redirectUrl: 'https://idp.example.com/authorize?state=test-state' });
+    });
+
+    it('passes cli_state through to getLoginRedirectUrl (security finding #3)', async () => {
+      const oidcAuthServiceMock = buildOidcAuthServiceMock();
+      const controller = await buildController(oidcAuthServiceMock, buildOrgRepoMock('oidc'));
+      const res = buildResponse();
+
+      await controller.oidcLoginCli(
+        {
+          cli_redirect: 'http://localhost:3001/callback',
+          cli_state: 'a1b2c3d4e5f60718293a4b5c6d7e8f90',
+        },
+        res as any,
+      );
+
+      expect(oidcAuthServiceMock.getLoginRedirectUrl).toHaveBeenCalledWith(
+        'http://localhost:3001/callback',
+        undefined,
+        'a1b2c3d4e5f60718293a4b5c6d7e8f90',
+      );
+    });
+
+    it('rejects a cli_state with invalid characters', async () => {
+      const controller = await buildController();
+      const res = buildResponse();
+
+      await expect(
+        controller.oidcLoginCli(
+          { cli_redirect: 'http://localhost:3001/callback', cli_state: 'bad state<script>' },
+          res as any,
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('rejects an overlong cli_state', async () => {
+      const controller = await buildController();
+      const res = buildResponse();
+
+      await expect(
+        controller.oidcLoginCli(
+          { cli_redirect: 'http://localhost:3001/callback', cli_state: 'a'.repeat(200) },
+          res as any,
+        ),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('OIDC-01b: browser flow redirects to IdP', async () => {
@@ -330,6 +375,26 @@ describe('OidcController (OIDC-01)', () => {
       );
       expect(res.redirect).toHaveBeenCalledWith(
         expect.stringContaining('http://localhost:7777/callback?code='),
+      );
+    });
+
+    it('CLI flow: echoes the stored cliState on the localhost redirect (security finding #3)', async () => {
+      const oidcAuthServiceMock = buildOidcAuthServiceMock();
+      oidcAuthServiceMock.consumeOidcState.mockReturnValue({
+        code_verifier: 'verifier',
+        cliRedirect: 'http://localhost:7777/callback',
+        cliState: 'a1b2c3d4e5f60718293a4b5c6d7e8f90',
+        expiresAt: Date.now() + 60_000,
+      });
+      const controller = await buildController(oidcAuthServiceMock);
+      const res = buildResponse();
+      const req = buildRequest();
+
+      await controller.oidcCallback('code', 'state', req as any, res as any);
+
+      const redirectArg: string = (res.redirect as jest.Mock).mock.calls[0][0];
+      expect(redirectArg).toMatch(
+        /^http:\/\/localhost:7777\/callback\?code=[0-9a-f]{64}&state=a1b2c3d4e5f60718293a4b5c6d7e8f90$/,
       );
     });
 

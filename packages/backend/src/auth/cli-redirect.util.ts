@@ -41,3 +41,43 @@ export function assertLoopbackCliRedirect(cliRedirect: string): void {
     throw new BadRequestException('cli_redirect must target localhost only');
   }
 }
+
+/**
+ * URL-safe CLI state nonce: 8-128 chars from the base64url alphabet.
+ *
+ * `(?![\s\S])` is a true end-of-input anchor — plain `$` would also match
+ * just before a trailing `\n`, admitting a value that isn't URL-safe.
+ */
+const CLI_STATE_RE = /^[A-Za-z0-9_-]{8,128}(?![\s\S])/;
+
+/**
+ * Assert that a CLI-supplied `state` nonce is well-formed.
+ *
+ * The value is opaque to the server — it is echoed verbatim to the CLI's local
+ * callback so the callback server can bind the redirect to the login it
+ * started (blocks injected-code session fixation). We only bound its length
+ * and charset so it can't smuggle control characters into a redirect or log.
+ *
+ * @throws BadRequestException if the state is malformed.
+ */
+export function assertValidCliState(state: string): void {
+  if (!CLI_STATE_RE.test(state)) {
+    throw new BadRequestException('state must be 8-128 URL-safe characters');
+  }
+}
+
+/**
+ * Build the loopback redirect that hands the one-time code (and, when present,
+ * the echoed state nonce) back to the CLI's local callback server.
+ *
+ * Uses the URL API rather than string concatenation so a `cli_redirect` that
+ * already carries a query string or fragment merges correctly instead of
+ * producing `...callback?x=1?code=...` (which would hide the `state` key from
+ * the CLI and hang the login).
+ */
+export function buildCliCallbackUrl(cliRedirect: string, code: string, state?: string): string {
+  const url = new URL(cliRedirect);
+  url.searchParams.set('code', code);
+  if (state) url.searchParams.set('state', state);
+  return url.toString();
+}

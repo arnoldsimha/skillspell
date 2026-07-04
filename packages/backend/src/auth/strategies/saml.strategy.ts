@@ -1,6 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, type Cache } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
-import { SAML, type SamlConfig } from '@node-saml/node-saml';
+import {
+  SAML,
+  ValidateInResponseTo,
+  type CacheItem,
+  type CacheProvider,
+  type SamlConfig,
+} from '@node-saml/node-saml';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import {
   SAML_CONFIG_REPOSITORY,
@@ -43,11 +50,57 @@ export interface SamlValidationResult {
 /** SAML RelayState CSRF nonce validity window (5 minutes). */
 const SAML_NONCE_TTL_MS = 5 * 60 * 1000;
 
+/**
+ * How long an outstanding AuthnRequest ID stays valid for InResponseTo
+ * matching. Must comfortably exceed the login window (RelayState TTL +
+ * time spent at the IdP).
+ */
+const SAML_REQUEST_ID_TTL_MS = 10 * 60 * 1000;
+
+/**
+ * node-saml CacheProvider backed by the Nest cache manager.
+ *
+ * createSamlInstance() builds a fresh SAML object per request, so node-saml's
+ * default in-memory cache would be discarded before the callback arrives —
+ * request IDs must live in a store that outlives the instance (and, with a
+ * Redis-backed cache manager, is shared across nodes). node-saml consumes the
+ * ID on successful validation, which is what makes a replayed assertion fail.
+ */
+class SamlRequestIdCacheProvider implements CacheProvider {
+  private static readonly PREFIX = 'saml:reqid:';
+
+  constructor(private readonly cacheManager: Cache) {}
+
+  async saveAsync(key: string, value: string): Promise<CacheItem | null> {
+    const cacheKey = SamlRequestIdCacheProvider.PREFIX + key;
+    const existing = await this.cacheManager.get<string>(cacheKey);
+    if (existing != null) return null; // node-saml contract: never overwrite
+    await this.cacheManager.set(cacheKey, value, SAML_REQUEST_ID_TTL_MS);
+    return { value, createdAt: Date.now() };
+  }
+
+  async getAsync(key: string): Promise<string | null> {
+    const value = await this.cacheManager.get<string>(SamlRequestIdCacheProvider.PREFIX + key);
+    return value ?? null;
+  }
+
+  async removeAsync(key: string | null): Promise<string | null> {
+    if (key == null) return null;
+    const cacheKey = SamlRequestIdCacheProvider.PREFIX + key;
+    const existing = await this.cacheManager.get<string>(cacheKey);
+    if (existing == null) return null;
+    await this.cacheManager.del(cacheKey);
+    return key;
+  }
+}
+
 @Injectable()
 export class SamlAuthService {
   private readonly logger = new Logger(SamlAuthService.name);
   private readonly jwtSecret: string;
   private readonly publicUrl: string;
+  /** Shared across all per-request SAML instances — see SamlRequestIdCacheProvider. */
+  readonly requestIdCache: CacheProvider;
 
   constructor(
     @Inject(SAML_CONFIG_REPOSITORY)
@@ -59,9 +112,11 @@ export class SamlAuthService {
     @Inject(USER_REPOSITORY)
     private readonly userRepo: IUserRepository,
     configService: ConfigService<AppConfig, true>,
+    @Inject(CACHE_MANAGER) cacheManager: Cache,
   ) {
     this.jwtSecret = configService.get('auth.jwtSecret', { infer: true });
     this.publicUrl = configService.get('app.publicUrl', { infer: true }) || '';
+    this.requestIdCache = new SamlRequestIdCacheProvider(cacheManager);
   }
 
   /**
@@ -89,6 +144,13 @@ export class SamlAuthService {
       wantAuthnResponseSigned: false,
       idpIssuer: config.idpEntityId,
       logoutUrl: config.idpSloUrl || undefined,
+      // Replay protection (security finding #2): every response must answer an
+      // AuthnRequest we issued; the request ID is consumed on first validation,
+      // so a captured assertion cannot be accepted twice. Also rejects
+      // IdP-initiated responses, which the app does not support.
+      validateInResponseTo: ValidateInResponseTo.always,
+      requestIdExpirationPeriodMs: SAML_REQUEST_ID_TTL_MS,
+      cacheProvider: this.requestIdCache,
     };
 
     return { saml: new SAML(samlConfig), config };
@@ -278,15 +340,18 @@ export class SamlAuthService {
    * Generate an HMAC-signed CSRF nonce for SAML RelayState.
    *
    * Format: `base64url(JSON).hmac` where JSON payload is:
-   *   { n: "<32-hex-nonce>", t: <timestamp-ms>, r?: "<cli_redirect>" }
+   *   { n: "<32-hex-nonce>", t: <timestamp-ms>, r?: "<cli_redirect>", s?: "<cli_state>" }
    * HMAC is computed over the base64url string (not raw JSON).
    *
-   * The `r` field is only present for CLI-initiated flows.
+   * The `r` and `s` fields are only present for CLI-initiated flows. `s` is the
+   * CLI-generated state nonce echoed back on the localhost redirect so the CLI
+   * callback server can reject injected codes.
    */
-  generateRelayState(cliRedirect?: string): string {
+  generateRelayState(cliRedirect?: string, cliState?: string): string {
     const nonce = randomBytes(16).toString('hex');
     const payload: Record<string, unknown> = { n: nonce, t: Date.now() };
     if (cliRedirect) payload.r = cliRedirect;
+    if (cliState) payload.s = cliState;
     const encoded = Buffer.from(JSON.stringify(payload)).toString('base64url');
     const hmac = createHmac('sha256', this.jwtSecret).update(encoded).digest('hex');
     return `${encoded}.${hmac}`;
@@ -350,14 +415,29 @@ export class SamlAuthService {
    * Returns null if RelayState is not in the new base64url JSON format.
    */
   extractCliRedirect(relayState: string): string | null {
+    return this.extractPayloadField(relayState, 'r');
+  }
+
+  /**
+   * Extract the CLI state nonce from a RelayState payload.
+   *
+   * MUST be called AFTER verifyRelayState() passes — no re-verification here.
+   * Returns null for browser-flow RelayState or corrupt input.
+   */
+  extractCliState(relayState: string): string | null {
+    return this.extractPayloadField(relayState, 's');
+  }
+
+  private extractPayloadField(relayState: string, field: string): string | null {
     const dotIdx = relayState.lastIndexOf('.');
     if (dotIdx === -1) return null;
     const encoded = relayState.slice(0, dotIdx);
     try {
       const payload = JSON.parse(Buffer.from(encoded, 'base64url').toString('utf8')) as Record<string, unknown>;
-      return typeof payload.r === 'string' ? payload.r : null;
+      const value = payload[field];
+      return typeof value === 'string' ? value : null;
     } catch {
-      return null; // old format or corrupt — no cli_redirect
+      return null; // old format or corrupt — field absent
     }
   }
 

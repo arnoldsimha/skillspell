@@ -25,9 +25,11 @@ interface SsoStatusResponse {
  * Initiate OIDC login via POST to keep the PKCE code_verifier out of server access logs.
  * Per D-09: CLI generates PKCE inline using node:crypto (openid-client NOT installed in CLI).
  * CR-01 fix: code_verifier is sent in the POST body, not the URL query string.
+ * `state` is a CLI-generated nonce the backend echoes to the local callback so the
+ * callback server can reject injected codes (security finding #3).
  * Returns the IdP authorization URL that the CLI should open in the browser.
  */
-async function fetchOidcLoginUrl(baseUrl: string, cliRedirect: string): Promise<string> {
+export async function fetchOidcLoginUrl(baseUrl: string, cliRedirect: string, state: string): Promise<string> {
   const codeVerifier = randomBytes(32).toString('base64url');
   const resp = await fetch(`${baseUrl}/api/auth/oidc/login`, {
     method: 'POST',
@@ -35,6 +37,7 @@ async function fetchOidcLoginUrl(baseUrl: string, cliRedirect: string): Promise<
     body: JSON.stringify({
       cli_redirect: cliRedirect,
       cli_code_verifier: codeVerifier,
+      cli_state: state,
     }),
   });
   if (!resp.ok) {
@@ -42,6 +45,14 @@ async function fetchOidcLoginUrl(baseUrl: string, cliRedirect: string): Promise<
   }
   const data = await resp.json() as { redirectUrl: string };
   return data.redirectUrl;
+}
+
+/**
+ * Build the SAML CLI login URL. The backend embeds `state` in the HMAC-signed
+ * RelayState and echoes it back to the local callback (security finding #3).
+ */
+export function buildSamlLoginUrl(baseUrl: string, cliRedirect: string, state: string): string {
+  return `${baseUrl}/api/auth/saml/login?cli_redirect=${encodeURIComponent(cliRedirect)}&state=${encodeURIComponent(state)}`;
 }
 
 /**
@@ -64,8 +75,12 @@ async function fetchOidcLoginUrl(baseUrl: string, cliRedirect: string): Promise<
 async function ssoLoginFlow(config: CliConfig): Promise<void> {
   p.intro('SkillSpell SSO Login');
 
+  // State nonce binds the callback to THIS login attempt — the backend echoes it
+  // and the callback server rejects any request that doesn't carry it back.
+  const state = randomBytes(16).toString('hex');
+
   // Start local callback server — must resolve before opening browser (Pitfall 2)
-  const { port, codePromise } = await startCallbackServer();
+  const { port, codePromise } = await startCallbackServer(state);
   const cliRedirect = `http://localhost:${port}/callback`;
 
   // D-08: Detect active SSO protocol before building login URL
@@ -89,10 +104,10 @@ async function ssoLoginFlow(config: CliConfig): Promise<void> {
   let loginUrl: string;
   if (ssoStatus.activeSsoProtocol === 'oidc') {
     // D-09: OIDC CLI flow with PKCE — code_verifier sent in POST body (CR-01)
-    loginUrl = await fetchOidcLoginUrl(config.baseUrl, cliRedirect);
+    loginUrl = await fetchOidcLoginUrl(config.baseUrl, cliRedirect, state);
   } else {
-    // SAML flow (unchanged from Phase 7)
-    loginUrl = `${config.baseUrl}/api/auth/saml/login?cli_redirect=${encodeURIComponent(cliRedirect)}`;
+    // SAML flow — state travels via RelayState on the backend
+    loginUrl = buildSamlLoginUrl(config.baseUrl, cliRedirect, state);
   }
 
   // D-15: auto-open browser; also print URL in case auto-open fails
@@ -121,7 +136,9 @@ async function ssoLoginFlow(config: CliConfig): Promise<void> {
     s.stop('Timed out.');
     p.cancel(
       err instanceof Error && err.message === 'timeout'
-        ? 'Authentication timed out (5 minutes). Run `skillspell login --sso` to try again.'
+        ? 'Authentication timed out (5 minutes). Run `skillspell login --sso` to try again. ' +
+          'If it keeps timing out right after the browser shows success, your SkillSpell ' +
+          'backend may predate secure CLI login — ask your admin to upgrade it.'
         : `Authentication failed: ${err instanceof Error ? err.message : String(err)}`,
     );
     process.exit(1);

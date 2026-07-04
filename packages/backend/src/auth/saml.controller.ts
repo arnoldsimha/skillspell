@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -27,6 +26,7 @@ import { SamlAuthService } from './strategies/saml.strategy.js';
 import { CliAuthService } from './cli-auth.service.js';
 import { Public } from './decorators/public.decorator.js';
 import { setRefreshTokenCookie } from './cookie.utils.js';
+import { assertLoopbackCliRedirect, assertValidCliState, buildCliCallbackUrl } from './cli-redirect.util.js';
 
 /**
  * SAML SSO controller.
@@ -68,19 +68,20 @@ export class SamlController {
   @Get('saml/login')
   async samlLogin(
     @Query('cli_redirect') cliRedirect: string | undefined,
+    @Query('state') state: string | undefined,
     @Res() res: Response,
   ): Promise<void> {
     this.logger.log(`SAML login initiated: cli_redirect=${cliRedirect ?? 'none'}`);
-    // Validate cli_redirect before anything else (criterion #4)
+    // Validate cli_redirect before anything else (criterion #4). Shared with
+    // the OIDC path so both protocols enforce one loopback policy.
     if (cliRedirect !== undefined) {
-      try {
-        if (new URL(cliRedirect).hostname !== 'localhost') {
-          throw new BadRequestException('cli_redirect must target localhost only');
-        }
-      } catch (e) {
-        if (e instanceof BadRequestException) throw e;
-        throw new BadRequestException('cli_redirect must be a valid localhost URL');
-      }
+      assertLoopbackCliRedirect(cliRedirect);
+    }
+
+    // CLI-generated state nonce — echoed back to the local callback so the CLI
+    // can reject injected codes (security finding #3).
+    if (state !== undefined) {
+      assertValidCliState(state);
     }
 
     // Check org-level SSO gate before attempting IdP configuration lookup
@@ -90,8 +91,8 @@ export class SamlController {
     }
 
     try {
-      // Generate CSRF nonce for RelayState (with optional cliRedirect embedded)
-      const relayState = this.samlAuthService.generateRelayState(cliRedirect);
+      // Generate CSRF nonce for RelayState (with optional cliRedirect + CLI state embedded)
+      const relayState = this.samlAuthService.generateRelayState(cliRedirect, state);
       this.logger.debug(`SAML login: generated RelayState nonce (length=${relayState.length})`);
 
       const redirectUrl = await this.samlAuthService.getLoginRedirectUrl(relayState);
@@ -132,24 +133,21 @@ export class SamlController {
     this.logger.debug(`SAML callback body keys: ${Object.keys(body).join(', ')}`);
 
     // ── RelayState CSRF nonce check ──
-    // If RelayState is present (SP-initiated flow), it MUST be valid.
-    // Only skip the check for IdP-initiated flows where no RelayState exists.
-    // The SAML assertion signature provides primary security; RelayState
-    // adds defense-in-depth against login CSRF.
-    if (body.RelayState) {
-      if (!this.samlAuthService.verifyRelayState(body.RelayState)) {
-        this.logger.warn(
-          'SAML callback: RelayState nonce verification failed — rejecting callback',
-        );
-        const frontendBaseUrl = this.samlAuthService.getFrontendRedirectUrl();
-        const redirectUrl = `${frontendBaseUrl}/sso-callback#error=csrf_failed`;
-        res.redirect(redirectUrl);
-        return;
-      }
-      this.logger.debug('SAML callback: RelayState nonce verified successfully');
-    } else {
-      this.logger.warn('SAML callback: IdP-initiated flow — no RelayState, CSRF protection not applicable');
+    // RelayState is REQUIRED: every flow the app supports (browser + CLI) is
+    // SP-initiated via /saml/login, which always issues a signed RelayState.
+    // A callback without one is either an IdP-initiated flow (unsupported) or
+    // a replayed/forged response — reject both (security finding #2).
+    if (!body.RelayState || !this.samlAuthService.verifyRelayState(body.RelayState)) {
+      this.logger.warn(
+        body.RelayState
+          ? 'SAML callback: RelayState nonce verification failed — rejecting callback'
+          : 'SAML callback: missing RelayState (IdP-initiated SSO is not supported) — rejecting callback',
+      );
+      const frontendBaseUrl = this.samlAuthService.getFrontendRedirectUrl();
+      res.redirect(`${frontendBaseUrl}/sso-callback#error=csrf_failed`);
+      return;
     }
+    this.logger.debug('SAML callback: RelayState nonce verified successfully');
 
     // Resolve the frontend base URL from APP_PUBLIC_URL
     const frontendBaseUrl = this.samlAuthService.getFrontendRedirectUrl();
@@ -165,19 +163,17 @@ export class SamlController {
       const deviceInfo = req.headers['user-agent'];
 
       // Check if this is a CLI flow: cli_redirect embedded in RelayState
-      const cliRedirect = this.samlAuthService.extractCliRedirect(body.RelayState ?? '');
+      const cliRedirect = this.samlAuthService.extractCliRedirect(body.RelayState);
+      const cliState = this.samlAuthService.extractCliState(body.RelayState);
 
       if (cliRedirect) {
         // CLI flow
-        // Defense in depth: re-validate cli_redirect even though samlLogin already checked
+        // Defense in depth: re-validate cli_redirect even though samlLogin already
+        // checked it (shared loopback policy with the OIDC callback).
         try {
-          if (new URL(cliRedirect).hostname !== 'localhost') {
-            this.logger.warn(`SAML callback: cli_redirect has invalid origin — rejecting: ${cliRedirect.substring(0, 80)}`);
-            res.redirect(`${frontendBaseUrl}/sso-callback#error=invalid_redirect`);
-            return;
-          }
+          assertLoopbackCliRedirect(cliRedirect);
         } catch {
-          this.logger.warn(`SAML callback: cli_redirect is not a valid URL — rejecting: ${cliRedirect.substring(0, 80)}`);
+          this.logger.warn(`SAML callback: cli_redirect failed re-validation — rejecting: ${cliRedirect.substring(0, 80)}`);
           res.redirect(`${frontendBaseUrl}/sso-callback#error=invalid_redirect`);
           return;
         }
@@ -201,7 +197,9 @@ export class SamlController {
 
         this.logger.log(`SAML callback: CLI login succeeded for ${result.user.email}`);
         this.logger.debug(`SAML callback: CLI flow — redirecting to local callback with code`);
-        res.redirect(`${cliRedirect}?code=${code}`);
+        // Echo the CLI's state nonce so its callback server can verify this
+        // redirect belongs to the login it started (security finding #3).
+        res.redirect(buildCliCallbackUrl(cliRedirect, code, cliState ?? undefined));
         return;
       }
 

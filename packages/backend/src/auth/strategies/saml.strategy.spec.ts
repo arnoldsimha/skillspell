@@ -1,5 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ValidateInResponseTo } from '@node-saml/node-saml';
 import {
   SAML_CONFIG_REPOSITORY,
   ORGANIZATION_REPOSITORY,
@@ -55,14 +57,27 @@ const TEST_SAML_CONFIG: SamlProviderConfig = {
   updatedAt: '2024-01-01T00:00:00Z',
 };
 
+/** Map-backed stand-in for the Nest cache manager. */
+function createFakeCacheManager() {
+  const store = new Map<string, unknown>();
+  return {
+    store,
+    get: jest.fn(async (key: string) => (store.has(key) ? store.get(key) : undefined)),
+    set: jest.fn(async (key: string, value: unknown) => { store.set(key, value); }),
+    del: jest.fn(async (key: string) => { store.delete(key); }),
+  };
+}
+
 describe('SamlAuthService', () => {
   let service: SamlAuthService;
   let samlConfigRepo: jest.Mocked<ISamlConfigRepository>;
   let orgRepo: jest.Mocked<IOrganizationRepository>;
   let authTokenRepo: jest.Mocked<IAuthTokenRepository>;
   let userRepo: jest.Mocked<IUserRepository>;
+  let fakeCache: ReturnType<typeof createFakeCacheManager>;
 
   beforeEach(async () => {
+    fakeCache = createFakeCacheManager();
     samlConfigRepo = {
       getSamlConfig: jest.fn(),
       saveSamlConfig: jest.fn(),
@@ -109,6 +124,7 @@ describe('SamlAuthService', () => {
         { provide: ORGANIZATION_REPOSITORY, useValue: orgRepo },
         { provide: AUTH_TOKEN_REPOSITORY, useValue: authTokenRepo },
         { provide: USER_REPOSITORY, useValue: userRepo },
+        { provide: CACHE_MANAGER, useValue: fakeCache },
         {
           provide: ConfigService,
           useValue: {
@@ -390,6 +406,7 @@ describe('SamlAuthService', () => {
           { provide: ORGANIZATION_REPOSITORY, useValue: orgRepo },
           { provide: AUTH_TOKEN_REPOSITORY, useValue: authTokenRepo },
           { provide: USER_REPOSITORY, useValue: userRepo },
+          { provide: CACHE_MANAGER, useValue: createFakeCacheManager() },
           {
             provide: ConfigService,
             useValue: {
@@ -405,6 +422,100 @@ describe('SamlAuthService', () => {
       const service2 = module2.get<SamlAuthService>(SamlAuthService);
       // publicUrl comes from env — it is NOT spEntityId ('https://app.example.com')
       expect(service2.getFrontendRedirectUrl()).toBe('https://trusted.env.example.com');
+    });
+  });
+
+  // ── assertion replay protection (security finding #2) ────────
+
+  describe('assertion replay protection — validateInResponseTo (security finding #2)', () => {
+    beforeEach(() => {
+      orgRepo.findSingleton.mockResolvedValue(TEST_ORG);
+      samlConfigRepo.getSamlConfig.mockResolvedValue(TEST_SAML_CONFIG);
+    });
+
+    it('createSamlInstance enables validateInResponseTo=always', async () => {
+      const instance = await (service as unknown as {
+        createSamlInstance(): Promise<{ saml: { options: Record<string, unknown> } } | null>;
+      }).createSamlInstance();
+      expect(instance).not.toBeNull();
+      expect(instance!.saml.options.validateInResponseTo).toBe(ValidateInResponseTo.always);
+    });
+
+    it('all SAML instances share the same request-ID cache provider (survives per-request instances)', async () => {
+      const svc = service as unknown as {
+        createSamlInstance(): Promise<{ saml: { options: Record<string, unknown> } } | null>;
+      };
+      const first = await svc.createSamlInstance();
+      const second = await svc.createSamlInstance();
+      expect(first!.saml.options.cacheProvider).toBeDefined();
+      expect(first!.saml.options.cacheProvider).toBe(second!.saml.options.cacheProvider);
+    });
+
+    describe('requestIdCache — cache-manager-backed CacheProvider', () => {
+      it('saveAsync stores a request ID retrievable via getAsync', async () => {
+        const item = await service.requestIdCache.saveAsync('_req1', '2026-07-04T00:00:00Z');
+        expect(item).toEqual({ value: '2026-07-04T00:00:00Z', createdAt: expect.any(Number) });
+        await expect(service.requestIdCache.getAsync('_req1')).resolves.toBe('2026-07-04T00:00:00Z');
+      });
+
+      it('saveAsync returns null for an already-saved key (no overwrite)', async () => {
+        await service.requestIdCache.saveAsync('_req1', 'first');
+        const second = await service.requestIdCache.saveAsync('_req1', 'second');
+        expect(second).toBeNull();
+        await expect(service.requestIdCache.getAsync('_req1')).resolves.toBe('first');
+      });
+
+      it('removeAsync deletes the key and returns it; a second remove returns null (single-use)', async () => {
+        await service.requestIdCache.saveAsync('_req1', 'v');
+        await expect(service.requestIdCache.removeAsync('_req1')).resolves.toBe('_req1');
+        await expect(service.requestIdCache.getAsync('_req1')).resolves.toBeNull();
+        await expect(service.requestIdCache.removeAsync('_req1')).resolves.toBeNull();
+      });
+
+      it('getAsync returns null for an unknown key', async () => {
+        await expect(service.requestIdCache.getAsync('_missing')).resolves.toBeNull();
+      });
+
+      it('removeAsync tolerates null keys', async () => {
+        await expect(service.requestIdCache.removeAsync(null)).resolves.toBeNull();
+      });
+    });
+  });
+
+  // ── cliState in RelayState (security finding #3) ─────────────
+
+  describe('generateRelayState / extractCliState — CLI state nonce', () => {
+    const CLI_STATE = 'a1b2c3d4e5f60718293a4b5c6d7e8f90';
+
+    it('embeds cliState as the s field in the RelayState payload', () => {
+      const relayState = service.generateRelayState('http://localhost:9876/callback', CLI_STATE);
+      const dotIdx = relayState.lastIndexOf('.');
+      const payload = JSON.parse(Buffer.from(relayState.slice(0, dotIdx), 'base64url').toString('utf8'));
+      expect(payload.s).toBe(CLI_STATE);
+      expect(payload.r).toBe('http://localhost:9876/callback');
+      // Still verifiable — HMAC covers the s field
+      expect(service.verifyRelayState(relayState)).toBe(true);
+    });
+
+    it('omits the s field when no cliState provided (browser flow)', () => {
+      const relayState = service.generateRelayState('http://localhost:9876/callback');
+      const dotIdx = relayState.lastIndexOf('.');
+      const payload = JSON.parse(Buffer.from(relayState.slice(0, dotIdx), 'base64url').toString('utf8'));
+      expect(payload.s).toBeUndefined();
+    });
+
+    it('extractCliState returns the embedded state', () => {
+      const relayState = service.generateRelayState('http://localhost:9876/callback', CLI_STATE);
+      expect(service.extractCliState(relayState)).toBe(CLI_STATE);
+    });
+
+    it('extractCliState returns null when absent', () => {
+      const relayState = service.generateRelayState('http://localhost:9876/callback');
+      expect(service.extractCliState(relayState)).toBeNull();
+    });
+
+    it('extractCliState returns null on corrupt input', () => {
+      expect(service.extractCliState('not-valid-at-all')).toBeNull();
     });
   });
 

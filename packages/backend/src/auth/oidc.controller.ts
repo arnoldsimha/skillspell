@@ -25,7 +25,7 @@ import { OidcAuthService } from './strategies/oidc.strategy.js';
 import { CliAuthService } from './cli-auth.service.js';
 import { Public } from './decorators/public.decorator.js';
 import { setRefreshTokenCookie } from './cookie.utils.js';
-import { assertLoopbackCliRedirect } from './cli-redirect.util.js';
+import { assertLoopbackCliRedirect, assertValidCliState, buildCliCallbackUrl } from './cli-redirect.util.js';
 
 /**
  * OIDC SSO controller.
@@ -96,16 +96,22 @@ export class OidcController {
   @Post('oidc/login')
   @HttpCode(HttpStatus.OK)
   async oidcLoginCli(
-    @Body() body: { cli_redirect?: string; cli_code_verifier?: string },
+    @Body() body: { cli_redirect?: string; cli_code_verifier?: string; cli_state?: string },
     @Res({ passthrough: true }) _res: Response,
   ): Promise<{ redirectUrl: string }> {
-    const { cli_redirect: cliRedirect, cli_code_verifier: cliCodeVerifier } = body;
+    const { cli_redirect: cliRedirect, cli_code_verifier: cliCodeVerifier, cli_state: cliState } = body;
     this.logger.log(`OIDC CLI login initiated: cli_redirect=${cliRedirect ?? 'none'}`);
 
     // Only loopback cli_redirect accepted. Parse the URL and check the real
     // hostname — a prefix check is bypassable via userinfo (localhost:x@evil.com).
     if (cliRedirect !== undefined) {
       assertLoopbackCliRedirect(cliRedirect);
+    }
+
+    // CLI-generated state nonce — echoed back to the local callback so the CLI
+    // can reject injected codes (security finding #3).
+    if (cliState !== undefined) {
+      assertValidCliState(cliState);
     }
 
     // Only active OIDC protocol allowed
@@ -118,6 +124,7 @@ export class OidcController {
       const { redirectUrl } = await this.oidcAuthService.getLoginRedirectUrl(
         cliRedirect,
         cliCodeVerifier,
+        cliState,
       );
       return { redirectUrl };
     } catch (error) {
@@ -194,7 +201,9 @@ export class OidcController {
           expiresAt: Date.now() + this.cliAuthService.CODE_TTL_MS,
         });
         this.logger.log(`OIDC callback: CLI login succeeded for ${result.user.email}`);
-        res.redirect(`${pendingState.cliRedirect}?code=${code}`);
+        // Echo the CLI's state nonce so its callback server can verify this
+        // redirect belongs to the login it started (security finding #3).
+        res.redirect(buildCliCallbackUrl(pendingState.cliRedirect, code, pendingState.cliState));
       } else {
         // Browser flow — set cookie + redirect to SsoCallbackPage
         setRefreshTokenCookie(res, refreshToken, this.refreshTokenExpiry, this.isProduction);
