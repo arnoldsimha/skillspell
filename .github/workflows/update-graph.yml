@@ -3,8 +3,10 @@ name: Update Knowledge Graph
 # Updates the project knowledge graph on merge to main.
 # The graph reflects the actual codebase architecture and is committed to the repo.
 #
-# Requires the ANTHROPIC_API_KEY repo secret; if it is not set, the job
-# skips with a warning instead of failing.
+# Uses `graphify update` (AST-only re-extraction) — no LLM backend or API key
+# needed. New communities keep "Community N" placeholder names until someone
+# runs `graphify label` with an LLM backend; doc/paper/image changes require a
+# manual `graphify extract` for semantic re-extraction.
 
 on:
   push:
@@ -24,38 +26,17 @@ jobs:
         with:
           fetch-depth: 0  # Full history for graphify context
 
-      - name: Check for ANTHROPIC_API_KEY
-        id: check-key
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::warning::ANTHROPIC_API_KEY secret not set — skipping knowledge graph update"
-            echo "available=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Install graphify
-        if: steps.check-key.outputs.available == 'true'
         run: pipx install graphifyy
 
-      - name: Extract codebase
-        if: steps.check-key.outputs.available == 'true'
+      - name: Update graph (AST-only, no LLM)
         env:
           GRAPHIFY_OUT: graph
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: graphify extract . --backend=claude
-
-      - name: Cluster and generate report
-        if: steps.check-key.outputs.available == 'true'
-        env:
-          GRAPHIFY_OUT: graph
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: graphify cluster-only . --backend=claude
+          # Full checkout — allow node-count decreases after code deletions
+          GRAPHIFY_FORCE: "1"
+        run: graphify update .
 
       - name: Commit graph changes
-        if: steps.check-key.outputs.available == 'true'
         run: |
           if [ -n "$(git status --porcelain graph/)" ]; then
             git config user.name "github-actions[bot]"
