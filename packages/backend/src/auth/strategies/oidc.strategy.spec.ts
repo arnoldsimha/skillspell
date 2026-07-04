@@ -300,6 +300,29 @@ describe('OidcAuthService (OIDC-02)', () => {
     expect(second).toBeNull();
   });
 
+  it('getLoginRedirectUrl stores cliState in the pending state for the callback echo (security finding #3)', async () => {
+    cacheStore.clear();
+    const client = jest.requireMock('openid-client');
+    client.discovery.mockResolvedValue(mockDiscoveryConfig);
+    mockDiscoveryConfig.serverMetadata.mockReturnValue(mockServerMetadata);
+    client.calculatePKCECodeChallenge.mockResolvedValue('test-challenge');
+    client.randomState.mockReturnValue('server-state-1');
+    client.buildAuthorizationUrl.mockReturnValue(
+      new URL('https://idp.example.com/authorize?state=server-state-1'),
+    );
+
+    const service = await buildService(buildMocks());
+    await service.getLoginRedirectUrl(
+      'http://localhost:7777/callback',
+      'cli-verifier',
+      'a1b2c3d4e5f60718293a4b5c6d7e8f90',
+    );
+
+    const entry = await service.consumeOidcState('server-state-1');
+    expect(entry?.cliRedirect).toBe('http://localhost:7777/callback');
+    expect(entry?.cliState).toBe('a1b2c3d4e5f60718293a4b5c6d7e8f90');
+  });
+
   it('OIDC-02e: validateCallback throws UnauthorizedException when autoProvision=false and user not found', async () => {
     const configNoProvision = {
       ...baseOidcConfig,

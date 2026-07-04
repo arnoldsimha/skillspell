@@ -10,9 +10,21 @@
 import { startCallbackServer } from '../../src/lib/callback-server.js';
 import * as http from 'node:http';
 
+const STATE = 'a1b2c3d4e5f60718293a4b5c6d7e8f90';
+
+/** GET a path on the callback server and return the response status code. */
+function get(port: number, path: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    http.get(`http://127.0.0.1:${port}${path}`, (res) => {
+      res.resume(); // drain so the socket is released
+      resolve(res.statusCode ?? 0);
+    }).on('error', reject);
+  });
+}
+
 describe('startCallbackServer() — local HTTP callback server (D-05)', () => {
   it('7-02-02: binds to 127.0.0.1 on OS-assigned port (not 0.0.0.0)', async () => {
-    const { port, codePromise } = await startCallbackServer();
+    const { port, codePromise } = await startCallbackServer(STATE);
 
     // Port must be a positive integer assigned by OS
     expect(port).toBeGreaterThan(0);
@@ -22,7 +34,7 @@ describe('startCallbackServer() — local HTTP callback server (D-05)', () => {
     const req = http.request({
       hostname: '127.0.0.1',
       port,
-      path: '/callback?code=testcode1234',
+      path: `/callback?code=testcode1234&state=${STATE}`,
       method: 'GET',
     });
     req.end();
@@ -32,15 +44,65 @@ describe('startCallbackServer() — local HTTP callback server (D-05)', () => {
   }, 5000);
 
   it('responds with 200 and HTML on GET /callback', async () => {
-    const { port, codePromise } = await startCallbackServer();
+    const { port, codePromise } = await startCallbackServer(STATE);
 
-    await new Promise<void>((resolve, reject) => {
-      http.get(`http://127.0.0.1:${port}/callback?code=abc123`, (res) => {
-        expect(res.statusCode).toBe(200);
-        resolve();
-      }).on('error', reject);
-    });
+    const status = await get(port, `/callback?code=abc123&state=${STATE}`);
+    expect(status).toBe(200);
 
     await codePromise;
+  }, 5000);
+});
+
+describe('startCallbackServer() — state binding (security finding #3)', () => {
+  it('rejects a callback with a mismatched state with 400 and keeps listening', async () => {
+    const { port, codePromise } = await startCallbackServer(STATE);
+
+    // Attacker-injected code with the wrong state must NOT resolve the login.
+    const attackStatus = await get(port, '/callback?code=attackercode&state=deadbeefdeadbeefdeadbeefdeadbeef');
+    expect(attackStatus).toBe(400);
+
+    // The server must still be alive and accept the legitimate callback.
+    const realStatus = await get(port, `/callback?code=realcode&state=${STATE}`);
+    expect(realStatus).toBe(200);
+
+    const code = await codePromise;
+    expect(code).toBe('realcode');
+  }, 5000);
+
+  it('rejects a callback with no state param with 400 and keeps listening', async () => {
+    const { port, codePromise } = await startCallbackServer(STATE);
+
+    const noStateStatus = await get(port, '/callback?code=attackercode');
+    expect(noStateStatus).toBe(400);
+
+    const realStatus = await get(port, `/callback?code=realcode&state=${STATE}`);
+    expect(realStatus).toBe(200);
+
+    const code = await codePromise;
+    expect(code).toBe('realcode');
+  }, 5000);
+
+  it('still returns 404 for non-callback paths without consuming the login', async () => {
+    const { port, codePromise } = await startCallbackServer(STATE);
+
+    const status = await get(port, '/favicon.ico');
+    expect(status).toBe(404);
+
+    const realStatus = await get(port, `/callback?code=realcode&state=${STATE}`);
+    expect(realStatus).toBe(200);
+
+    const code = await codePromise;
+    expect(code).toBe('realcode');
+  }, 5000);
+
+  it('rejects a matching-state callback that is missing the code with an error', async () => {
+    const { port, codePromise } = await startCallbackServer(STATE);
+
+    // Attach the rejection handler BEFORE the request so the rejection is not unhandled.
+    const rejection = expect(codePromise).rejects.toThrow(/No code/);
+    const status = await get(port, `/callback?state=${STATE}`);
+    expect(status).toBe(400);
+
+    await rejection;
   }, 5000);
 });
