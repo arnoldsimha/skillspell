@@ -2,6 +2,11 @@ name: Update Knowledge Graph
 
 # Updates the project knowledge graph on merge to main.
 # The graph reflects the actual codebase architecture and is committed to the repo.
+#
+# Uses `graphify update` (AST-only re-extraction) — no LLM backend or API key
+# needed. New communities keep "Community N" placeholder names until someone
+# runs `graphify label` with an LLM backend; doc/paper/image changes require a
+# manual `graphify extract` for semantic re-extraction.
 
 on:
   push:
@@ -22,17 +27,14 @@ jobs:
           fetch-depth: 0  # Full history for graphify context
 
       - name: Install graphify
-        run: npm install -g graphify
+        run: pipx install graphifyy
 
-      - name: Extract codebase
+      - name: Update graph (AST-only, no LLM)
         env:
           GRAPHIFY_OUT: graph
-        run: graphify extract . --backend=http
-
-      - name: Cluster and generate report
-        env:
-          GRAPHIFY_OUT: graph
-        run: graphify cluster-only . --backend=http
+          # Full checkout — allow node-count decreases after code deletions
+          GRAPHIFY_FORCE: "1"
+        run: graphify update .
 
       - name: Commit graph changes
         run: |
