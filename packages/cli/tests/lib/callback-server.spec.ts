@@ -22,6 +22,17 @@ function get(port: number, path: string): Promise<number> {
   });
 }
 
+/** GET a path and return { status, body }. */
+function getWithBody(port: number, path: string): Promise<{ status: number; body: string }> {
+  return new Promise((resolve, reject) => {
+    http.get(`http://127.0.0.1:${port}${path}`, (res) => {
+      let body = '';
+      res.on('data', (c) => { body += c; });
+      res.on('end', () => resolve({ status: res.statusCode ?? 0, body }));
+    }).on('error', reject);
+  });
+}
+
 describe('startCallbackServer() — local HTTP callback server (D-05)', () => {
   it('7-02-02: binds to 127.0.0.1 on OS-assigned port (not 0.0.0.0)', async () => {
     const { port, codePromise } = await startCallbackServer(STATE);
@@ -80,6 +91,18 @@ describe('startCallbackServer() — state binding (security finding #3)', () => 
 
     const code = await codePromise;
     expect(code).toBe('realcode');
+  }, 5000);
+
+  it('a no-state callback returns an actionable version-skew hint (not a bare mismatch)', async () => {
+    const { port, codePromise } = await startCallbackServer(STATE);
+
+    const { status, body } = await getWithBody(port, '/callback?code=attackercode');
+    expect(status).toBe(400);
+    expect(body.toLowerCase()).toContain('upgrade');
+
+    // Still resolves the real callback afterwards.
+    await get(port, `/callback?code=realcode&state=${STATE}`);
+    await expect(codePromise).resolves.toBe('realcode');
   }, 5000);
 
   it('still returns 404 for non-callback paths without consuming the login', async () => {
