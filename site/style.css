@@ -97,6 +97,11 @@ html.js .reveal.in { opacity: 1; transform: none; }
     radial-gradient(1px 1px at 76% 74%, rgba(199,203,255,.3), transparent);
   -webkit-mask-image: linear-gradient(180deg, black 55%, transparent 100%);
   mask-image: linear-gradient(180deg, black 55%, transparent 100%); }
+/* living constellation canvas — replaces the static ::before stars when running */
+.hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, black 60%, transparent 100%);
+  mask-image: linear-gradient(180deg, black 60%, transparent 100%); }
+.hero.has-canvas::before { display: none; }
 .sigil { position: absolute; top: 0; right: 0; width: 50%; max-width: 660px; height: auto; pointer-events: none; }
 .hero-copy { position: relative; max-width: 780px; }
 .hero-copy .kicker { margin: 0 0 28px; }
