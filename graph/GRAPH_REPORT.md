@@ -1,275 +1,365 @@
-# Graph Report - .  (2026-07-01)
+# Graph Report - .  (2026-07-04)
 
 ## Corpus Check
 - cluster-only mode — file stats not available
 
 ## Summary
-- 3704 nodes · 6825 edges · 268 communities (149 shown, 119 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 23 edges (avg confidence: 0.84)
+- 4471 nodes · 8069 edges · 363 communities (206 shown, 157 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2a1c90d2`
+- Built from commit: `97cd1fee`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Strands Agent Events|Strands Agent Events]]
-- [[_COMMUNITY_Admin Analytics|Admin Analytics]]
-- [[_COMMUNITY_Organization Settings|Organization Settings]]
-- [[_COMMUNITY_Skill Request DTOs|Skill Request DTOs]]
-- [[_COMMUNITY_Test Generation UI|Test Generation UI]]
-- [[_COMMUNITY_LLM Dependencies|LLM Dependencies]]
-- [[_COMMUNITY_Skill Upload|Skill Upload]]
-- [[_COMMUNITY_Marketplace Review|Marketplace Review]]
-- [[_COMMUNITY_Auth Configuration|Auth Configuration]]
-- [[_COMMUNITY_Marketplace Taxonomy|Marketplace Taxonomy]]
-- [[_COMMUNITY_Application Lifecycle|Application Lifecycle]]
-- [[_COMMUNITY_Description Optimizer|Description Optimizer]]
-- [[_COMMUNITY_CLI Authentication|CLI Authentication]]
-- [[_COMMUNITY_Eval Runner|Eval Runner]]
-- [[_COMMUNITY_LLM Services|LLM Services]]
-- [[_COMMUNITY_Generation API|Generation API]]
-- [[_COMMUNITY_Session Models|Session Models]]
-- [[_COMMUNITY_File Tree Viewer|File Tree Viewer]]
-- [[_COMMUNITY_Settings UI|Settings UI]]
-- [[_COMMUNITY_Auth Controller|Auth Controller]]
-- [[_COMMUNITY_Skill Generation|Skill Generation]]
-- [[_COMMUNITY_CLI Login|CLI Login]]
-- [[_COMMUNITY_Auth Pages|Auth Pages]]
-- [[_COMMUNITY_Frontend Dev Deps|Frontend Dev Deps]]
-- [[_COMMUNITY_CLI Package|CLI Package]]
-- [[_COMMUNITY_Eval Suggestions|Eval Suggestions]]
-- [[_COMMUNITY_Evaluation DTOs|Evaluation DTOs]]
-- [[_COMMUNITY_User Preferences|User Preferences]]
-- [[_COMMUNITY_Organization Entities|Organization Entities]]
-- [[_COMMUNITY_App Layout|App Layout]]
-- [[_COMMUNITY_Auth SDK|Auth SDK]]
+- [[_COMMUNITY_LLM Transport Port|LLM Transport Port]]
+- [[_COMMUNITY_Admin Skill Review UI|Admin Skill Review UI]]
+- [[_COMMUNITY_Skill Builder UI|Skill Builder UI]]
+- [[_COMMUNITY_Strands Agent SDK Types|Strands Agent SDK Types]]
+- [[_COMMUNITY_Organization Settings UI|Organization Settings UI]]
+- [[_COMMUNITY_API Client & Security UI|API Client & Security UI]]
+- [[_COMMUNITY_Analytics & Eval Charts|Analytics & Eval Charts]]
+- [[_COMMUNITY_Request Context & Skill Utils|Request Context & Skill Utils]]
+- [[_COMMUNITY_Org Guard & SMTP Encryption|Org Guard & SMTP Encryption]]
+- [[_COMMUNITY_Analytics & Category Repositories|Analytics & Category Repositories]]
 - [[_COMMUNITY_Backend Dependencies|Backend Dependencies]]
-- [[_COMMUNITY_Email Service|Email Service]]
-- [[_COMMUNITY_Skill Sharing|Skill Sharing]]
-- [[_COMMUNITY_Auth Service|Auth Service]]
-- [[_COMMUNITY_Marketplace DTOs|Marketplace DTOs]]
-- [[_COMMUNITY_Evaluation Models|Evaluation Models]]
-- [[_COMMUNITY_Build Scripts|Build Scripts]]
-- [[_COMMUNITY_Request Context|Request Context]]
-- [[_COMMUNITY_Documentation|Documentation]]
-- [[_COMMUNITY_Admin Approval|Admin Approval]]
-- [[_COMMUNITY_Evaluation Entities|Evaluation Entities]]
+- [[_COMMUNITY_Generation & Eval Dialogs|Generation & Eval Dialogs]]
+- [[_COMMUNITY_Auth Pages & Layout|Auth Pages & Layout]]
+- [[_COMMUNITY_CLI Authentication|CLI Authentication]]
+- [[_COMMUNITY_Skill DTOs & WS Guard|Skill DTOs & WS Guard]]
+- [[_COMMUNITY_LLM Response Parsing|LLM Response Parsing]]
+- [[_COMMUNITY_CLI Package Manifest|CLI Package Manifest]]
+- [[_COMMUNITY_Auth Context & Readiness Hooks|Auth Context & Readiness Hooks]]
+- [[_COMMUNITY_Shared User & Session Types|Shared User & Session Types]]
+- [[_COMMUNITY_SSE & Controller Plumbing|SSE & Controller Plumbing]]
+- [[_COMMUNITY_Eval Runner & Error Utils|Eval Runner & Error Utils]]
+- [[_COMMUNITY_Admin Marketplace Controller|Admin Marketplace Controller]]
+- [[_COMMUNITY_Skill Generation Service|Skill Generation Service]]
+- [[_COMMUNITY_File Tree & Markdown Viewers|File Tree & Markdown Viewers]]
+- [[_COMMUNITY_Marketplace Submission Logic|Marketplace Submission Logic]]
+- [[_COMMUNITY_Toasts & Admin Routing|Toasts & Admin Routing]]
+- [[_COMMUNITY_OIDC SSO Flow|OIDC SSO Flow]]
+- [[_COMMUNITY_Taxonomy & Dropdown UI|Taxonomy & Dropdown UI]]
+- [[_COMMUNITY_Backend Dev Tooling|Backend Dev Tooling]]
+- [[_COMMUNITY_Email Templates & Invites|Email Templates & Invites]]
+- [[_COMMUNITY_Category Management API|Category Management API]]
+- [[_COMMUNITY_Batching & Draft Store|Batching & Draft Store]]
+- [[_COMMUNITY_Strands Transport Layer|Strands Transport Layer]]
+- [[_COMMUNITY_Auth Controller & Cookies|Auth Controller & Cookies]]
+- [[_COMMUNITY_Postgres Package Manifest|Postgres Package Manifest]]
+- [[_COMMUNITY_App Module & Middleware|App Module & Middleware]]
+- [[_COMMUNITY_Skill Optimization Loop|Skill Optimization Loop]]
+- [[_COMMUNITY_Root NPM Scripts|Root NPM Scripts]]
+- [[_COMMUNITY_Eval Benchmark UI|Eval Benchmark UI]]
+- [[_COMMUNITY_Observability & Infrastructure|Observability & Infrastructure]]
+- [[_COMMUNITY_Document Authoring Skill|Document Authoring Skill]]
+- [[_COMMUNITY_Postgres Entity Definitions|Postgres Entity Definitions]]
+- [[_COMMUNITY_Admin Analytics API|Admin Analytics API]]
+- [[_COMMUNITY_Core Auth Service|Core Auth Service]]
+- [[_COMMUNITY_Login & Route Guards|Login & Route Guards]]
+- [[_COMMUNITY_Shared Eval Types|Shared Eval Types]]
+- [[_COMMUNITY_System Design Template|System Design Template]]
+- [[_COMMUNITY_Postgres Storage Module|Postgres Storage Module]]
+- [[_COMMUNITY_Eval Execution API|Eval Execution API]]
+- [[_COMMUNITY_Postgres Category Storage|Postgres Category Storage]]
+- [[_COMMUNITY_Changelog|Changelog]]
+- [[_COMMUNITY_Keycloak SAML Dev Guide|Keycloak SAML Dev Guide]]
 - [[_COMMUNITY_LLM Tool Schemas|LLM Tool Schemas]]
-- [[_COMMUNITY_Eval Run API|Eval Run API]]
-- [[_COMMUNITY_Evaluation Feedback|Evaluation Feedback]]
-- [[_COMMUNITY_Generation Hooks|Generation Hooks]]
-- [[_COMMUNITY_Skill Optimization|Skill Optimization]]
-- [[_COMMUNITY_Evaluation Repository|Evaluation Repository]]
-- [[_COMMUNITY_Eval Runner Hooks|Eval Runner Hooks]]
-- [[_COMMUNITY_App Configuration|App Configuration]]
-- [[_COMMUNITY_CLI Receipts|CLI Receipts]]
-- [[_COMMUNITY_Eval Visualization|Eval Visualization]]
-- [[_COMMUNITY_Skill Export|Skill Export]]
-- [[_COMMUNITY_OIDC Auth|OIDC Auth]]
-- [[_COMMUNITY_API Client|API Client]]
-- [[_COMMUNITY_CLI Install|CLI Install]]
-- [[_COMMUNITY_Frontend Dependencies|Frontend Dependencies]]
-- [[_COMMUNITY_Frontend Config|Frontend Config]]
-- [[_COMMUNITY_Skill Repository|Skill Repository]]
-- [[_COMMUNITY_Generation Types|Generation Types]]
-- [[_COMMUNITY_Admin Components|Admin Components]]
-- [[_COMMUNITY_Analytics UI|Analytics UI]]
-- [[_COMMUNITY_CLI Tools|CLI Tools]]
-- [[_COMMUNITY_Frontend Dev|Frontend Dev]]
-- [[_COMMUNITY_Analytics Dashboard|Analytics Dashboard]]
-- [[_COMMUNITY_CLI Configuration|CLI Configuration]]
-- [[_COMMUNITY_JWT Auth|JWT Auth]]
-- [[_COMMUNITY_Marketplace Submit|Marketplace Submit]]
-- [[_COMMUNITY_Eval Outputs|Eval Outputs]]
-- [[_COMMUNITY_Marketplace UI|Marketplace UI]]
-- [[_COMMUNITY_Eval Viewer|Eval Viewer]]
-- [[_COMMUNITY_Node Config|Node Config]]
-- [[_COMMUNITY_Marketplace Service|Marketplace Service]]
-- [[_COMMUNITY_Marketplace Storage|Marketplace Storage]]
-- [[_COMMUNITY_Eval Display|Eval Display]]
-- [[_COMMUNITY_LLM Configuration|LLM Configuration]]
-- [[_COMMUNITY_Marketplace Entities|Marketplace Entities]]
+- [[_COMMUNITY_Run Progress & Token Modal|Run Progress & Token Modal]]
+- [[_COMMUNITY_Architecture Doc Template|Architecture Doc Template]]
+- [[_COMMUNITY_Postgres Eval Repository|Postgres Eval Repository]]
+- [[_COMMUNITY_CLI Install Command|CLI Install Command]]
+- [[_COMMUNITY_Session Message Storage|Session Message Storage]]
+- [[_COMMUNITY_Marketplace Submission Storage|Marketplace Submission Storage]]
+- [[_COMMUNITY_Marketplace DTOs|Marketplace DTOs]]
+- [[_COMMUNITY_Public Skills API|Public Skills API]]
+- [[_COMMUNITY_CLI Credential Storage|CLI Credential Storage]]
 - [[_COMMUNITY_Eval Viewer UI|Eval Viewer UI]]
-- [[_COMMUNITY_App Infrastructure|App Infrastructure]]
-- [[_COMMUNITY_Root Config|Root Config]]
-- [[_COMMUNITY_Repository Interfaces|Repository Interfaces]]
-- [[_COMMUNITY_Shared Config|Shared Config]]
-- [[_COMMUNITY_Postgres Storage|Postgres Storage]]
-- [[_COMMUNITY_Benchmark Service|Benchmark Service]]
-- [[_COMMUNITY_Eval Comparison|Eval Comparison]]
-- [[_COMMUNITY_LLM Transport|LLM Transport]]
-- [[_COMMUNITY_Base Config|Base Config]]
-- [[_COMMUNITY_CLI TypeScript|CLI TypeScript]]
-- [[_COMMUNITY_CLI Uninstall|CLI Uninstall]]
-- [[_COMMUNITY_Marketplace Submissions|Marketplace Submissions]]
-- [[_COMMUNITY_Docs Config|Docs Config]]
-- [[_COMMUNITY_Grading Service|Grading Service]]
-- [[_COMMUNITY_Skill Parsing|Skill Parsing]]
-- [[_COMMUNITY_WebSocket Gateway|WebSocket Gateway]]
-- [[_COMMUNITY_Backend Scripts|Backend Scripts]]
-- [[_COMMUNITY_User Invitations|User Invitations]]
-- [[_COMMUNITY_Skill Removal|Skill Removal]]
-- [[_COMMUNITY_Shared Package|Shared Package]]
-- [[_COMMUNITY_Eval Editor|Eval Editor]]
-- [[_COMMUNITY_Skill Cards|Skill Cards]]
-- [[_COMMUNITY_LLM Configuration|LLM Configuration]]
-- [[_COMMUNITY_SMTP Configuration|SMTP Configuration]]
-- [[_COMMUNITY_Monorepo Packages|Monorepo Packages]]
-- [[_COMMUNITY_Prompt Dumping|Prompt Dumping]]
-- [[_COMMUNITY_User Repository|User Repository]]
-- [[_COMMUNITY_Socket Test Utilities|Socket Test Utilities]]
-- [[_COMMUNITY_Skill Favorites|Skill Favorites]]
-- [[_COMMUNITY_Skill Upvotes|Skill Upvotes]]
-- [[_COMMUNITY_Session Repository|Session Repository]]
-- [[_COMMUNITY_Strands Agent Transport|Strands Agent Transport]]
-- [[_COMMUNITY_Skill Domain Model|Skill Domain Model]]
-- [[_COMMUNITY_Skill Version Management|Skill Version Management]]
+- [[_COMMUNITY_Frontend App TSConfig|Frontend App TSConfig]]
+- [[_COMMUNITY_Shared Generation Types|Shared Generation Types]]
+- [[_COMMUNITY_Postgres Skill Repository|Postgres Skill Repository]]
+- [[_COMMUNITY_Eval Case DTOs|Eval Case DTOs]]
+- [[_COMMUNITY_Frontend Dependencies|Frontend Dependencies]]
+- [[_COMMUNITY_Frontend Dev Tooling|Frontend Dev Tooling]]
+- [[_COMMUNITY_Misc UI Components|Misc UI Components]]
+- [[_COMMUNITY_App Bootstrap & Logging|App Bootstrap & Logging]]
+- [[_COMMUNITY_Marketplace Repository Interfaces|Marketplace Repository Interfaces]]
+- [[_COMMUNITY_Submission Requirements Checking|Submission Requirements Checking]]
+- [[_COMMUNITY_CLI Install Receipts|CLI Install Receipts]]
+- [[_COMMUNITY_Eval Claims & Grades UI|Eval Claims & Grades UI]]
+- [[_COMMUNITY_Eval Outputs Tab|Eval Outputs Tab]]
+- [[_COMMUNITY_Eval Run List Panel|Eval Run List Panel]]
+- [[_COMMUNITY_JWT & PAT Guards|JWT & PAT Guards]]
+- [[_COMMUNITY_Eval Feedback API|Eval Feedback API]]
+- [[_COMMUNITY_Skill Export Service|Skill Export Service]]
+- [[_COMMUNITY_CLI Login Flow|CLI Login Flow]]
+- [[_COMMUNITY_Frontend Node TSConfig|Frontend Node TSConfig]]
+- [[_COMMUNITY_CLI Security Review Findings|CLI Security Review Findings]]
+- [[_COMMUNITY_SAML SSO Flow|SAML SSO Flow]]
+- [[_COMMUNITY_TypeScript Build Config|TypeScript Build Config]]
+- [[_COMMUNITY_Favorites & Upvotes Repositories|Favorites & Upvotes Repositories]]
+- [[_COMMUNITY_Base TSConfig|Base TSConfig]]
+- [[_COMMUNITY_Backend TSConfig|Backend TSConfig]]
+- [[_COMMUNITY_Project README & Roadmap|Project README & Roadmap]]
 - [[_COMMUNITY_Jest Configuration|Jest Configuration]]
-- [[_COMMUNITY_Skill Optimization & Testing|Skill Optimization & Testing]]
-- [[_COMMUNITY_Skill Download Events|Skill Download Events]]
-- [[_COMMUNITY_Evaluation Output Files|Evaluation Output Files]]
-- [[_COMMUNITY_Package Overrides|Package Overrides]]
-- [[_COMMUNITY_Admin Analytics|Admin Analytics]]
-- [[_COMMUNITY_Skill Categories|Skill Categories]]
-- [[_COMMUNITY_Marketplace Submissions|Marketplace Submissions]]
-- [[_COMMUNITY_Jest Module Mapping|Jest Module Mapping]]
-- [[_COMMUNITY_Error Boundary|Error Boundary]]
-- [[_COMMUNITY_Description Optimizer|Description Optimizer]]
-- [[_COMMUNITY_TypeScript Configuration|TypeScript Configuration]]
-- [[_COMMUNITY_Rate Limit Retry|Rate Limit Retry]]
-- [[_COMMUNITY_Skill Optimization|Skill Optimization]]
-- [[_COMMUNITY_Skill Builder|Skill Builder]]
-- [[_COMMUNITY_Marketplace Listings|Marketplace Listings]]
-- [[_COMMUNITY_Skill Operation Prompts|Skill Operation Prompts]]
-- [[_COMMUNITY_Invite Acceptance|Invite Acceptance]]
-- [[_COMMUNITY_Password Input|Password Input]]
-- [[_COMMUNITY_Package Metadata|Package Metadata]]
-- [[_COMMUNITY_Dropdown Menu|Dropdown Menu]]
-- [[_COMMUNITY_Skill Creation Reference|Skill Creation Reference]]
-- [[_COMMUNITY_NPM Scripts|NPM Scripts]]
-- [[_COMMUNITY_Marketplace Test Mocks|Marketplace Test Mocks]]
+- [[_COMMUNITY_Docs Site Theme Config|Docs Site Theme Config]]
+- [[_COMMUNITY_RBAC Roles & Org DTOs|RBAC Roles & Org DTOs]]
+- [[_COMMUNITY_Eval Grading Service|Eval Grading Service]]
+- [[_COMMUNITY_Benchmark Statistics Service|Benchmark Statistics Service]]
+- [[_COMMUNITY_Eval Case API|Eval Case API]]
+- [[_COMMUNITY_CLI Config & Entrypoint|CLI Config & Entrypoint]]
+- [[_COMMUNITY_CLI Uninstall Command|CLI Uninstall Command]]
+- [[_COMMUNITY_Eval Repository Interface|Eval Repository Interface]]
+- [[_COMMUNITY_CLI Listing Commands|CLI Listing Commands]]
+- [[_COMMUNITY_Shared TSConfig|Shared TSConfig]]
+- [[_COMMUNITY_Admin Analytics Dashboard|Admin Analytics Dashboard]]
+- [[_COMMUNITY_Marketplace UI Tests|Marketplace UI Tests]]
+- [[_COMMUNITY_Root Package Manifest|Root Package Manifest]]
+- [[_COMMUNITY_Project README|Project README]]
+- [[_COMMUNITY_WebSocket Stream Gateway|WebSocket Stream Gateway]]
+- [[_COMMUNITY_Skill Generation & Refinement|Skill Generation & Refinement]]
+- [[_COMMUNITY_ADR Template|ADR Template]]
+- [[_COMMUNITY_Marketplace Listing Storage|Marketplace Listing Storage]]
+- [[_COMMUNITY_PostgreSQL Setup Guide|PostgreSQL Setup Guide]]
+- [[_COMMUNITY_Backend NPM Scripts|Backend NPM Scripts]]
+- [[_COMMUNITY_Health & Lifecycle|Health & Lifecycle]]
+- [[_COMMUNITY_CLI Update Command|CLI Update Command]]
+- [[_COMMUNITY_Eval Case Editing UI|Eval Case Editing UI]]
+- [[_COMMUNITY_Regression Guard Features|Regression Guard Features]]
+- [[_COMMUNITY_Package Manifest|Package Manifest]]
+- [[_COMMUNITY_Grader Prompt|Grader Prompt]]
+- [[_COMMUNITY_Dependency Overrides|Dependency Overrides]]
 - [[_COMMUNITY_Marketplace Removal Requests|Marketplace Removal Requests]]
-- [[_COMMUNITY_Skill Categories Mapping|Skill Categories Mapping]]
-- [[_COMMUNITY_Skill Detail Tabs|Skill Detail Tabs]]
-- [[_COMMUNITY_CLI API Types|CLI API Types]]
-- [[_COMMUNITY_Marketplace Detail Test|Marketplace Detail Test]]
-- [[_COMMUNITY_Marketplace Card Test|Marketplace Card Test]]
+- [[_COMMUNITY_Skill Testing Guide|Skill Testing Guide]]
+- [[_COMMUNITY_Skill Download & Versions|Skill Download & Versions]]
+- [[_COMMUNITY_Skills Grid UI|Skills Grid UI]]
+- [[_COMMUNITY_User Repository|User Repository]]
+- [[_COMMUNITY_Community & Security Docs|Community & Security Docs]]
+- [[_COMMUNITY_Environment Setup Guide|Environment Setup Guide]]
+- [[_COMMUNITY_Architecture Doc Checklist|Architecture Doc Checklist]]
+- [[_COMMUNITY_Skill Domain Types|Skill Domain Types]]
+- [[_COMMUNITY_Skill Favorites Storage|Skill Favorites Storage]]
+- [[_COMMUNITY_Skill Upvotes Storage|Skill Upvotes Storage]]
+- [[_COMMUNITY_Skill Testing Analysis Prompt|Skill Testing Analysis Prompt]]
+- [[_COMMUNITY_Skill Output Contract|Skill Output Contract]]
+- [[_COMMUNITY_Skill Creator Prompt|Skill Creator Prompt]]
+- [[_COMMUNITY_CLI Commands Reference|CLI Commands Reference]]
+- [[_COMMUNITY_CLI User Guide|CLI User Guide]]
+- [[_COMMUNITY_Trigger Evals Prompt|Trigger Evals Prompt]]
+- [[_COMMUNITY_First Access Guide|First Access Guide]]
+- [[_COMMUNITY_LLM Model Config|LLM Model Config]]
+- [[_COMMUNITY_Eval Output File Viewer|Eval Output File Viewer]]
+- [[_COMMUNITY_Eval Run Comparison UI|Eval Run Comparison UI]]
+- [[_COMMUNITY_Implementation Plan Template|Implementation Plan Template]]
+- [[_COMMUNITY_Skill Optimization Prompt|Skill Optimization Prompt]]
+- [[_COMMUNITY_Diagram Generation Prompt|Diagram Generation Prompt]]
+- [[_COMMUNITY_Download Event Tracking|Download Event Tracking]]
+- [[_COMMUNITY_Admin Analytics Queries|Admin Analytics Queries]]
+- [[_COMMUNITY_Project Instructions|Project Instructions]]
+- [[_COMMUNITY_CLI Troubleshooting|CLI Troubleshooting]]
+- [[_COMMUNITY_Testing Workflow Guide|Testing Workflow Guide]]
+- [[_COMMUNITY_Benchmark Analysis Docs|Benchmark Analysis Docs]]
+- [[_COMMUNITY_Optimization Loop Docs|Optimization Loop Docs]]
+- [[_COMMUNITY_Jest Module Mappings|Jest Module Mappings]]
+- [[_COMMUNITY_Skill Validation Service|Skill Validation Service]]
+- [[_COMMUNITY_Problem Statement Validation|Problem Statement Validation]]
+- [[_COMMUNITY_Architecture Writing Guide|Architecture Writing Guide]]
+- [[_COMMUNITY_Failure Explanation Prompt|Failure Explanation Prompt]]
+- [[_COMMUNITY_TypeScript Configuration|TypeScript Configuration]]
+- [[_COMMUNITY_Optimization Domain Types|Optimization Domain Types]]
+- [[_COMMUNITY_OIDC Config Storage|OIDC Config Storage]]
+- [[_COMMUNITY_Getting Started Guide|Getting Started Guide]]
+- [[_COMMUNITY_Storage Module Configuration|Storage Module Configuration]]
+- [[_COMMUNITY_Session Repository Port|Session Repository Port]]
+- [[_COMMUNITY_React Error Boundary|React Error Boundary]]
+- [[_COMMUNITY_Version Diff Viewer|Version Diff Viewer]]
+- [[_COMMUNITY_Diagram Selection Guide|Diagram Selection Guide]]
+- [[_COMMUNITY_Description Improvement Prompt|Description Improvement Prompt]]
+- [[_COMMUNITY_GitHub PR Skill|GitHub PR Skill]]
+- [[_COMMUNITY_Code of Conduct|Code of Conduct]]
+- [[_COMMUNITY_Infrastructure Config Docs|Infrastructure Config Docs]]
+- [[_COMMUNITY_Assertion Types Guide|Assertion Types Guide]]
+- [[_COMMUNITY_Feedback Sanitization|Feedback Sanitization]]
+- [[_COMMUNITY_CLI README|CLI README]]
+- [[_COMMUNITY_Frontend Build Scripts|Frontend Build Scripts]]
+- [[_COMMUNITY_Password Input Component|Password Input Component]]
+- [[_COMMUNITY_Strands Transport Adapter|Strands Transport Adapter]]
+- [[_COMMUNITY_Authenticated App Layout|Authenticated App Layout]]
+- [[_COMMUNITY_Strands Provider Config|Strands Provider Config]]
+- [[_COMMUNITY_User Management API|User Management API]]
+- [[_COMMUNITY_Skill Improvement Rules|Skill Improvement Rules]]
+- [[_COMMUNITY_Contributing Guide|Contributing Guide]]
+- [[_COMMUNITY_Database Troubleshooting|Database Troubleshooting]]
+- [[_COMMUNITY_Docs Quick Start|Docs Quick Start]]
+- [[_COMMUNITY_Test Case Management Docs|Test Case Management Docs]]
+- [[_COMMUNITY_Grading System Docs|Grading System Docs]]
+- [[_COMMUNITY_Test Execution Docs|Test Execution Docs]]
+- [[_COMMUNITY_Bug Report Template|Bug Report Template]]
 - [[_COMMUNITY_NestJS CLI Config|NestJS CLI Config]]
-- [[_COMMUNITY_Package Metadata|Package Metadata]]
-- [[_COMMUNITY_Marketplace Sorting|Marketplace Sorting]]
-- [[_COMMUNITY_SAML Configuration|SAML Configuration]]
-- [[_COMMUNITY_SMTP Repository|SMTP Repository]]
-- [[_COMMUNITY_TypeScript Watch Config|TypeScript Watch Config]]
-- [[_COMMUNITY_Funnel Chart Test|Funnel Chart Test]]
-- [[_COMMUNITY_User Roles|User Roles]]
-- [[_COMMUNITY_Funnel Chart|Funnel Chart]]
-- [[_COMMUNITY_Code Viewer|Code Viewer]]
-- [[_COMMUNITY_Evaluation Feedback|Evaluation Feedback]]
-- [[_COMMUNITY_Evaluation Help Dialog|Evaluation Help Dialog]]
-- [[_COMMUNITY_Category Repository|Category Repository]]
-- [[_COMMUNITY_Download Event Repository|Download Event Repository]]
-- [[_COMMUNITY_Strands Agent|Strands Agent]]
-- [[_COMMUNITY_Auth SDK Test|Auth SDK Test]]
-- [[_COMMUNITY_Admin Review Tabs|Admin Review Tabs]]
-- [[_COMMUNITY_Category Chart|Category Chart]]
+- [[_COMMUNITY_Minimal Package Manifest|Minimal Package Manifest]]
+- [[_COMMUNITY_Chart Test Mocks|Chart Test Mocks]]
+- [[_COMMUNITY_Non-Discriminating Help Dialog|Non-Discriminating Help Dialog]]
+- [[_COMMUNITY_SMTP Email Service|SMTP Email Service]]
+- [[_COMMUNITY_Grading Request Prompt|Grading Request Prompt]]
+- [[_COMMUNITY_Trigger Eval Generation Prompt|Trigger Eval Generation Prompt]]
+- [[_COMMUNITY_Watch Build Config|Watch Build Config]]
+- [[_COMMUNITY_User Role Hierarchy|User Role Hierarchy]]
+- [[_COMMUNITY_Dependency Overview|Dependency Overview]]
+- [[_COMMUNITY_Few-Shot Skill Examples|Few-Shot Skill Examples]]
+- [[_COMMUNITY_Installation Guide|Installation Guide]]
+- [[_COMMUNITY_Feature Request Template|Feature Request Template]]
+- [[_COMMUNITY_Strands Agent Core|Strands Agent Core]]
+- [[_COMMUNITY_Assertion Replacement DTOs|Assertion Replacement DTOs]]
+- [[_COMMUNITY_Funnel Chart Component|Funnel Chart Component]]
+- [[_COMMUNITY_Code Viewer Component|Code Viewer Component]]
+- [[_COMMUNITY_Eval Feedback Component|Eval Feedback Component]]
+- [[_COMMUNITY_Auth SDK Tests|Auth SDK Tests]]
+- [[_COMMUNITY_Document Type Guide|Document Type Guide]]
+- [[_COMMUNITY_Trade-off Dimensions Guide|Trade-off Dimensions Guide]]
+- [[_COMMUNITY_Zip Upload Test Fixtures|Zip Upload Test Fixtures]]
+- [[_COMMUNITY_Batch Trigger Simulation Prompt|Batch Trigger Simulation Prompt]]
+- [[_COMMUNITY_Trigger Simulation Prompt|Trigger Simulation Prompt]]
+- [[_COMMUNITY_Skill Category Repository|Skill Category Repository]]
+- [[_COMMUNITY_Dev Dependencies|Dev Dependencies]]
+- [[_COMMUNITY_AI Test Suggestions|AI Test Suggestions]]
+- [[_COMMUNITY_Test Results Outputs Tab|Test Results Outputs Tab]]
+- [[_COMMUNITY_Pull Request Template|Pull Request Template]]
+- [[_COMMUNITY_Agent Skills Plugin|Agent Skills Plugin]]
+- [[_COMMUNITY_Category Chart Component|Category Chart Component]]
 - [[_COMMUNITY_Spinner Component|Spinner Component]]
+- [[_COMMUNITY_Blinded Split Hint|Blinded Split Hint]]
+- [[_COMMUNITY_Optimization Suggestions UI|Optimization Suggestions UI]]
+- [[_COMMUNITY_Batch Simulate Trigger Prompt|Batch Simulate Trigger Prompt]]
+- [[_COMMUNITY_Security Improvements|Security Improvements]]
+- [[_COMMUNITY_Skill List Component|Skill List Component]]
+- [[_COMMUNITY_Skill Viewer Component|Skill Viewer Component]]
 - [[_COMMUNITY_Drop Tags Migration|Drop Tags Migration]]
-- [[_COMMUNITY_Initial Schema|Initial Schema]]
+- [[_COMMUNITY_Initial Schema Migration|Initial Schema Migration]]
 - [[_COMMUNITY_SMTP Config Migration|SMTP Config Migration]]
 - [[_COMMUNITY_Invite Tokens Migration|Invite Tokens Migration]]
 - [[_COMMUNITY_Owner Role Migration|Owner Role Migration]]
-- [[_COMMUNITY_Login Mode Migration|Login Mode Migration]]
-- [[_COMMUNITY_Evaluation Indexes|Evaluation Indexes]]
-- [[_COMMUNITY_Skill Owner Unique|Skill Owner Unique]]
-- [[_COMMUNITY_Drop Conversation|Drop Conversation]]
-- [[_COMMUNITY_PAT & Published Flag|PAT & Published Flag]]
-- [[_COMMUNITY_User Preferences|User Preferences]]
-- [[_COMMUNITY_Organization Timezone|Organization Timezone]]
-- [[_COMMUNITY_OIDC & SSO Config|OIDC & SSO Config]]
-- [[_COMMUNITY_OIDC Secret Encryption|OIDC Secret Encryption]]
-- [[_COMMUNITY_Marketplace Submissions|Marketplace Submissions]]
-- [[_COMMUNITY_Categories & Tags|Categories & Tags]]
-- [[_COMMUNITY_Category Tag Joins|Category Tag Joins]]
-- [[_COMMUNITY_Download Events|Download Events]]
-- [[_COMMUNITY_Drop Weekly Stats|Drop Weekly Stats]]
-- [[_COMMUNITY_Marketplace Listings|Marketplace Listings]]
-- [[_COMMUNITY_Self Approval Flag|Self Approval Flag]]
-- [[_COMMUNITY_Refresh Token Index|Refresh Token Index]]
-- [[_COMMUNITY_Trigram Indexes|Trigram Indexes]]
-- [[_COMMUNITY_Submission Notes|Submission Notes]]
-- [[_COMMUNITY_Skill Upvotes|Skill Upvotes]]
-- [[_COMMUNITY_Skill Favorites|Skill Favorites]]
-- [[_COMMUNITY_Unified Skill Status|Unified Skill Status]]
-- [[_COMMUNITY_Submission Requirements|Submission Requirements]]
-- [[_COMMUNITY_Removal Requests|Removal Requests]]
-- [[_COMMUNITY_Marketplace Enabled|Marketplace Enabled]]
-- [[_COMMUNITY_Optimization Suggestions|Optimization Suggestions]]
-- [[_COMMUNITY_Skill Category|Skill Category]]
-- [[_COMMUNITY_Skill List|Skill List]]
-- [[_COMMUNITY_Skill Viewer|Skill Viewer]]
-- [[_COMMUNITY_Agent Skills|Agent Skills]]
-- [[_COMMUNITY_Top Skills Table|Top Skills Table]]
+- [[_COMMUNITY_Login Mode Flags Migration|Login Mode Flags Migration]]
+- [[_COMMUNITY_Eval Run Indexes Migration|Eval Run Indexes Migration]]
+- [[_COMMUNITY_Skill Name Uniqueness Migration|Skill Name Uniqueness Migration]]
+- [[_COMMUNITY_Drop Conversation Columns Migration|Drop Conversation Columns Migration]]
+- [[_COMMUNITY_Suggest Gap Counts Prompt|Suggest Gap Counts Prompt]]
+- [[_COMMUNITY_Personal Access Tokens Migration|Personal Access Tokens Migration]]
+- [[_COMMUNITY_User Preferences Migration|User Preferences Migration]]
+- [[_COMMUNITY_LLM Ports And Adapters|LLM Ports And Adapters]]
+- [[_COMMUNITY_Skill Creation Builder|Skill Creation Builder]]
+- [[_COMMUNITY_Skill Evaluation System|Skill Evaluation System]]
+- [[_COMMUNITY_Skill Refinement|Skill Refinement]]
+- [[_COMMUNITY_Org Timezone Migration|Org Timezone Migration]]
+- [[_COMMUNITY_OIDC SSO Config Migration|OIDC SSO Config Migration]]
+- [[_COMMUNITY_Kubernetes Security Context|Kubernetes Security Context]]
+- [[_COMMUNITY_Eval Failure Explanation Prompt|Eval Failure Explanation Prompt]]
+- [[_COMMUNITY_OIDC Secret Encryption Migration|OIDC Secret Encryption Migration]]
+- [[_COMMUNITY_Marketplace Submissions Migration|Marketplace Submissions Migration]]
+- [[_COMMUNITY_Diagram Generation Prompt|Diagram Generation Prompt]]
+- [[_COMMUNITY_Graph Report|Graph Report]]
+- [[_COMMUNITY_Invite Email HTML Template|Invite Email HTML Template]]
+- [[_COMMUNITY_Invite Email Text Template|Invite Email Text Template]]
+- [[_COMMUNITY_Categories And Tags Migration|Categories And Tags Migration]]
 - [[_COMMUNITY_Anthropic SDK|Anthropic SDK]]
-- [[_COMMUNITY_Form Input|Form Input]]
-- [[_COMMUNITY_TypeScript Build Config|TypeScript Build Config]]
+- [[_COMMUNITY_Skill Category Joins Migration|Skill Category Joins Migration]]
+- [[_COMMUNITY_Download Events Migration|Download Events Migration]]
+- [[_COMMUNITY_Drop Weekly Stats Migration|Drop Weekly Stats Migration]]
+- [[_COMMUNITY_Marketplace Listings Migration|Marketplace Listings Migration]]
+- [[_COMMUNITY_Self Approval Flag Migration|Self Approval Flag Migration]]
+- [[_COMMUNITY_Refresh Token Index Migration|Refresh Token Index Migration]]
+- [[_COMMUNITY_Trigram Indexes Migration|Trigram Indexes Migration]]
+- [[_COMMUNITY_Submitter Note Migration|Submitter Note Migration]]
+- [[_COMMUNITY_Skill Upvotes Migration|Skill Upvotes Migration]]
+- [[_COMMUNITY_Skill Favorites Migration|Skill Favorites Migration]]
+- [[_COMMUNITY_Unify Skill Status Migration|Unify Skill Status Migration]]
+- [[_COMMUNITY_Submission Requirements Migration|Submission Requirements Migration]]
+- [[_COMMUNITY_Removal Requests Migration|Removal Requests Migration]]
+- [[_COMMUNITY_Marketplace Enabled Flag Migration|Marketplace Enabled Flag Migration]]
+- [[_COMMUNITY_Docs Landing Page|Docs Landing Page]]
+- [[_COMMUNITY_Skill Detail Tabs|Skill Detail Tabs]]
+- [[_COMMUNITY_PAT Response DTOs|PAT Response DTOs]]
+- [[_COMMUNITY_Build TypeScript Config|Build TypeScript Config]]
+- [[_COMMUNITY_Top Skills Table|Top Skills Table]]
+- [[_COMMUNITY_Form Input Component|Form Input Component]]
 - [[_COMMUNITY_Prompt Input Component|Prompt Input Component]]
 - [[_COMMUNITY_Refinement Dialog Component|Refinement Dialog Component]]
 - [[_COMMUNITY_Skill Editor Component|Skill Editor Component]]
-- [[_COMMUNITY_Skill Zip Upload|Skill Zip Upload]]
-- [[_COMMUNITY_PAT Response DTOs|PAT Response DTOs]]
-- [[_COMMUNITY_TypeScript Configuration|TypeScript Configuration]]
+- [[_COMMUNITY_Skill Zip Uploader|Skill Zip Uploader]]
 - [[_COMMUNITY_Header Component|Header Component]]
-- [[_COMMUNITY_Development Dependencies|Development Dependencies]]
-- [[_COMMUNITY_Evaluation Repository|Evaluation Repository]]
-- [[_COMMUNITY_OIDC Configuration|OIDC Configuration]]
-- [[_COMMUNITY_Organization Repository|Organization Repository]]
-- [[_COMMUNITY_SAML Configuration|SAML Configuration]]
-- [[_COMMUNITY_Session Repository|Session Repository]]
-- [[_COMMUNITY_SMTP Configuration|SMTP Configuration]]
-- [[_COMMUNITY_User Repository|User Repository]]
-- [[_COMMUNITY_Trigger Simulation Prompt|Trigger Simulation Prompt]]
-- [[_COMMUNITY_Security Policy|Security Policy]]
+- [[_COMMUNITY_TypeScript Project References|TypeScript Project References]]
+- [[_COMMUNITY_Anthropic Model Adapter|Anthropic Model Adapter]]
+- [[_COMMUNITY_Bedrock Model Adapter|Bedrock Model Adapter]]
+- [[_COMMUNITY_Logging Configuration|Logging Configuration]]
+- [[_COMMUNITY_Google Model Adapter|Google Model Adapter]]
+- [[_COMMUNITY_OpenAI Model Adapter|OpenAI Model Adapter]]
 - [[_COMMUNITY_Create PAT DTO|Create PAT DTO]]
-- [[_COMMUNITY_List ADRs Script|List ADRs Script]]
-- [[_COMMUNITY_Next ADR Number|Next ADR Number]]
-- [[_COMMUNITY_Validate Docs Script|Validate Docs Script]]
-- [[_COMMUNITY_Anthropic Model Constructor|Anthropic Model Constructor]]
-- [[_COMMUNITY_Bedrock Model Constructor|Bedrock Model Constructor]]
-- [[_COMMUNITY_Google Model Constructor|Google Model Constructor]]
-- [[_COMMUNITY_OpenAI Model Constructor|OpenAI Model Constructor]]
-- [[_COMMUNITY_Test Case Count Suggestion|Test Case Count Suggestion]]
+- [[_COMMUNITY_Tsup Build Config|Tsup Build Config]]
 - [[_COMMUNITY_Marketplace Grid Tests|Marketplace Grid Tests]]
-- [[_COMMUNITY_LLM Transport Layer|LLM Transport Layer]]
-- [[_COMMUNITY_Skill Creation Workflow|Skill Creation Workflow]]
-- [[_COMMUNITY_Skill Evaluation System|Skill Evaluation System]]
-- [[_COMMUNITY_Skill Refinement Workflow|Skill Refinement Workflow]]
-- [[_COMMUNITY_Code of Conduct|Code of Conduct]]
-- [[_COMMUNITY_Kubernetes Security Context|Kubernetes Security Context]]
-- [[_COMMUNITY_Explain Eval Failure|Explain Eval Failure]]
-- [[_COMMUNITY_Generate Diagram Prompt|Generate Diagram Prompt]]
-- [[_COMMUNITY_Graph Report|Graph Report]]
-- [[_COMMUNITY_Invite Email HTML|Invite Email HTML]]
-- [[_COMMUNITY_Invite Email Text|Invite Email Text]]
-- [[_COMMUNITY_Anthropic SDK Library|Anthropic SDK Library]]
+- [[_COMMUNITY_ADR Listing Script|ADR Listing Script]]
+- [[_COMMUNITY_ADR Numbering Script|ADR Numbering Script]]
+- [[_COMMUNITY_Doc Validation Script|Doc Validation Script]]
+- [[_COMMUNITY_SkillSpell Creator Skill|SkillSpell Creator Skill]]
+- [[_COMMUNITY_Redis State Migration|Redis State Migration]]
+- [[_COMMUNITY_LLM Service Facade|LLM Service Facade]]
+- [[_COMMUNITY_LLM Transport Port|LLM Transport Port]]
+- [[_COMMUNITY_PostgreSQL Storage Adapter|PostgreSQL Storage Adapter]]
+- [[_COMMUNITY_Strands Provider Configuration|Strands Provider Configuration]]
+- [[_COMMUNITY_Strands Runtime Transport|Strands Runtime Transport]]
+- [[_COMMUNITY_CLI Authentication Flow|CLI Authentication Flow]]
+- [[_COMMUNITY_CLI Skill Installation|CLI Skill Installation]]
+- [[_COMMUNITY_Contributing Guidelines|Contributing Guidelines]]
+- [[_COMMUNITY_Benchmarking System|Benchmarking System]]
+- [[_COMMUNITY_Test Case Creation|Test Case Creation]]
+- [[_COMMUNITY_Keycloak Identity Provider|Keycloak Identity Provider]]
+- [[_COMMUNITY_Marketplace & Skill Distribution|Marketplace & Skill Distribution]]
+- [[_COMMUNITY_OIDC Authentication|OIDC Authentication]]
+- [[_COMMUNITY_Organization & SSO Support|Organization & SSO Support]]
 - [[_COMMUNITY_Concurrent Invocation Error|Concurrent Invocation Error]]
-- [[_COMMUNITY_Context Overflow Error|Context Overflow Error]]
-- [[_COMMUNITY_Default Config Error|Default Config Error]]
+- [[_COMMUNITY_Context Window Overflow Error|Context Window Overflow Error]]
+- [[_COMMUNITY_Default Not Configured Error|Default Not Configured Error]]
 - [[_COMMUNITY_JSON Validation Error|JSON Validation Error]]
 - [[_COMMUNITY_Max Tokens Error|Max Tokens Error]]
 - [[_COMMUNITY_Model Error|Model Error]]
-- [[_COMMUNITY_Model Throttled Error|Model Throttled Error]]
+- [[_COMMUNITY_Model Throttling Error|Model Throttling Error]]
 - [[_COMMUNITY_Sandbox Abort Error|Sandbox Abort Error]]
 - [[_COMMUNITY_Sandbox Path Error|Sandbox Path Error]]
 - [[_COMMUNITY_Sandbox Timeout Error|Sandbox Timeout Error]]
 - [[_COMMUNITY_Structured Output Error|Structured Output Error]]
-- [[_COMMUNITY_Tool Not Found|Tool Not Found]]
+- [[_COMMUNITY_Tool Not Found Error|Tool Not Found Error]]
 - [[_COMMUNITY_Tool Validation Error|Tool Validation Error]]
-- [[_COMMUNITY_Architecture Writing Guide|Architecture Writing Guide]]
+- [[_COMMUNITY_Generate Test Evals Prompt|Generate Test Evals Prompt]]
+- [[_COMMUNITY_Grader Prompt|Grader Prompt]]
+- [[_COMMUNITY_Grading Request Template|Grading Request Template]]
+- [[_COMMUNITY_Optimize Improvement Prompt|Optimize Improvement Prompt]]
+- [[_COMMUNITY_Suggest Assertion Replacements Prompt|Suggest Assertion Replacements Prompt]]
+- [[_COMMUNITY_Suggest Test Case Count Prompt|Suggest Test Case Count Prompt]]
+- [[_COMMUNITY_Suggest Test Prompts Prompt|Suggest Test Prompts Prompt]]
+- [[_COMMUNITY_Improve Description Prompt|Improve Description Prompt]]
+- [[_COMMUNITY_Simulate Trigger Prompt|Simulate Trigger Prompt]]
+- [[_COMMUNITY_Suggest Prompt|Suggest Prompt]]
+- [[_COMMUNITY_Docker & Docker Compose|Docker & Docker Compose]]
+- [[_COMMUNITY_NestJS Backend Framework|NestJS Backend Framework]]
+- [[_COMMUNITY_React Frontend Framework|React Frontend Framework]]
+- [[_COMMUNITY_AWS Strands Agent SDK|AWS Strands Agent SDK]]
+- [[_COMMUNITY_SAML 2.0 Authentication|SAML 2.0 Authentication]]
+- [[_COMMUNITY_Multi-Format Skill Export|Multi-Format Skill Export]]
+- [[_COMMUNITY_Few-Shot Examples Reference|Few-Shot Examples Reference]]
+- [[_COMMUNITY_Skill Improvement Reference|Skill Improvement Reference]]
+- [[_COMMUNITY_Output Contract Reference|Output Contract Reference]]
+- [[_COMMUNITY_SkillSpell Creator Skill|SkillSpell Creator Skill]]
+- [[_COMMUNITY_Rate Limit Retry|Rate Limit Retry]]
+- [[_COMMUNITY_Skill Export UI|Skill Export UI]]
+- [[_COMMUNITY_Package Metadata|Package Metadata]]
+- [[_COMMUNITY_Strands Config Schema|Strands Config Schema]]
+- [[_COMMUNITY_Marketplace Submission UI|Marketplace Submission UI]]
+- [[_COMMUNITY_Marketplace Sort Bar|Marketplace Sort Bar]]
+- [[_COMMUNITY_SAML Config Storage|SAML Config Storage]]
+- [[_COMMUNITY_SMTP Config Storage|SMTP Config Storage]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `request()` - 105 edges
+1. `request()` - 106 edges
 2. `useToast()` - 40 edges
 3. `useUserPreferences()` - 37 edges
 4. `AppConfig` - 35 edges
@@ -281,577 +371,785 @@
 10. `formatError()` - 30 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `PostgreSQL Storage Adapter` --semantically_similar_to--> `PostgreSQL Database`  [INFERRED] [semantically similar]
-  CLAUDE.md → README.md
-- `SkillSpell Creator Skill (Arc)` --conceptually_related_to--> `SkillSpell Platform`  [INFERRED]
-  packages/frontend/test/fixtures/plain/SKILL.md → README.md
-- `GitHub Actions CI Pipeline` --calls--> `SkillSpell Platform`  [INFERRED]
+- `GitHub Actions CI Pipeline` --calls--> `SkillSpell ✨`  [INFERRED]
   .github/workflows/ci.yml → README.md
-- `SkillSpell Creator Skill` --conceptually_related_to--> `Improve Description Prompt`  [INFERRED]
-  skills-workspace/skills/skillspell-creator/SKILL.md → packages/shared/prompts/generation/improve-description.md
-- `SkillSpell Creator Skill` --conceptually_related_to--> `Suggest Prompt`  [INFERRED]
-  skills-workspace/skills/skillspell-creator/SKILL.md → packages/shared/prompts/generation/suggest.md
+- `main()` --indirect_call--> `SkillEntity`  [INFERRED]
+  scripts/seed-dev.ts → packages/storage/postgres/src/entities/skill.entity.ts
+- `main()` --indirect_call--> `UserEntity`  [INFERRED]
+  scripts/seed-dev.ts → packages/storage/postgres/src/entities/user.entity.ts
+- `buildController()` --indirect_call--> `OidcAuthService`  [INFERRED]
+  packages/backend/src/auth/oidc.controller.spec.ts → packages/backend/src/auth/strategies/oidc.strategy.ts
+- `buildService()` --indirect_call--> `EncryptionService`  [INFERRED]
+  packages/backend/src/auth/strategies/oidc.strategy.spec.ts → packages/backend/src/common/services/encryption.service.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (268 total, 119 thin omitted)
+## Communities (363 total, 157 thin omitted)
 
-### Community 0 - "Strands Agent Events"
+### Community 0 - "LLM Transport Port"
+Cohesion: 0.21
+Nodes (7): LlmModule, LLM_TRANSPORT, LlmTransport, AgentQueryOptions, AgentQueryResult, LightQueryOptions, ToolSchema
+
+### Community 1 - "Admin Skill Review UI"
+Cohesion: 0.05
+Nodes (50): AdminReviewTabBarProps, AdminReviewView, AdminSkillReviewPage(), ApprovedSkillRow(), Props, RejectState, Props, RemovalRequestsTab() (+42 more)
+
+### Community 2 - "Skill Builder UI"
+Cohesion: 0.06
+Nodes (56): jszip, CreationInputProps, CreationMode, SecretWarningBannerProps, BuilderState, SkillBuilder(), SkillBuilderProps, OptState (+48 more)
+
+### Community 3 - "Strands Agent SDK Types"
 Cohesion: 0.03
 Nodes (71): AfterInvocationEvent, AfterModelCallEvent, AfterToolCallEvent, AfterToolsEvent, AgentConfig, AgentMetrics, AgentResult, AgentResultEvent (+63 more)
 
-### Community 1 - "Admin Analytics"
+### Community 4 - "Organization Settings UI"
 Cohesion: 0.05
-Nodes (22): AdminAnalyticsController, stubResponse, AnalyticsKpis, AnalyticsPeriod, AnalyticsQueryDto, AnalyticsResponseDto, AdminAnalyticsModule, AdminAnalyticsService (+14 more)
+Nodes (55): InviteUsersDialogProps, MarketplaceSettingsSection(), Props, DEFAULT_SMTP_FORM, DEFAULT_SSO_FORM, GeneralSectionProps, isAtLeast(), MembersSectionProps (+47 more)
 
-### Community 2 - "Organization Settings"
+### Community 5 - "API Client & Security UI"
+Cohesion: 0.09
+Nodes (28): ChangePasswordView(), SecurityView, ApiError, buildHeaders(), doFetch(), generateDiagram(), exportSkillZip(), generateSkill() (+20 more)
+
+### Community 6 - "Analytics & Eval Charts"
+Cohesion: 0.07
+Nodes (27): DownloadsChartProps, SkillsChartProps, UserGrowthChartProps, EvalCaseListProps, EvalCaseRow(), DATE_FORMAT_OPTIONS, DetailsSection(), DetailsSectionProps (+19 more)
+
+### Community 7 - "Request Context & Skill Utils"
+Cohesion: 0.08
+Nodes (12): RequestContext, updateFrontMatterName(), GenerationService, SessionService, DiagramService, ALLOWED_FRONTMATTER_KEYS, ValidationResult, SkillOwnerGuard (+4 more)
+
+### Community 8 - "Org Guard & SMTP Encryption"
 Cohesion: 0.06
-Nodes (50): InviteUsersDialogProps, MarketplaceSettingsSection(), Props, DEFAULT_SMTP_FORM, DEFAULT_SSO_FORM, GeneralSectionProps, isAtLeast(), MembersSectionProps (+42 more)
+Nodes (9): OrganizationContextGuard, EncryptionService, SaveSmtpConfigDto, TestSmtpEmailDto, OidcConfigController, OrganizationController, OrganizationService, SmtpConfigController (+1 more)
 
-### Community 3 - "Skill Request DTOs"
-Cohesion: 0.05
-Nodes (23): ApproveOptimizationDto, CheckNameDto, CreateSkillDto, SkillFileItemDto, DraftContextDto, PublicSkillListQueryDto, SkillFileItemDto, SkillDetailDto (+15 more)
+### Community 9 - "Analytics & Category Repositories"
+Cohesion: 0.06
+Nodes (43): ADMIN_ANALYTICS_REPOSITORY, AnalyticsCategoryCount, AnalyticsDatePoint, AnalyticsFunnel, AnalyticsGranularity, AnalyticsKpiRaw, AnalyticsTopSkill, Category (+35 more)
 
-### Community 4 - "Test Generation UI"
-Cohesion: 0.05
-Nodes (47): SuggestCountBreakdown, suggestTestCaseCount(), GenerationProgress(), GenerationProgressProps, EvalRunProgress(), Props, ASSERTION_TYPES, EditableCase (+39 more)
-
-### Community 5 - "LLM Dependencies"
+### Community 10 - "Backend Dependencies"
 Cohesion: 0.03
 Nodes (59): dependencies, @anthropic-ai/foundry-sdk, archiver, bcryptjs, cache-manager, class-transformer, class-validator, cookie-parser (+51 more)
 
-### Community 6 - "Skill Upload"
-Cohesion: 0.07
-Nodes (43): CreationInputProps, CreationMode, SecretWarningBannerProps, UseZipUploadReturn, baseSkill, collectEntries(), ExtractedFile, extractFromDirectoryEntry() (+35 more)
-
-### Community 7 - "Marketplace Review"
+### Community 11 - "Generation & Eval Dialogs"
 Cohesion: 0.06
-Nodes (41): AdminSkillReviewPage(), ApprovedSkillRow(), Props, MarketplaceSubmissionsSection(), RejectState, Props, RemovalRequestsTab(), AdminSubmissionPreview (+33 more)
+Nodes (44): GenerationProgress(), GenerationProgressProps, ASSERTION_TYPES, EditableCase, GenerateLoadingView(), GenerateTestEvalsDialogProps, Phase, DescriptionOptimizer() (+36 more)
 
-### Community 8 - "Auth Configuration"
+### Community 12 - "Auth Pages & Layout"
 Cohesion: 0.06
-Nodes (15): Roles(), AttributeMappingDto, SaveOidcConfigDto, AttributeMappingDto, ImportMetadataDto, SaveSamlConfigDto, CreateOrganizationDto, UpdateOrganizationDto (+7 more)
+Nodes (17): AuthLayoutProps, BrandTitle(), NotFoundPageProps, AuthApiError, AuthChangeCallback, authRequest(), AuthSDK, AuthState (+9 more)
 
-### Community 9 - "Marketplace Taxonomy"
-Cohesion: 0.06
-Nodes (32): SubsectionProps, TaxonomyItem, fetchFavorites(), MarketplaceListItem, MarketplaceSkillDetail, requestMarketplaceRemoval(), submitSkill(), Category (+24 more)
+### Community 13 - "CLI Authentication"
+Cohesion: 0.08
+Nodes (18): CliAuthController, CliAuthService, CliCodeEntry, cacheStore, mockCacheManager, Public(), CliExchangeDto, CliRefreshDto (+10 more)
 
-### Community 10 - "Application Lifecycle"
-Cohesion: 0.06
-Nodes (21): LifecycleService, RequestContextModule, SetupRoute(), EvalModule, AllExceptionsFilter, GenerationModule, RolesGuard, WsJwtGuard (+13 more)
+### Community 14 - "Skill DTOs & WS Guard"
+Cohesion: 0.12
+Nodes (14): WsJwtGuard, normalizeSkillName(), GenerateSkillDto, SkillFileItemDto, SkillStatus, validateDto(), UpdateSkillDto, CancelPayload (+6 more)
 
-### Community 11 - "Description Optimizer"
-Cohesion: 0.07
-Nodes (19): onClientDisconnect(), SseConnection, SseService, CheckOwnership(), DescriptionOptimizerController, GenerateSkillDto, ApplyOptimizedDescriptionDto, GenerateTriggerEvalsDto (+11 more)
+### Community 15 - "LLM Response Parsing"
+Cohesion: 0.16
+Nodes (20): buildSkillResult(), countTableColumns(), extractArrayFromJson(), extractBalancedArray(), extractBalancedJson(), extractGeneratedTestEvalsJson(), extractSuggestionsJson(), extractTestSuggestionsJson() (+12 more)
 
-### Community 12 - "CLI Authentication"
-Cohesion: 0.06
-Nodes (13): CliAuthController, CliAuthService, CliCodeEntry, cacheStore, mockCacheManager, SamlController, Public(), CliExchangeDto (+5 more)
+### Community 16 - "CLI Package Manifest"
+Cohesion: 0.04
+Nodes (45): author, bin, skillspell, bugs, url, dependencies, @clack/prompts, commander (+37 more)
 
-### Community 13 - "Eval Runner"
-Cohesion: 0.06
-Nodes (18): EvalRunConfigDto, EvalRunnerService, DRAFT_STORE, IDraftStore, InMemoryDraftStore, IterationIndex, RedisDraftStore, CASES (+10 more)
+### Community 17 - "Auth Context & Readiness Hooks"
+Cohesion: 0.08
+Nodes (33): ReadinessData, SkillReadinessBarProps, StepKey, STEPS, AuthContext, AuthContextValue, AuthProvider(), OptConfig (+25 more)
 
-### Community 14 - "LLM Services"
-Cohesion: 0.11
-Nodes (10): COMPETING_SKILLS, TriggerDecision, TriggerEvaluatorService, DETERMINISTIC_TYPES, GraderResponse, LlmModule, LlmService, LLM_TRANSPORT (+2 more)
-
-### Community 15 - "Generation API"
-Cohesion: 0.07
-Nodes (36): generateDiagram(), bulkCreateEvalCases(), createEvalCase(), deleteEvalCase(), deleteEvalRun(), explainFailure(), fetchBenchmark(), fetchEvalCases() (+28 more)
-
-### Community 16 - "Session Models"
+### Community 18 - "Shared User & Session Types"
 Cohesion: 0.09
-Nodes (42): SessionMessage, ApiToken, AuthProvider, AuthUser, ChangeEmailRequest, CreateUserData, DownloadLog, EmailChangeRequest (+34 more)
+Nodes (41): SessionMessage, ApiToken, AuthProvider, AuthUser, ChangeEmailRequest, CreateUserData, DownloadLog, EmailChangeRequest (+33 more)
 
-### Community 17 - "File Tree Viewer"
+### Community 19 - "SSE & Controller Plumbing"
+Cohesion: 0.07
+Nodes (17): SkillFileItemDto, ParseVersionPipe, SseConnection, SseService, DescriptionOptimizerController, DescriptionOptimizerService, ApplyOptimizedDescriptionDto, GenerateTriggerEvalsDto (+9 more)
+
+### Community 20 - "Eval Runner & Error Utils"
+Cohesion: 0.10
+Nodes (12): formatError(), shuffleArray(), EvalRunnerService, GraderResponse, SavedDraft, ServicePrivate, WithBuildPrompt, COMPETING_SKILLS (+4 more)
+
+### Community 21 - "Admin Marketplace Controller"
+Cohesion: 0.07
+Nodes (11): AdminMarketplaceController, AdminRemoveSkillDto, ApproveRejectDto, mockAdminUser, mockExportService, mockGenerationService, mockMarketplaceService, mockSubmissionService (+3 more)
+
+### Community 22 - "Skill Generation Service"
+Cohesion: 0.06
+Nodes (9): ShareController, CheckNameDto, CreateSkillDto, SkillDetailDto, SkillListItemDto, SkillSummaryDto, UpdateSkillMetadataDto, SkillsController (+1 more)
+
+### Community 23 - "File Tree & Markdown Viewers"
 Cohesion: 0.07
 Nodes (25): FileEntry, FileGroup, FileIcon(), FolderIcon(), groupFiles(), TreeFileItem(), MarkdownToggleViewerProps, SourcePreviewToggle() (+17 more)
 
-### Community 18 - "Settings UI"
-Cohesion: 0.06
-Nodes (28): MembersSection(), SmtpSection(), TaxonomySection(), fetchMySubmissions(), MySubmission, SocketStatusMonitor(), Toast(), TYPE_STYLES (+20 more)
-
-### Community 19 - "Auth Controller"
-Cohesion: 0.08
-Nodes (12): AuthController, calculateExpiry(), clearRefreshTokenCookie(), DURATION_MULTIPLIERS, parseDurationToMs(), setRefreshTokenCookie(), OidcController, LoginDto (+4 more)
-
-### Community 20 - "Skill Generation"
-Cohesion: 0.11
-Nodes (7): GenerationService, SessionService, DiagramService, ALLOWED_FRONTMATTER_KEYS, SkillValidatorService, ValidationResult, formatError()
-
-### Community 21 - "CLI Login"
+### Community 24 - "Marketplace Submission Logic"
 Cohesion: 0.10
-Nodes (28): fetchOidcLoginUrl(), loginCommand(), LoginOptions, ssoLoginFlow(), SsoStatusResponse, mockFetch, logoutCommand(), clearCredential() (+20 more)
+Nodes (3): MarketplaceSubmissionService, IMarketplaceListingRepository, IMarketplaceSubmissionRepository
 
-### Community 22 - "Auth Pages"
+### Community 25 - "Toasts & Admin Routing"
 Cohesion: 0.07
-Nodes (21): AuthLayoutProps, BrandTitle(), ErrorAlert(), LoginPage(), MarketplaceRouteGuard(), Props, ProtectedRoute(), PublicRoute() (+13 more)
+Nodes (30): MarketplaceSubmissionsSection(), GeneralSection(), MembersSection(), AdminRoute(), Toast(), TYPE_STYLES, ToastContext, ToastContextValue (+22 more)
 
-### Community 23 - "Frontend Dev Deps"
+### Community 26 - "OIDC SSO Flow"
+Cohesion: 0.08
+Nodes (12): OidcAuthService, baseOidcConfig, buildService(), cacheStore, mockCacheManager, mockDiscoveryConfig, mockOrg, mockServerMetadata (+4 more)
+
+### Community 27 - "Taxonomy & Dropdown UI"
+Cohesion: 0.07
+Nodes (26): SubsectionProps, TaxonomyItem, TaxonomySection(), DropdownMenuDivider, DropdownMenuEntry, DropdownMenuItem, DropdownMenuProps, MultiSelectComboboxProps (+18 more)
+
+### Community 28 - "Backend Dev Tooling"
 Cohesion: 0.06
 Nodes (36): devDependencies, eslint, eslint-config-prettier, @eslint/eslintrc, @eslint/js, eslint-plugin-prettier, globals, jest (+28 more)
 
-### Community 24 - "CLI Package"
-Cohesion: 0.06
-Nodes (35): author, bin, skillspell, dependencies, @clack/prompts, commander, diff, open (+27 more)
-
-### Community 25 - "Eval Suggestions"
+### Community 29 - "Email Templates & Invites"
 Cohesion: 0.10
-Nodes (22): EvalSuggestionService, buildSkillResult(), countTableColumns(), extractArrayFromJson(), extractBalancedArray(), extractBalancedJson(), extractGeneratedTestEvalsJson(), extractJson() (+14 more)
+Nodes (5): EmailTemplateLoaderService, CompleteInviteDto, SendInvitesDto, InviteController, InviteService
 
-### Community 26 - "Evaluation DTOs"
+### Community 30 - "Category Management API"
 Cohesion: 0.11
-Nodes (10): BulkCreateEvalCasesDto, CreateEvalCaseDto, EvalAssertionDto, GenerateTestEvalsDto, OptimizeSkillDto, GapItemDto, SuggestTestCaseCountDto, UpdateEvalCaseDto (+2 more)
+Nodes (10): AdminCategoriesController, AdminCategoriesReadController, CategoryModule, CategoryService, CreateCategoryDto, UpdateCategoryDto, mockAdminUser, mockCategoryService (+2 more)
 
-### Community 27 - "User Preferences"
-Cohesion: 0.08
-Nodes (26): GeneralSection(), AuthProvider(), DateFormat, DEFAULT_PREFS, PreferencesContext, PreferencesContextValue, PreferencesProvider(), readFromStorage() (+18 more)
+### Community 31 - "Batching & Draft Store"
+Cohesion: 0.07
+Nodes (13): runInBatches(), DRAFT_STORE, IDraftStore, InMemoryDraftStore, IterationIndex, RedisDraftStore, CASES, Event (+5 more)
 
-### Community 28 - "Organization Entities"
-Cohesion: 0.16
-Nodes (13): CategoryEntity, OidcConfigEntity, OrganizationEntity, SamlConfigEntity, SkillCategoryEntity, SmtpConfigEntity, SsoLinkEntity, UserEntity (+5 more)
+### Community 32 - "Strands Transport Layer"
+Cohesion: 0.18
+Nodes (7): Anthropic, @anthropic-ai/sdk, anthropicConfig(), AnyConfig, strandsConfig(), ZOD_TOOL, PromptDumpService
 
-### Community 29 - "App Layout"
+### Community 33 - "Auth Controller & Cookies"
 Cohesion: 0.09
-Nodes (26): useSkills(), AuthenticatedContext, AuthenticatedLayout(), OrganizationSettingsPage(), ProfilePageWrapper(), SecuritySubsection, VALID_PROFILE_SECTIONS, VALID_SECURITY_SUBSECTIONS (+18 more)
+Nodes (11): AuthController, calculateExpiry(), clearRefreshTokenCookie(), DURATION_MULTIPLIERS, parseDurationToMs(), setRefreshTokenCookie(), LoginDto, LogoutDto (+3 more)
 
-### Community 30 - "Auth SDK"
-Cohesion: 0.12
-Nodes (9): AuthApiError, AuthChangeCallback, authRequest(), AuthSDK, AuthState, clearLegacyStorage(), decodeJwtPayload(), getTokenExpiry() (+1 more)
-
-### Community 31 - "Backend Dependencies"
+### Community 34 - "Postgres Package Manifest"
 Cohesion: 0.06
 Nodes (32): dependencies, dotenv, @nestjs/common, @nestjs/typeorm, pg, typeorm, uuid, description (+24 more)
 
-### Community 32 - "Email Service"
-Cohesion: 0.12
-Nodes (3): EmailService, EmailTemplateLoaderService, InviteService
+### Community 35 - "App Module & Middleware"
+Cohesion: 0.14
+Nodes (16): backendRoot, frontendDistPath, AuthModule, RequestContextModule, AllExceptionsFilter, LoggingInterceptor, validateEnv(), EvalModule (+8 more)
 
-### Community 33 - "Skill Sharing"
-Cohesion: 0.10
-Nodes (6): ParseVersionPipe, ExportFormat, ShareController, SharedSkillResponse, VALID_FORMATS, SkillsService
-
-### Community 34 - "Auth Service"
-Cohesion: 0.10
-Nodes (6): AuthService, TEST_CREDENTIAL, TEST_ORG, TEST_USER, LocalStrategy, UsersService
-
-### Community 35 - "Marketplace DTOs"
-Cohesion: 0.11
-Nodes (7): MarketplaceBrowseResponseDto, MarketplaceListItemDto, MarketplaceListQueryDto, MarketplaceSkillDetailDto, MySubmissionDto, RequestRemovalDto, MarketplaceController
-
-### Community 36 - "Evaluation Models"
-Cohesion: 0.07
-Nodes (29): AssertionReplacementSuggestion, ConfigStats, CreateEvalCaseRequest, EvalAssertion, EvalAssertionResult, EvalAssertionStats, EvalAssertionValueStats, EvalBenchmark (+21 more)
-
-### Community 37 - "Build Scripts"
+### Community 37 - "Root NPM Scripts"
 Cohesion: 0.07
 Nodes (29): scripts, backend:build, backend:dev, build, cli:build, db:postgres:down, db:postgres:migrate, db:postgres:up (+21 more)
 
-### Community 38 - "Request Context"
-Cohesion: 0.13
-Nodes (4): RequestContext, SkillOwnerGuard, OwnershipService, updateFrontMatterName()
+### Community 38 - "Eval Benchmark UI"
+Cohesion: 0.07
+Nodes (14): Sparkline, SparklineProps, SparklineWithLabel, AssertionReplacementDialog(), AssertionReplacementDialogProps, EvalBenchmarkTabProps, EvalNavigation(), EvalNavigationProps (+6 more)
 
-### Community 39 - "Documentation"
+### Community 39 - "Observability & Infrastructure"
+Cohesion: 0.40
+Nodes (5): Docker Compose Configuration, Langfuse v3 LLM Observability, OpenTelemetry Tracing, PostgreSQL Database, Redis Cache & State Store
+
+### Community 40 - "Document Authoring Skill"
+Cohesion: 0.06
+Nodes (31): Ambiguous Document Type, Anti-Pattern 1: Solution-Focused Language, Anti-Pattern 2: Vague Scope, Anti-Pattern 3: Missing Urgency, Arc, Contradictory Information, Cross-Team Decisions, Edge Cases (+23 more)
+
+### Community 41 - "Postgres Entity Definitions"
+Cohesion: 0.20
+Nodes (17): entities, EvalBenchmarkEntity, EvalCaseEntity, EvalFeedbackEntity, EvalRunEntity, OidcConfigEntity, OrganizationEntity, SamlConfigEntity (+9 more)
+
+### Community 42 - "Admin Analytics API"
+Cohesion: 0.12
+Nodes (9): AdminAnalyticsController, stubResponse, AnalyticsKpis, AnalyticsPeriod, AnalyticsQueryDto, AnalyticsResponseDto, AdminAnalyticsModule, AdminAnalyticsService (+1 more)
+
+### Community 43 - "Core Auth Service"
 Cohesion: 0.08
-Nodes (27): SkillSpell Creator Skill (Arc), Redis State Migration (v0.0.10), PostgreSQL Storage Adapter, CLI Authentication Flow, SkillSpell CLI Guide, CLI Skill Installation, Contributing Guidelines, Docker Compose Configuration (+19 more)
+Nodes (11): AuthService, TEST_CREDENTIAL, TEST_ORG, TEST_USER, LocalStrategy, EmailModule, OrganizationModule, UsersModule (+3 more)
 
-### Community 40 - "Admin Approval"
-Cohesion: 0.10
-Nodes (4): AdminRemoveSkillDto, ApproveRejectDto, AdminMarketplaceController, MarketplaceGuard
+### Community 44 - "Login & Route Guards"
+Cohesion: 0.07
+Nodes (30): ErrorAlert(), LoginPage(), MarketplaceRouteGuard(), Props, ProtectedRoute(), PublicRoute(), sanitizeReturnUrl(), SetupWizard() (+22 more)
 
-### Community 41 - "Evaluation Entities"
-Cohesion: 0.28
-Nodes (10): EvalBenchmarkEntity, EvalCaseEntity, EvalFeedbackEntity, EvalRunEntity, SessionMessageEntity, SetupStateEntity, SkillDiagramEntity, SkillEntity (+2 more)
+### Community 45 - "Shared Eval Types"
+Cohesion: 0.07
+Nodes (29): AssertionReplacementSuggestion, ConfigStats, CreateEvalCaseRequest, EvalAssertion, EvalAssertionResult, EvalAssertionStats, EvalAssertionValueStats, EvalBenchmark (+21 more)
 
-### Community 42 - "LLM Tool Schemas"
-Cohesion: 0.10
-Nodes (20): BATCH_TRIGGER_TOOL_SCHEMA, BATCH_TRIGGER_ZOD_SCHEMA, EVAL_CASE_ITEM_SCHEMA, EVAL_CASE_ITEM_ZOD_SCHEMA, GENERATE_TEST_EVALS_TOOL_SCHEMA, GENERATE_TEST_EVALS_ZOD_SCHEMA, SUGGEST_GAP_COUNTS_TOOL_SCHEMA, SUGGEST_GAP_COUNTS_ZOD_SCHEMA (+12 more)
+### Community 46 - "System Design Template"
+Cohesion: 0.07
+Nodes (27): Alternatives Considered, API Design, Assumptions, Component 1: [Name], Component 2: [Name], Consequences, Constraints, Context (+19 more)
 
-### Community 43 - "Eval Run API"
-Cohesion: 0.13
-Nodes (4): RunEvalsDto, EvalExecutionController, EvalExecutionService, ExplainFailureService
+### Community 47 - "Postgres Storage Module"
+Cohesion: 0.18
+Nodes (6): POSTGRES_STORAGE_OPTIONS, PostgresStorageOptions, PostgresOptionsModule, PostgresStorageAsyncOptions, PostgresStorageModule, PostgresOrganizationRepository
 
-### Community 44 - "Evaluation Feedback"
-Cohesion: 0.12
-Nodes (12): SaveFeedbackDto, EvalFeedbackService, truncate(), TestPromptSuggestion, CancelPayload, GenerateEvalsPayload, GeneratePayload, OptimizeDraftPayload (+4 more)
-
-### Community 45 - "Generation Hooks"
-Cohesion: 0.12
-Nodes (16): applyOptimizedDescription(), generateTriggerEvals(), runDescriptionOptimization(), fetchSkill(), OptimizerStep, UseDescriptionOptimizerReturn, UseEvalsReturn, UseGenerationReturn (+8 more)
-
-### Community 48 - "Eval Runner Hooks"
-Cohesion: 0.14
-Nodes (19): generateTestEvals(), suggestGapCounts(), approveOptimization(), optimizeDraft(), AuthContext, AuthContextValue, EvalStatus, UseEvalRunnerReturn (+11 more)
-
-### Community 49 - "App Configuration"
+### Community 48 - "Eval Execution API"
 Cohesion: 0.15
-Nodes (7): AuthModule, AppConfig, EmailModule, EncryptionService, JwtStrategy, OidcPendingState, OidcValidateResult
+Nodes (5): EvalRunConfigDto, RunEvalsDto, EvalExecutionController, EvalExecutionService, ExplainFailureService
 
-### Community 50 - "CLI Receipts"
+### Community 49 - "Postgres Category Storage"
 Cohesion: 0.13
-Nodes (20): outdatedCommand(), mockFetch, mockReadReceipt, mockFetch, mockReadFile, mockReadReceipt, mockUpsertReceiptEntry, mockWriteFile (+12 more)
+Nodes (7): CategoryEntity, SkillCategoryEntity, entities, repositoryExports, repositoryProviders, PostgresCategoryRepository, PostgresSkillCategoryRepository
 
-### Community 51 - "Eval Visualization"
+### Community 50 - "Changelog"
 Cohesion: 0.08
-Nodes (8): Sparkline, SparklineProps, SparklineWithLabel, AssertionReplacementDialog(), AssertionReplacementDialogProps, EvalBenchmarkTabProps, NonDiscriminatingHelpDialog(), NonDiscriminatingHelpDialogProps
+Nodes (25): [0.0.10] - 2026-04-28, [0.0.9] - 2026-04-17, [1.0.0] - 2026-05-01, [1.1.0] - 2026-07-04, Added, Added, Added, Changed (+17 more)
 
-### Community 52 - "Skill Export"
-Cohesion: 0.16
-Nodes (9): ExportController, ExportFormat, VALID_FORMATS, ExportModule, ExportService, sanitizePath(), MarketplaceModule, buildFlatMarkdown() (+1 more)
+### Community 51 - "Keycloak SAML Dev Guide"
+Cohesion: 0.08
+Nodes (25): 1. Sign assertions is Off in Keycloak (most common), 2. Certificate mismatch — container recreated (new keys generated), Admin UI not accessible after `saml:up`, Container not starting / port 8080 already in use, How It All Fits Together, "Invalid requester" on the Keycloak login page, Key Details, Local SAML SSO Testing with Keycloak (+17 more)
 
-### Community 53 - "OIDC Auth"
+### Community 52 - "LLM Tool Schemas"
 Cohesion: 0.10
-Nodes (9): OidcAuthService, baseOidcConfig, cacheStore, mockCacheManager, mockDiscoveryConfig, mockOrg, mockServerMetadata, mockUser (+1 more)
+Nodes (20): EVAL_CASE_ITEM_SCHEMA, EVAL_CASE_ITEM_ZOD_SCHEMA, GENERATE_TEST_EVALS_TOOL_SCHEMA, GENERATE_TEST_EVALS_ZOD_SCHEMA, SUGGEST_GAP_COUNTS_TOOL_SCHEMA, SUGGEST_GAP_COUNTS_ZOD_SCHEMA, TEST_SUGGESTIONS_TOOL_SCHEMA, TEST_SUGGESTIONS_ZOD_SCHEMA (+12 more)
 
-### Community 54 - "API Client"
+### Community 53 - "Run Progress & Token Modal"
 Cohesion: 0.11
-Nodes (16): ApiError, buildHeaders(), doFetch(), exportSkillZip(), UseExportReturn, ExpiryPreset, GenerateTokenModal(), GenerateTokenModalProps (+8 more)
+Nodes (15): EvalRunProgress(), Props, ExpiryPreset, GenerateTokenModal(), GenerateTokenModalProps, ModalPhase, PRESET_LABELS, tomorrowDateString() (+7 more)
 
-### Community 55 - "CLI Install"
-Cohesion: 0.13
-Nodes (17): globalPathHint(), installCommand(), InstallOptions, resolveSlugToId(), SUPPORTED_TOOLS, mockFetch, mockMkdir, mockReadFile (+9 more)
+### Community 54 - "Architecture Doc Template"
+Cohesion: 0.08
+Nodes (24): Alternatives Considered, Architectural Principles, Architecture Overview, [Component 1 Name], Component Details, Consequences, Cross-Cutting Concerns, Data Architecture (+16 more)
 
-### Community 56 - "Frontend Dependencies"
-Cohesion: 0.09
-Nodes (23): dependencies, dompurify, fetch-event-stream, @heroicons/react, jszip, mermaid, @microsoft/fetch-event-source, react (+15 more)
+### Community 56 - "CLI Install Command"
+Cohesion: 0.24
+Nodes (10): globalPathHint(), installCommand(), InstallOptions, resolveSlugToId(), SUPPORTED_TOOLS, toolLabel(), workspacePathHint(), InstallPath (+2 more)
 
-### Community 57 - "Frontend Config"
+### Community 58 - "Marketplace Submission Storage"
+Cohesion: 0.12
+Nodes (3): MarketplaceSubmissionEntity, MarketplaceSubmissionStatus, PostgresMarketplaceSubmissionRepository
+
+### Community 59 - "Marketplace DTOs"
+Cohesion: 0.15
+Nodes (7): MarketplaceBrowseResponseDto, MarketplaceListItemDto, MarketplaceListQueryDto, MarketplaceSkillDetailDto, MySubmissionDto, RequestRemovalDto, MarketplaceController
+
+### Community 60 - "Public Skills API"
+Cohesion: 0.14
+Nodes (9): PublicSkillListQueryDto, PublicController, mockPublicSkillsService, PublicModule, PublicSkillDownload, PublicSkillsService, PublicSkillSummary, mockSkillRepo (+1 more)
+
+### Community 61 - "CLI Credential Storage"
+Cohesion: 0.15
+Nodes (18): logoutCommand(), clearCredential(), clearSsoCredential(), CRED_FILE, execFileAsync, readCredential(), readSsoCredential(), resolveToken() (+10 more)
+
+### Community 62 - "Eval Viewer UI"
+Cohesion: 0.14
+Nodes (16): EvalBenchmarkTab(), EvalCaseList(), COLOR_MAP, EvalHelpDialog(), EvalHelpDialogProps, EvalOutputsTab(), EvalViewer, EvalViewerComponent() (+8 more)
+
+### Community 63 - "Frontend App TSConfig"
 Cohesion: 0.09
 Nodes (22): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, jsx, lib, module, moduleDetection, moduleResolution (+14 more)
 
-### Community 59 - "Generation Types"
+### Community 64 - "Shared Generation Types"
 Cohesion: 0.10
 Nodes (22): ApplyOptimizedDescriptionRequest, ApproveOptimizationRequest, DescriptionOptimizationResult, GenerateSkillRequest, GenerateTriggerEvalsRequest, GenerateTriggerEvalsResponse, GenerationStats, OptimizationIteration (+14 more)
 
-### Community 60 - "Admin Components"
-Cohesion: 0.10
-Nodes (13): AdminReviewHeader(), AdminReviewHeaderProps, formatRelativeTime(), STATUS_COLORS, STATUS_LABELS, SubmitButtonProps, Button(), ButtonProps (+5 more)
+### Community 66 - "Eval Case DTOs"
+Cohesion: 0.22
+Nodes (8): BulkCreateEvalCasesDto, CreateEvalCaseDto, EvalAssertionDto, OptimizeSkillDto, GapItemDto, SuggestTestCaseCountDto, SuggestTestPromptsDto, UpdateEvalCaseDto
 
-### Community 61 - "Analytics UI"
-Cohesion: 0.14
-Nodes (11): DownloadsChartProps, SkillsChartProps, UserGrowthChartProps, EvalCaseListProps, EvalCaseRow(), dateFormatter, dateTimeFormatter, formatChartAxisLabel() (+3 more)
+### Community 67 - "Frontend Dependencies"
+Cohesion: 0.09
+Nodes (22): dependencies, dompurify, fetch-event-stream, @heroicons/react, mermaid, @microsoft/fetch-event-source, react, react-diff-viewer-continued (+14 more)
 
-### Community 62 - "CLI Tools"
-Cohesion: 0.18
-Nodes (14): listCommand(), ListOptions, mockFetch, mockSkills, OutdatedOptions, OutdatedRow, assertSafePath(), resolveSlugToId() (+6 more)
-
-### Community 63 - "Frontend Dev"
+### Community 68 - "Frontend Dev Tooling"
 Cohesion: 0.09
 Nodes (22): devDependencies, eslint, @eslint/js, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals, jsdom, tailwindcss (+14 more)
 
-### Community 64 - "Analytics Dashboard"
-Cohesion: 0.13
-Nodes (9): KpiTilesProps, PeriodPicker(), PeriodPickerProps, PRESETS, AnalyticsKpis, AnalyticsPeriod, AnalyticsResponse, getAnalytics() (+1 more)
+### Community 69 - "Misc UI Components"
+Cohesion: 0.10
+Nodes (13): AdminReviewHeader(), AdminReviewHeaderProps, formatRelativeTime(), STATUS_COLORS, STATUS_LABELS, SubmitButtonProps, Button(), ButtonProps (+5 more)
 
-### Community 65 - "CLI Configuration"
-Cohesion: 0.17
-Nodes (14): configUrlCommand(), mockFetch, UserProfile, whoamiCommand(), CONFIG_DIR, CONFIG_FILE, readConfig(), mockMkdir (+6 more)
+### Community 70 - "App Bootstrap & Logging"
+Cohesion: 0.14
+Nodes (10): AppModule, createAppLogger(), devFormat, LEVEL_COLOR, buildHttpsRedirectTarget(), httpsRedirectMiddleware(), bootstrap(), StreamingAdapter (+2 more)
 
-### Community 66 - "JWT Auth"
-Cohesion: 0.11
-Nodes (7): JwtAuthGuard, PatPassportStrategy, PatStrategy, mockPat, mockPatService, mockUser, mockUserRepo
-
-### Community 67 - "Marketplace Submit"
+### Community 72 - "Submission Requirements Checking"
 Cohesion: 0.13
 Nodes (6): SubmitSkillDto, BaselineEvalRunChecker, CheckContext, RequirementChecker, RequirementsCheckerService, SubmissionSnapshot
 
-### Community 68 - "Eval Outputs"
+### Community 73 - "CLI Install Receipts"
+Cohesion: 0.13
+Nodes (18): InstalledReceipt, InstalledReceiptEntry, receiptDir(), receiptPath(), upsertReceiptEntry(), withReceiptLock(), writeReceipt(), ExportFormat (+10 more)
+
+### Community 74 - "Eval Claims & Grades UI"
+Cohesion: 0.10
+Nodes (13): InfoTip(), InfoTipProps, ClaimsSection(), ClaimsSectionProps, TYPE_COLORS, TYPE_LABELS, TYPE_TOOLTIPS, EvalCritique() (+5 more)
+
+### Community 75 - "Eval Outputs Tab"
 Cohesion: 0.12
 Nodes (6): EvalOutputsTabProps, EvalTab, SECTION_ICONS, SummaryTab(), computeDelta(), sortAssertions()
 
-### Community 69 - "Marketplace UI"
-Cohesion: 0.16
-Nodes (14): getMarketplaceSkill(), toggleFavorite(), toggleUpvote(), AdminRoute(), Tooltip(), TooltipProps, ROLE_HIERARCHY, useHasRole() (+6 more)
+### Community 76 - "Eval Run List Panel"
+Cohesion: 0.14
+Nodes (11): EvalRunListPanel(), EvalRunListPanelProps, RunGroup, useEvalViewer(), UseEvalViewerOptions, UseEvalViewerReturn, useRunComparison(), UseRunComparisonOptions (+3 more)
 
-### Community 70 - "Eval Viewer"
-Cohesion: 0.15
-Nodes (10): EvalRunListPanelProps, RunGroup, useEvalViewer(), UseEvalViewerOptions, UseEvalViewerReturn, useRunComparison(), UseRunComparisonOptions, UseRunComparisonReturn (+2 more)
+### Community 77 - "JWT & PAT Guards"
+Cohesion: 0.12
+Nodes (7): JwtAuthGuard, PatPassportStrategy, PatStrategy, mockPat, mockPatService, mockUser, mockUserRepo
 
-### Community 71 - "Node Config"
+### Community 78 - "Eval Feedback API"
+Cohesion: 0.13
+Nodes (9): onClientDisconnect(), GenerateTestEvalsDto, SuggestGapCountsDto, EvalFeedbackController, EvalFeedbackService, truncate(), EvalSuggestionService, extractJson() (+1 more)
+
+### Community 79 - "Skill Export Service"
+Cohesion: 0.19
+Nodes (7): buildFlatMarkdown(), stripFrontmatter(), ExportController, ExportFormat, VALID_FORMATS, ExportService, sanitizePath()
+
+### Community 80 - "CLI Login Flow"
+Cohesion: 0.17
+Nodes (15): fetchOidcLoginUrl(), loginCommand(), LoginOptions, ssoLoginFlow(), SsoStatusResponse, getJwtExpiry(), isValidPat(), startCallbackServer() (+7 more)
+
+### Community 81 - "Frontend Node TSConfig"
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib, module, moduleDetection, moduleResolution, noEmit (+11 more)
 
-### Community 74 - "Eval Display"
-Cohesion: 0.12
-Nodes (11): InfoTip(), InfoTipProps, ClaimsSection(), ClaimsSectionProps, TYPE_COLORS, TYPE_LABELS, TYPE_TOOLTIPS, EvalCritique() (+3 more)
+### Community 82 - "CLI Security Review Findings"
+Cohesion: 0.10
+Nodes (19): 10. LOW — `skillspell config url` accepts arbitrary URLs, no https enforcement, 11. LOW — SSO refresh token and PAT stored in plaintext on disk, 12. INFO — CLI-supplied PKCE `code_verifier` is security-neutral, 1. HIGH — OIDC `cli_redirect` open redirect enables SSO code theft / account takeover, 2. MEDIUM — SAML IdP-initiated flow bypasses CSRF nonce; no assertion replay protection, 3. MEDIUM — CLI callback server accepts any code with no state binding, 4. MEDIUM — User enumeration via login error messages and timing, 5. MEDIUM — Password change does not revoke Personal Access Tokens (+11 more)
 
-### Community 75 - "LLM Configuration"
-Cohesion: 0.16
-Nodes (3): LlmProvider, configureLogging(), StrandsConfigService
+### Community 83 - "SAML SSO Flow"
+Cohesion: 0.10
+Nodes (9): AttributeMappingDto, ImportMetadataDto, SaveSamlConfigDto, SamlAuthService, TEST_ORG, TEST_SAML_CONFIG, SsoConfigControllerPrivate, SsoConfigController (+1 more)
 
-### Community 76 - "Marketplace Entities"
-Cohesion: 0.18
-Nodes (7): MarketplaceListingEntity, MarketplaceListingStatus, MarketplaceRemovalType, MarketplaceSubmissionEntity, MarketplaceSubmissionStatus, PostgresMarketplaceListingRepository, MockMarketplaceListingEntity
-
-### Community 77 - "Eval Viewer UI"
-Cohesion: 0.20
-Nodes (15): EvalBenchmarkTab(), EvalCaseList(), EvalHelpDialog(), EvalOutputsTab(), EvalRunComparison, EvalRunListPanel(), EvalViewer, EvalViewerComponent() (+7 more)
-
-### Community 78 - "App Infrastructure"
-Cohesion: 0.15
-Nodes (9): createAppLogger(), devFormat, LEVEL_COLOR, buildHttpsRedirectTarget(), httpsRedirectMiddleware(), bootstrap(), StreamingAdapter, buildTraceProcessors() (+1 more)
-
-### Community 79 - "Root Config"
+### Community 84 - "TypeScript Build Config"
 Cohesion: 0.11
 Nodes (18): compilerOptions, declaration, declarationMap, emitDecoratorMetadata, esModuleInterop, experimentalDecorators, module, moduleResolution (+10 more)
 
-### Community 80 - "Repository Interfaces"
-Cohesion: 0.19
-Nodes (14): ADMIN_ANALYTICS_REPOSITORY, AnalyticsCategoryCount, AnalyticsDatePoint, AnalyticsFunnel, AnalyticsGranularity, AnalyticsKpiRaw, AnalyticsTopSkill, IAdminAnalyticsRepository (+6 more)
-
-### Community 81 - "Shared Config"
-Cohesion: 0.11
-Nodes (17): compilerOptions, allowSyntheticDefaultImports, baseUrl, emitDecoratorMetadata, experimentalDecorators, incremental, isolatedModules, module (+9 more)
-
-### Community 82 - "Postgres Storage"
-Cohesion: 0.16
-Nodes (6): POSTGRES_STORAGE_OPTIONS, PostgresStorageOptions, PostgresOrganizationRepository, PostgresOptionsModule, PostgresStorageAsyncOptions, PostgresStorageModule
-
-### Community 84 - "Eval Comparison"
-Cohesion: 0.15
-Nodes (8): EvalGrades(), EvalNavigation(), EvalNavigationProps, TimingInfo(), EvalRunComparisonProps, VersionComparisonView, VersionComparisonViewProps, formatDuration()
-
-### Community 85 - "LLM Transport"
-Cohesion: 0.30
-Nodes (7): AgentQueryOptions, AgentQueryResult, LightQueryOptions, MessageResult, SendMessageOptions, ToolSchema, LlmTransport
-
-### Community 86 - "Base Config"
+### Community 86 - "Base TSConfig"
 Cohesion: 0.12
 Nodes (16): compilerOptions, declaration, declarationMap, esModuleInterop, forceConsistentCasingInFileNames, lib, module, moduleResolution (+8 more)
 
-### Community 87 - "CLI TypeScript"
+### Community 87 - "Backend TSConfig"
+Cohesion: 0.11
+Nodes (17): compilerOptions, allowSyntheticDefaultImports, baseUrl, emitDecoratorMetadata, experimentalDecorators, incremental, isolatedModules, module (+9 more)
+
+### Community 88 - "Project README & Roadmap"
 Cohesion: 0.12
-Nodes (15): compilerOptions, baseUrl, isolatedModules, module, moduleResolution, noImplicitAny, outDir, removeComments (+7 more)
+Nodes (17): GitHub Actions CI Pipeline, Also proposed, Author, CLI enhancements, Compared to CLI-Based Skill Authoring, Default Ports, Documentation, Key Capabilities (+9 more)
 
-### Community 88 - "CLI Uninstall"
-Cohesion: 0.20
-Nodes (12): assertSafePath(), isSharedFileTarget(), mockReadFile, mockReadReceipt, mockRemoveReceiptEntry, mockUnlink, mockWriteFile, uninstallCommand() (+4 more)
-
-### Community 90 - "Docs Config"
-Cohesion: 0.13
-Nodes (14): colors, dark, light, primary, footer, socials, name, navbar (+6 more)
-
-### Community 92 - "Skill Parsing"
-Cohesion: 0.23
-Nodes (4): SkillGenerationService, extractSectionHeadings(), extractSections(), SkillSection
-
-### Community 94 - "Backend Scripts"
-Cohesion: 0.14
-Nodes (14): scripts, build, format, lint, lint:fix, start, start:debug, start:dev (+6 more)
-
-### Community 95 - "User Invitations"
-Cohesion: 0.19
-Nodes (3): CompleteInviteDto, SendInvitesDto, InviteController
-
-### Community 96 - "Skill Removal"
-Cohesion: 0.20
-Nodes (4): MarketplaceRemovalRequestEntity, RemovalRequestScope, RemovalRequestStatus, PostgresMarketplaceRemovalRequestRepository
-
-### Community 97 - "Shared Package"
-Cohesion: 0.15
-Nodes (13): default, description, exports, import, license, main, name, private (+5 more)
-
-### Community 98 - "Eval Editor"
-Cohesion: 0.23
-Nodes (8): SmartSuggestions(), SmartSuggestionsProps, ASSERTION_TYPES, EvalCaseEditor(), EvalCaseEditorProps, useDebounce(), useSuggestions(), UseSuggestionsReturn
-
-### Community 99 - "Skill Cards"
-Cohesion: 0.17
-Nodes (9): RunMetaCard(), DEFAULT_STATUS, SkillCard(), SkillCardProps, STATUS_STYLES, DEFAULT_STATUS, SkillsGridProps, STATUS_STYLES (+1 more)
-
-### Community 100 - "LLM Configuration"
-Cohesion: 0.23
-Nodes (9): configFactory(), EnvConfig, envSchema, validateEnv(), createStrandsConfig(), LLM_PROVIDERS, resolveProvider(), StrandsConfig (+1 more)
-
-### Community 101 - "SMTP Configuration"
-Cohesion: 0.32
-Nodes (3): SaveSmtpConfigDto, TestSmtpEmailDto, SmtpConfigController
-
-### Community 102 - "Monorepo Packages"
-Cohesion: 0.17
-Nodes (11): author, dependencies, openai, description, engines, node, license, name (+3 more)
-
-### Community 103 - "Prompt Dumping"
-Cohesion: 0.21
-Nodes (5): PromptDumpService, anthropicConfig(), AnyConfig, strandsConfig(), ZOD_TOOL
-
-### Community 105 - "Socket Test Utilities"
-Cohesion: 0.21
-Nodes (5): FakeEmitter, Handler, { mockIo }, triggerConnect(), triggerConnectError()
-
-### Community 106 - "Skill Favorites"
-Cohesion: 0.24
-Nodes (3): SkillFavoriteEntity, isUniqueViolation(), PostgresSkillFavoriteRepository
-
-### Community 107 - "Skill Upvotes"
-Cohesion: 0.29
-Nodes (3): SkillUpvoteEntity, isUniqueViolation(), PostgresSkillUpvoteRepository
-
-### Community 110 - "Skill Domain Model"
-Cohesion: 0.20
-Nodes (10): CreateSkillData, ExportFormat, ExportFormatInfo, Skill, SkillDiagram, SkillSummary, SkillVersionSnapshot, SkillVersionSummary (+2 more)
-
-### Community 111 - "Skill Version Management"
-Cohesion: 0.27
-Nodes (8): fetchVersionHistory(), fetchVersionSnapshot(), DiffFileEntry, getFileContent(), getFileKeys(), mergeFileKeys(), VersionDiffViewer(), VersionDiffViewerProps
-
-### Community 112 - "Jest Configuration"
+### Community 89 - "Jest Configuration"
 Cohesion: 0.20
 Nodes (10): jest, collectCoverageFrom, coverageDirectory, moduleFileExtensions, rootDir, testEnvironment, testRegex, transform (+2 more)
 
-### Community 113 - "Skill Optimization & Testing"
-Cohesion: 0.24
-Nodes (10): Regression Guard & Optimization Features, LlmService, LlmTransport Port, StrandsConfigService, StrandsTransport, Benchmarking System, Grading System, Automated Skill Optimization (+2 more)
+### Community 90 - "Docs Site Theme Config"
+Cohesion: 0.13
+Nodes (14): colors, dark, light, primary, footer, socials, name, navbar (+6 more)
 
-### Community 115 - "Evaluation Output Files"
-Cohesion: 0.29
-Nodes (6): EvalOutputFile(), EvalOutputFileProps, formatFileSize(), isCodeFile(), isMarkdownFile(), isYamlFile()
+### Community 91 - "RBAC Roles & Org DTOs"
+Cohesion: 0.17
+Nodes (7): Roles(), AttributeMappingDto, SaveOidcConfigDto, RolesGuard, CreateOrganizationDto, UpdateOrganizationDto, DiscoverEndpointsDto
 
-### Community 116 - "Package Overrides"
+### Community 92 - "Eval Grading Service"
+Cohesion: 0.21
+Nodes (3): service, DETERMINISTIC_TYPES, GradingService
+
+### Community 95 - "CLI Config & Entrypoint"
+Cohesion: 0.20
+Nodes (10): configUrlCommand(), configCmd, program, CONFIG_DIR, CONFIG_FILE, readConfig(), writeConfig(), mockMkdir (+2 more)
+
+### Community 96 - "CLI Uninstall Command"
+Cohesion: 0.20
+Nodes (13): assertSafePath(), isSharedFileTarget(), uninstallCommand(), UninstallOptions, readReceipt(), removeReceiptEntry(), removeSection(), upsertSection() (+5 more)
+
+### Community 98 - "CLI Listing Commands"
+Cohesion: 0.14
+Nodes (15): listCommand(), ListOptions, outdatedCommand(), OutdatedOptions, OutdatedRow, UserProfile, whoamiCommand(), ApiError (+7 more)
+
+### Community 99 - "Shared TSConfig"
+Cohesion: 0.12
+Nodes (15): compilerOptions, baseUrl, isolatedModules, module, moduleResolution, noImplicitAny, outDir, removeComments (+7 more)
+
+### Community 100 - "Admin Analytics Dashboard"
+Cohesion: 0.13
+Nodes (9): KpiTilesProps, PeriodPicker(), PeriodPickerProps, PRESETS, stubResponse, AnalyticsKpis, AnalyticsPeriod, AnalyticsResponse (+1 more)
+
+### Community 101 - "Marketplace UI Tests"
+Cohesion: 0.12
+Nodes (13): baseItem, mockAddToast, mockNavigate, mockToggleFavorite, mockToggleUpvote, renderCard(), renderWithProvider(), mockGetSkill (+5 more)
+
+### Community 102 - "Root Package Manifest"
+Cohesion: 0.17
+Nodes (11): author, dependencies, openai, description, engines, node, license, name (+3 more)
+
+### Community 103 - "Project README"
+Cohesion: 0.13
+Nodes (14): Compile and run the project, Custom providers, Deployment, Description, Example: switch to Azure AI Foundry, How it works, License, Multi-Provider LLM Support (+6 more)
+
+### Community 105 - "Skill Generation & Refinement"
+Cohesion: 0.23
+Nodes (4): SkillGenerationService, extractSectionHeadings(), extractSections(), SkillSection
+
+### Community 106 - "ADR Template"
+Cohesion: 0.13
+Nodes (14): ADR-NNNN: [Short Title], Alternatives Considered, Consequences, Context, Decision, Decision Triggers, Negative, Neutral (+6 more)
+
+### Community 107 - "Marketplace Listing Storage"
+Cohesion: 0.23
+Nodes (5): MarketplaceListingEntity, MarketplaceListingStatus, MarketplaceRemovalType, PostgresMarketplaceListingRepository, MockMarketplaceListingEntity
+
+### Community 108 - "PostgreSQL Setup Guide"
+Cohesion: 0.14
+Nodes (14): Connecting to the Database in pgAdmin, Connecting via CLI, Docker Compose Services, Generating New Migrations, pgAdmin (GUI), Postgres, PostgreSQL Storage Guide, Prerequisites (+6 more)
+
+### Community 109 - "Backend NPM Scripts"
+Cohesion: 0.14
+Nodes (14): scripts, build, format, lint, lint:fix, start, start:debug, start:dev (+6 more)
+
+### Community 110 - "Health & Lifecycle"
+Cohesion: 0.18
+Nodes (4): SetupRoute(), LifecycleService, HealthController, RedisHealthIndicator
+
+### Community 111 - "CLI Update Command"
+Cohesion: 0.18
+Nodes (12): assertSafePath(), resolveSlugToId(), updateCommand(), UpdateOptions, InstalledReceiptEntry, PublicSkillDownload, PublicSkillSummary, mockFetch (+4 more)
+
+### Community 112 - "Eval Case Editing UI"
+Cohesion: 0.21
+Nodes (9): SmartSuggestions(), SmartSuggestionsProps, ASSERTION_TYPES, EvalCaseEditor(), EvalCaseEditorProps, useDebounce(), useSuggestions(), UseSuggestionsReturn (+1 more)
+
+### Community 114 - "Package Manifest"
+Cohesion: 0.15
+Nodes (13): default, description, exports, import, license, main, name, private (+5 more)
+
+### Community 115 - "Grader Prompt"
+Cohesion: 0.14
+Nodes (13): Assertion Types, Claim Extraction, Eval Self-Critique, Examples of Grading in Practice, Extraction Rules, Field Descriptions, Grading Criteria, Important Guidelines (+5 more)
+
+### Community 116 - "Dependency Overrides"
 Cohesion: 0.20
 Nodes (10): ajv, overrides, @angular-devkit/core, @anthropic-ai/sdk, dompurify, lodash, lodash-es, path-to-regexp (+2 more)
 
-### Community 119 - "Marketplace Submissions"
-Cohesion: 0.27
-Nodes (8): CreateMarketplaceSubmissionData, FindApprovedByOrgOptions, IMarketplaceSubmissionRepository, MARKETPLACE_SUBMISSION_REPOSITORY, MarketplaceSubmission, MarketplaceSubmissionStatus, RequirementId, SubmissionRequirement
+### Community 117 - "Marketplace Removal Requests"
+Cohesion: 0.20
+Nodes (4): MarketplaceRemovalRequestEntity, RemovalRequestScope, RemovalRequestStatus, PostgresMarketplaceRemovalRequestRepository
 
-### Community 120 - "Jest Module Mapping"
+### Community 118 - "Skill Testing Guide"
+Cohesion: 0.15
+Nodes (13): AI-Explained Mode, Core Concepts, Failure Explanations, Feedback System, Glossary, How Testing Works at a High Level, Overview, Rating Runs (+5 more)
+
+### Community 120 - "Skills Grid UI"
+Cohesion: 0.17
+Nodes (9): RunMetaCard(), DEFAULT_STATUS, SkillCard(), SkillCardProps, STATUS_STYLES, DEFAULT_STATUS, SkillsGridProps, STATUS_STYLES (+1 more)
+
+### Community 122 - "Community & Security Docs"
+Cohesion: 0.18
+Nodes (4): Handling Secrets, Reporting a Vulnerability, Security Policy, Supported Versions
+
+### Community 123 - "Environment Setup Guide"
+Cohesion: 0.18
+Nodes (10): Anthropic (recommended), Azure, Bedrock (AWS), Choose your LLM provider, Create the `.env` file, Environment Setup, Google, Next step (+2 more)
+
+### Community 124 - "Architecture Doc Checklist"
+Cohesion: 0.18
+Nodes (10): Alternatives, Architecture Document Quality Checklist, Consequences, Context, Decision, Diagrams (System Design and Tech Architecture only), Implementation Roadmap (Accepted ADRs only), Problem Statement (+2 more)
+
+### Community 125 - "Skill Domain Types"
+Cohesion: 0.20
+Nodes (10): CreateSkillData, ExportFormat, ExportFormatInfo, Skill, SkillDiagram, SkillSummary, SkillVersionSnapshot, SkillVersionSummary (+2 more)
+
+### Community 126 - "Skill Favorites Storage"
+Cohesion: 0.24
+Nodes (3): SkillFavoriteEntity, isUniqueViolation(), PostgresSkillFavoriteRepository
+
+### Community 127 - "Skill Upvotes Storage"
+Cohesion: 0.29
+Nodes (3): SkillUpvoteEntity, isUniqueViolation(), PostgresSkillUpvoteRepository
+
+### Community 129 - "Skill Output Contract"
+Cohesion: 0.18
+Nodes (10): description, explanation, Field Rules, Frontmatter Validation, name, Output Contract, Schema, scripts / references / assets (+2 more)
+
+### Community 130 - "Skill Creator Prompt"
+Cohesion: 0.18
+Nodes (10): Description Optimization, Description — The Trigger Mechanism, Explanation Field, Improving an Existing Skill, Name Rules, Principle of Lack of Surprise, Process Flow, Skill Body Quality (+2 more)
+
+### Community 131 - "CLI Commands Reference"
+Cohesion: 0.20
+Nodes (10): Commands, config url, install, list, login, logout, outdated, uninstall (+2 more)
+
+### Community 132 - "CLI User Guide"
+Cohesion: 0.20
+Nodes (10): Config File, Credential Storage, Global Flags, Install Receipt System, Install Targets and File Paths, Installation, Non-Interactive / CI Mode, Quick Start (+2 more)
+
+### Community 134 - "First Access Guide"
+Cohesion: 0.20
+Nodes (9): Backend fails to start, Can't access the local development URL?, First Access, Frontend won't load, Missing dependencies?, Sign up, Start the development servers, Troubleshooting (+1 more)
+
+### Community 136 - "Eval Output File Viewer"
+Cohesion: 0.29
+Nodes (6): EvalOutputFile(), EvalOutputFileProps, formatFileSize(), isCodeFile(), isMarkdownFile(), isYamlFile()
+
+### Community 137 - "Eval Run Comparison UI"
+Cohesion: 0.24
+Nodes (6): EvalRunComparison, EvalRunComparisonProps, DescriptionDiff(), computeWordDiff(), DiffSegment, tokenize()
+
+### Community 138 - "Implementation Plan Template"
+Cohesion: 0.20
+Nodes (9): Current State Assessment, Dependencies and Blockers, Implementation Roadmap, Migration Phases, Phase 1: [Phase Name], Phase 2: [Phase Name], Phase 3: [Phase Name] (if applicable), Rollback Plan (+1 more)
+
+### Community 139 - "Skill Optimization Prompt"
+Cohesion: 0.20
+Nodes (9): Currently Passing Assertions — Do Not Break These, Handling Ambiguous or Mixed-Type Requests, If Previous Iterations Have Not Improved Scores, Improvement Principles, Instructions, Out-of-Scope Handling, Skill Behavior Categories, Structural Constraints (+1 more)
+
+### Community 140 - "Diagram Generation Prompt"
+Cohesion: 0.20
+Nodes (9): Analysis Steps, Diagram template, Edge Cases, Example, Mermaid Syntax Rules, Node naming conventions, Quality Checklist, Styling guidelines (+1 more)
+
+### Community 143 - "Project Instructions"
+Cohesion: 0.22
+Nodes (8): Architecture, Constraints, Conventions, Development Workflow, Knowledge Graph, Project, Project Skills, Technology Stack
+
+### Community 144 - "CLI Troubleshooting"
+Cohesion: 0.22
+Nodes (9): "Cannot reach `<url>`. Check your network...", "Credential is invalid or expired.", "Multiple installs found for `<slug>`", "Not logged in.", Receipt out of sync (file deleted manually), "Skill not found: `<slug>`", Stale lock file after a crash, Troubleshooting (+1 more)
+
+### Community 145 - "Testing Workflow Guide"
+Cohesion: 0.22
+Nodes (9): 1. Create Initial Test Cases, 2. Run Your First Tests, 3. Review Results, 4. Improve Test Quality, 5. Provide Feedback, 6. Improve the Skill, 7. Verify Improvements, 8. Iterate (+1 more)
+
+### Community 146 - "Benchmark Analysis Docs"
+Cohesion: 0.22
+Nodes (9): Analyst Notes, Benchmarks — The Benchmark Tab, Discrimination Analysis, Iteration History, Per-Assertion Breakdown, Per-Test-Case Breakdown, Summary Statistics, Variance Statistics (+1 more)
+
+### Community 147 - "Optimization Loop Docs"
+Cohesion: 0.22
+Nodes (9): Automated Skill Optimization, Cost Tracking, Feedback Integration, How the Optimization Loop Works, Optimization Configuration, Real-Time Progress, Regression Protection, Train/Test Split (+1 more)
+
+### Community 148 - "Jest Module Mappings"
 Cohesion: 0.22
 Nodes (9): moduleNameMapper, ^(\\.{1,2}/.*)\\.js$, ^@anthropic-ai/sdk$, ^@strands-agents/sdk$, ^@strands-agents/sdk/models/anthropic$, ^@strands-agents/sdk/models/bedrock$, ^@strands-agents/sdk/models/google$, ^@strands-agents/sdk/models/openai$ (+1 more)
 
-### Community 121 - "Error Boundary"
+### Community 150 - "Problem Statement Validation"
 Cohesion: 0.22
-Nodes (3): ErrorBoundary, ErrorBoundaryProps, ErrorBoundaryState
+Nodes (8): Before/After Examples, Common Mistakes Reference, Example 1: Solution-Focused Language, Example 2: Vague Scope, Example 3: Missing Urgency, Example 4: Too Long / Context Bleed, Problem Statement Quality Checklist, Quality Checklist
 
-### Community 123 - "TypeScript Configuration"
+### Community 151 - "Architecture Writing Guide"
+Cohesion: 0.22
+Nodes (8): Anti-Patterns, Architecture Writing Guide, Bad, Bad, Consequences Examples, Good, Good, Problem Statement Examples
+
+### Community 152 - "Failure Explanation Prompt"
+Cohesion: 0.22
+Nodes (8): 1. `summary`, 2. `root_cause`, 3. `suggestions`, Anti-patterns to avoid, Context, Explain Eval Failure, Input, Output Instructions
+
+### Community 153 - "TypeScript Configuration"
 Cohesion: 0.22
 Nodes (8): compilerOptions, module, moduleResolution, outDir, rootDir, exclude, extends, include
 
-### Community 124 - "Rate Limit Retry"
-Cohesion: 0.36
-Nodes (5): isRateLimitError(), logger, rateLimitSleep(), withRateLimitRetry(), withTimeout()
-
-### Community 125 - "Skill Optimization"
+### Community 154 - "Optimization Domain Types"
 Cohesion: 0.22
 Nodes (8): CoverageGap, CoverageGapDimension, CoverageGapReport, IterationState, IterationSubStep, OptimizationEvent, OptimizationResult, SkillOptimizationConfig
 
-### Community 126 - "Skill Builder"
-Cohesion: 0.32
-Nodes (7): checkSkillNameExists(), createSkill(), BuilderState, SkillBuilder(), SkillBuilderProps, useGeneration(), useZipUpload()
+### Community 156 - "Getting Started Guide"
+Cohesion: 0.22
+Nodes (9): 1. Clone & Install, 2. Configure Environment, 3. Start PostgreSQL, 4. Run Database Migrations, 5. Start Development Server, 5b. Seed Demo Data (optional), 6. Open the App, Getting Started (+1 more)
 
-### Community 127 - "Marketplace Listings"
+### Community 157 - "Storage Module Configuration"
 Cohesion: 0.25
-Nodes (7): FindListingsOptions, IMarketplaceListingRepository, MarketplaceListing, MarketplaceListingStatus, MarketplaceRemovalType, UpsertMarketplaceListingData, MarketplaceListItem
+Nodes (8): Configuration, Environment Variables, How Config Flows, NestJS Module Configuration, Options Interface, `PostgresStorageModule.forRoot(options)` — Synchronous, `PostgresStorageModule.forRootAsync(options)` — Async (recommended), What the Module Provides
 
-### Community 128 - "Skill Operation Prompts"
+### Community 159 - "React Error Boundary"
+Cohesion: 0.25
+Nodes (3): ErrorBoundary, ErrorBoundaryProps, ErrorBoundaryState
+
+### Community 160 - "Version Diff Viewer"
+Cohesion: 0.32
+Nodes (7): DiffFileEntry, getFileContent(), getFileKeys(), mergeFileKeys(), VersionDiffViewer(), VersionDiffViewerProps, fetchVersionHistory()
+
+### Community 161 - "Diagram Selection Guide"
+Cohesion: 0.25
+Nodes (7): Common Patterns, Context Diagram, Deployment Diagram, Diagram Selection and Mermaid Syntax Guide, Diagram Selection by Document Type, Rules, Sequence Diagram
+
+### Community 162 - "Description Improvement Prompt"
+Cohesion: 0.25
+Nodes (7): Current Description, Current Scores ({{SCORES_SUMMARY}}), Guidelines, Improve Skill Description, Output, Previous Attempts, Skill Content (for context)
+
+### Community 163 - "GitHub PR Skill"
 Cohesion: 0.29
-Nodes (7): Analyze Skill for Testing Prompt, Generate Test Evals Prompt, Grader Prompt, Grading Request Template, Optimize Improvement Prompt, Suggest Assertion Replacements Prompt, Suggest Test Prompts Prompt
+Nodes (6): 1. Preflight, 2. Inspect the diff against base, 3. Push the branch, 4. Compose the PR, 5. Create the PR, Notes
 
-### Community 129 - "Invite Acceptance"
+### Community 164 - "Code of Conduct"
 Cohesion: 0.29
-Nodes (4): completeInvite(), validateInvite(), FieldErrors, PageState
+Nodes (7): Attribution, Contributor Covenant Code of Conduct, Enforcement, Enforcement Responsibilities, Our Pledge, Our Standards, Scope
 
-### Community 131 - "Package Metadata"
+### Community 165 - "Infrastructure Config Docs"
 Cohesion: 0.29
-Nodes (6): author, description, license, name, private, version
+Nodes (7): Debug, OpenTelemetry (optional), Rate Limiting, Redis, Skills / Agent Subprocess, SMTP Encryption, Supporting Infrastructure
 
-### Community 132 - "Dropdown Menu"
+### Community 166 - "Assertion Types Guide"
 Cohesion: 0.29
-Nodes (4): DropdownMenuDivider, DropdownMenuEntry, DropdownMenuItem, DropdownMenuProps
+Nodes (7): Assertions — The Heart of Testing, Choosing the Right Assertion Type, `contains`, `custom`, `not_contains`, `regex`, `semantic`
 
-### Community 133 - "Skill Creation Reference"
+### Community 168 - "CLI README"
 Cohesion: 0.29
-Nodes (7): Few-Shot Examples Reference, Generate Trigger Evals Prompt, Improve Description Prompt, Improving Existing Skill Reference, Output Contract Reference, SkillSpell Creator Skill, Suggest Prompt
+Nodes (6): Commands, Examples, Install, License, Quick start, @skillspell/cli
 
-### Community 134 - "NPM Scripts"
+### Community 169 - "Frontend Build Scripts"
 Cohesion: 0.29
 Nodes (7): scripts, build, dev, lint, preview, test, test:watch
 
-### Community 135 - "Marketplace Test Mocks"
-Cohesion: 0.29
-Nodes (6): mockAdminUser, mockExportService, mockGenerationService, mockMarketplaceService, mockSubmissionService, mockUser
+### Community 172 - "Authenticated App Layout"
+Cohesion: 0.08
+Nodes (30): AuthenticatedContext, AuthenticatedLayout(), ProfileSection, useSkills(), OrganizationSettingsPage(), ProfilePageWrapper(), SecuritySubsection, VALID_PROFILE_SECTIONS (+22 more)
 
-### Community 136 - "Marketplace Removal Requests"
-Cohesion: 0.29
-Nodes (6): CreateRemovalRequestData, IMarketplaceRemovalRequestRepository, MARKETPLACE_REMOVAL_REQUEST_REPOSITORY, MarketplaceRemovalRequest, RemovalRequestScope, RemovalRequestStatus
+### Community 174 - "User Management API"
+Cohesion: 0.20
+Nodes (5): CurrentUser, CreateUserDto, UpdateUserDto, UserResponseDto, UsersController
 
-### Community 138 - "Skill Detail Tabs"
+### Community 175 - "Skill Improvement Rules"
 Cohesion: 0.29
-Nodes (5): SkillReadinessBar(), SkillDetailView, SkillTabBarProps, Tab, TABS
+Nodes (6): Improving an Existing Skill, Optimization History Is Read-Only, Primary Rule: Surgical and Minimal, Quality Improvement Principles, Section Preservation, Silent Cleanup (Always Apply)
 
-### Community 139 - "CLI API Types"
-Cohesion: 0.29
-Nodes (6): CreatePatResponse, InstalledReceipt, InstalledReceiptEntry, LoginResponse, PatListItem, PublicSkillDownload
+### Community 176 - "Contributing Guide"
+Cohesion: 0.33
+Nodes (6): Code of Conduct, Contributing to SkillSpell, Development Setup, Getting Started, Pull Request Guidelines, Reporting Issues
 
-### Community 140 - "Marketplace Detail Test"
-Cohesion: 0.29
-Nodes (5): mockGetSkill, mockNavigate, mockToggleFavorite, mockToggleUpvote, skillData
+### Community 177 - "Database Troubleshooting"
+Cohesion: 0.33
+Nodes (6): Backend fails with "POSTGRES_PASSWORD is required", "Connection refused" on port 5432, pgAdmin shows no tables, "relation does not exist" errors at runtime, Troubleshooting, TypeORM CLI errors ("Cannot find module")
 
-### Community 141 - "Marketplace Card Test"
-Cohesion: 0.29
-Nodes (5): baseItem, mockAddToast, mockNavigate, mockToggleFavorite, mockToggleUpvote
+### Community 178 - "Docs Quick Start"
+Cohesion: 0.33
+Nodes (5): Need help?, Quick reference, Quick Start, The wizard, What you'll need
 
-### Community 142 - "NestJS CLI Config"
+### Community 179 - "Test Case Management Docs"
+Cohesion: 0.33
+Nodes (6): AI-Generated Test Cases, Bulk Creation, Creating a Test Case, Limits, Test Case Fields, Test Cases
+
+### Community 180 - "Grading System Docs"
+Cohesion: 0.33
+Nodes (6): AI-Powered Grading, Deterministic Grading, Eval Self-Critique, Extracted Claims, Grading Results, Grading System
+
+### Community 181 - "Test Execution Docs"
+Cohesion: 0.33
+Nodes (6): Baseline Comparison, How Execution Works, Multiple Runs per Case, Running Tests, Version-Scoped Test Cases, Version Targeting
+
+### Community 182 - "Bug Report Template"
+Cohesion: 0.33
+Nodes (5): Describe the bug, Environment, Expected behavior, Logs / screenshots, To reproduce
+
+### Community 183 - "NestJS CLI Config"
 Cohesion: 0.33
 Nodes (5): collection, compilerOptions, deleteOutDir, $schema, sourceRoot
 
-### Community 143 - "Package Metadata"
+### Community 184 - "Minimal Package Manifest"
 Cohesion: 0.33
 Nodes (5): license, name, private, type, version
 
-### Community 144 - "Marketplace Sorting"
+### Community 188 - "Grading Request Prompt"
 Cohesion: 0.33
-Nodes (4): MarketplaceSortBar(), Props, SORT_OPTIONS, SortValue
+Nodes (5): Actual Output, Assertion Details (JSON), Assertions to Check, Evaluation Request, Original Prompt
 
-### Community 147 - "TypeScript Watch Config"
+### Community 189 - "Trigger Eval Generation Prompt"
+Cohesion: 0.33
+Nodes (5): Context, Generate Trigger Eval Queries, Instructions, Output Format, Skill Under Test
+
+### Community 190 - "Watch Build Config"
 Cohesion: 0.33
 Nodes (5): compilerOptions, declaration, declarationMap, sourceMap, extends
 
-### Community 149 - "User Roles"
+### Community 191 - "User Role Hierarchy"
 Cohesion: 0.53
 Nodes (4): UserRole, canModifyUser(), isAtLeast(), ROLE_HIERARCHY
 
-### Community 151 - "Code Viewer"
+### Community 192 - "Dependency Overview"
+Cohesion: 0.33
+Nodes (6): AI & LLM, Backend, CLI (`@skillspell/cli`), Frontend, Infrastructure, Third-Party Dependencies
+
+### Community 193 - "Few-Shot Skill Examples"
+Cohesion: 0.33
+Nodes (5): Example 1 — Clear prompt, simple skill (complete reference), Example 2 — Vague prompt (show: description, references, explanation), Example 3 — Skill with a bundled script (show: scripts, explanation), Example 4 — Improving an existing skill (show: prompt format, changes, explanation), Few-Shot Examples
+
+### Community 194 - "Installation Guide"
+Cohesion: 0.40
+Nodes (4): Clone the repository, Installation, Next step, Set up the database
+
+### Community 195 - "Feature Request Template"
+Cohesion: 0.40
+Nodes (4): Additional context, Alternatives considered, Problem / motivation, Proposed solution
+
+### Community 197 - "Assertion Replacement DTOs"
+Cohesion: 0.60
+Nodes (3): NonDiscriminatingAssertionDto, makeDto(), SuggestAssertionReplacementsDto
+
+### Community 199 - "Code Viewer Component"
 Cohesion: 0.50
 Nodes (4): CodeViewer(), CodeViewerProps, detectLanguage(), EXT_TO_LANGUAGE
 
-### Community 154 - "Category Repository"
+### Community 202 - "Document Type Guide"
 Cohesion: 0.40
-Nodes (4): Category, CATEGORY_REPOSITORY, CreateCategoryData, ICategoryRepository
+Nodes (4): Ambiguous Cases, Document Type Comparison, Document Type Selection Guide, Scope Signals
 
-### Community 155 - "Download Event Repository"
+### Community 203 - "Trade-off Dimensions Guide"
 Cohesion: 0.40
-Nodes (4): CreateSkillDownloadEventData, ISkillDownloadEventRepository, SKILL_DOWNLOAD_EVENT_REPOSITORY, SkillDownloadEvent
+Nodes (4): Core Dimensions, Rating Scale, Situational Dimensions, Trade-off Dimensions
 
-### Community 192 - "Skill Category"
-Cohesion: 0.50
-Nodes (3): ISkillCategoryRepository, SKILL_CATEGORY_REPOSITORY, SkillCategory
+### Community 204 - "Zip Upload Test Fixtures"
+Cohesion: 0.40
+Nodes (4): Expected directory, How to run, What the test does, Zip Upload Test Fixtures
 
-### Community 208 - "Development Dependencies"
+### Community 205 - "Batch Trigger Simulation Prompt"
+Cohesion: 0.40
+Nodes (4): Available Skills, Batch Simulate Skill Trigger Decisions, Decision Criteria, Queries to Evaluate
+
+### Community 206 - "Trigger Simulation Prompt"
+Cohesion: 0.40
+Nodes (4): Available Skills, Simulate Skill Trigger Decision, Task, User Query
+
+### Community 208 - "Dev Dependencies"
 Cohesion: 0.67
 Nodes (3): devDependencies, concurrently, portless
 
+### Community 209 - "AI Test Suggestions"
+Cohesion: 0.50
+Nodes (4): AI-Powered Suggestions, Assertion Replacement Suggestions, Smart Test Generation, Test Prompt Suggestions
+
+### Community 210 - "Test Results Outputs Tab"
+Cohesion: 0.50
+Nodes (4): Navigating Results, Output Comparison Modes, Run-vs-Run Comparison, Test Results — The Outputs Tab
+
+### Community 211 - "Pull Request Template"
+Cohesion: 0.50
+Nodes (3): Checklist, Type of change, What & why
+
+### Community 264 - "Skill Detail Tabs"
+Cohesion: 0.29
+Nodes (5): SkillReadinessBar(), SkillDetailView, SkillTabBarProps, Tab, TABS
+
+### Community 355 - "Rate Limit Retry"
+Cohesion: 0.36
+Nodes (5): isRateLimitError(), logger, rateLimitSleep(), withRateLimitRetry(), withTimeout()
+
+### Community 356 - "Skill Export UI"
+Cohesion: 0.36
+Nodes (6): EXPORT_FORMATS, ExportDialog(), ExportDialogProps, FORMAT_ICONS, useExport(), UseExportReturn
+
+### Community 357 - "Package Metadata"
+Cohesion: 0.29
+Nodes (6): author, description, license, name, private, version
+
+### Community 358 - "Strands Config Schema"
+Cohesion: 0.33
+Nodes (6): configFactory(), createStrandsConfig(), LLM_PROVIDERS, resolveProvider(), StrandsConfig, StrandsConfigSchema
+
+### Community 359 - "Marketplace Submission UI"
+Cohesion: 0.29
+Nodes (3): Props, SubmitToMarketplaceModalProps, fetchSubmissionEligibility()
+
+### Community 360 - "Marketplace Sort Bar"
+Cohesion: 0.33
+Nodes (4): MarketplaceSortBar(), Props, SORT_OPTIONS, SortValue
+
 ## Knowledge Gaps
-- **986 isolated node(s):** `$schema`, `theme`, `name`, `primary`, `light` (+981 more)
+- **1468 isolated node(s):** `$schema`, `theme`, `name`, `primary`, `light` (+1463 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **119 thin communities (fewer than 3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **157 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AppConfig` connect `App Configuration` to `Email Service`, `Auth Service`, `LLM Configuration`, `Prompt Dumping`, `Application Lifecycle`, `LLM Configuration`, `CLI Authentication`, `LLM Services`, `Auth Controller`, `Skill Generation`, `OIDC Auth`, `User Invitations`?**
-  _High betweenness centrality (0.061) - this node is a cross-community bridge._
-- **Why does `configureLogging()` connect `LLM Configuration` to `Strands Agent Events`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `LLM Dependencies` to `Package Metadata`, `Anthropic SDK`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `request()` connect `Organization Settings UI` to `Version Diff Viewer`, `Admin Skill Review UI`, `CLI Listing Commands`, `Admin Analytics Dashboard`, `API Client & Security UI`, `Eval Benchmark UI`, `Analytics & Eval Charts`, `Marketplace Submission UI`, `Eval Claims & Grades UI`, `Generation & Eval Dialogs`, `Authenticated App Layout`, `Auth Context & Readiness Hooks`, `Toasts & Admin Routing`, `Taxonomy & Dropdown UI`, `Eval Viewer UI`?**
+  _High betweenness centrality (0.184) - this node is a cross-community bridge._
+- **Why does `createApiClient()` connect `CLI Listing Commands` to `CLI Install Command`, `CLI Login Flow`, `Organization Settings UI`, `CLI Update Command`?**
+  _High betweenness centrality (0.177) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `Backend Dependencies` to `Strands Transport Layer`, `Package Metadata`?**
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
 - **What connects `$schema`, `theme`, `name` to the rest of the system?**
-  _986 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Strands Agent Events` be split into smaller, more focused modules?**
+  _1468 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Admin Skill Review UI` be split into smaller, more focused modules?**
+  _Cohesion score 0.04538341158059468 - nodes in this community are weakly interconnected._
+- **Should `Skill Builder UI` be split into smaller, more focused modules?**
+  _Cohesion score 0.05502392344497608 - nodes in this community are weakly interconnected._
+- **Should `Strands Agent SDK Types` be split into smaller, more focused modules?**
   _Cohesion score 0.02666666666666667 - nodes in this community are weakly interconnected._
-- **Should `Admin Analytics` be split into smaller, more focused modules?**
-  _Cohesion score 0.05456095481670929 - nodes in this community are weakly interconnected._
-- **Should `Organization Settings` be split into smaller, more focused modules?**
-  _Cohesion score 0.05501165501165501 - nodes in this community are weakly interconnected._

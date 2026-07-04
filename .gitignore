@@ -64,6 +64,8 @@ docker/saml/mock-saml.crt
 graphify-out/
 # graphify AST/semantic cache — regenerable, not tracked
 graph/cache/
+# graphify label backups (dated dirs created by `graphify label`) — regenerable
+graph/????-??-??/
 
 # Internal code-review / migration working notes — kept locally, not shipped
 .review/
