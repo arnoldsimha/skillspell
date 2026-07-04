@@ -136,7 +136,9 @@ async function ssoLoginFlow(config: CliConfig): Promise<void> {
     s.stop('Timed out.');
     p.cancel(
       err instanceof Error && err.message === 'timeout'
-        ? 'Authentication timed out (5 minutes). Run `skillspell login --sso` to try again.'
+        ? 'Authentication timed out (5 minutes). Run `skillspell login --sso` to try again. ' +
+          'If it keeps timing out right after the browser shows success, your SkillSpell ' +
+          'backend may predate secure CLI login — ask your admin to upgrade it.'
         : `Authentication failed: ${err instanceof Error ? err.message : String(err)}`,
     );
     process.exit(1);

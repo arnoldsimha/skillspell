@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -26,7 +25,7 @@ import { OidcAuthService } from './strategies/oidc.strategy.js';
 import { CliAuthService } from './cli-auth.service.js';
 import { Public } from './decorators/public.decorator.js';
 import { setRefreshTokenCookie } from './cookie.utils.js';
-import { assertLoopbackCliRedirect } from './cli-redirect.util.js';
+import { assertLoopbackCliRedirect, assertValidCliState, buildCliCallbackUrl } from './cli-redirect.util.js';
 
 /**
  * OIDC SSO controller.
@@ -110,10 +109,9 @@ export class OidcController {
     }
 
     // CLI-generated state nonce — echoed back to the local callback so the CLI
-    // can reject injected codes (security finding #3). Opaque, bound-length,
-    // URL-safe only.
-    if (cliState !== undefined && !/^[A-Za-z0-9_-]{8,128}$/.test(cliState)) {
-      throw new BadRequestException('cli_state must be 8-128 URL-safe characters');
+    // can reject injected codes (security finding #3).
+    if (cliState !== undefined) {
+      assertValidCliState(cliState);
     }
 
     // Only active OIDC protocol allowed
@@ -205,10 +203,7 @@ export class OidcController {
         this.logger.log(`OIDC callback: CLI login succeeded for ${result.user.email}`);
         // Echo the CLI's state nonce so its callback server can verify this
         // redirect belongs to the login it started (security finding #3).
-        const stateParam = pendingState.cliState
-          ? `&state=${encodeURIComponent(pendingState.cliState)}`
-          : '';
-        res.redirect(`${pendingState.cliRedirect}?code=${code}${stateParam}`);
+        res.redirect(buildCliCallbackUrl(pendingState.cliRedirect, code, pendingState.cliState));
       } else {
         // Browser flow — set cookie + redirect to SsoCallbackPage
         setRefreshTokenCookie(res, refreshToken, this.refreshTokenExpiry, this.isProduction);

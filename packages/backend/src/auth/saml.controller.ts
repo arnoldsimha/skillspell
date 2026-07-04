@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -27,6 +26,7 @@ import { SamlAuthService } from './strategies/saml.strategy.js';
 import { CliAuthService } from './cli-auth.service.js';
 import { Public } from './decorators/public.decorator.js';
 import { setRefreshTokenCookie } from './cookie.utils.js';
+import { assertLoopbackCliRedirect, assertValidCliState, buildCliCallbackUrl } from './cli-redirect.util.js';
 
 /**
  * SAML SSO controller.
@@ -72,22 +72,16 @@ export class SamlController {
     @Res() res: Response,
   ): Promise<void> {
     this.logger.log(`SAML login initiated: cli_redirect=${cliRedirect ?? 'none'}`);
-    // Validate cli_redirect before anything else (criterion #4)
+    // Validate cli_redirect before anything else (criterion #4). Shared with
+    // the OIDC path so both protocols enforce one loopback policy.
     if (cliRedirect !== undefined) {
-      try {
-        if (new URL(cliRedirect).hostname !== 'localhost') {
-          throw new BadRequestException('cli_redirect must target localhost only');
-        }
-      } catch (e) {
-        if (e instanceof BadRequestException) throw e;
-        throw new BadRequestException('cli_redirect must be a valid localhost URL');
-      }
+      assertLoopbackCliRedirect(cliRedirect);
     }
 
     // CLI-generated state nonce — echoed back to the local callback so the CLI
-    // can reject injected codes. Opaque to the server; bound-length URL-safe only.
-    if (state !== undefined && !/^[A-Za-z0-9_-]{8,128}$/.test(state)) {
-      throw new BadRequestException('state must be 8-128 URL-safe characters');
+    // can reject injected codes (security finding #3).
+    if (state !== undefined) {
+      assertValidCliState(state);
     }
 
     // Check org-level SSO gate before attempting IdP configuration lookup
@@ -174,15 +168,12 @@ export class SamlController {
 
       if (cliRedirect) {
         // CLI flow
-        // Defense in depth: re-validate cli_redirect even though samlLogin already checked
+        // Defense in depth: re-validate cli_redirect even though samlLogin already
+        // checked it (shared loopback policy with the OIDC callback).
         try {
-          if (new URL(cliRedirect).hostname !== 'localhost') {
-            this.logger.warn(`SAML callback: cli_redirect has invalid origin — rejecting: ${cliRedirect.substring(0, 80)}`);
-            res.redirect(`${frontendBaseUrl}/sso-callback#error=invalid_redirect`);
-            return;
-          }
+          assertLoopbackCliRedirect(cliRedirect);
         } catch {
-          this.logger.warn(`SAML callback: cli_redirect is not a valid URL — rejecting: ${cliRedirect.substring(0, 80)}`);
+          this.logger.warn(`SAML callback: cli_redirect failed re-validation — rejecting: ${cliRedirect.substring(0, 80)}`);
           res.redirect(`${frontendBaseUrl}/sso-callback#error=invalid_redirect`);
           return;
         }
@@ -208,8 +199,7 @@ export class SamlController {
         this.logger.debug(`SAML callback: CLI flow — redirecting to local callback with code`);
         // Echo the CLI's state nonce so its callback server can verify this
         // redirect belongs to the login it started (security finding #3).
-        const stateParam = cliState ? `&state=${encodeURIComponent(cliState)}` : '';
-        res.redirect(`${cliRedirect}?code=${code}${stateParam}`);
+        res.redirect(buildCliCallbackUrl(cliRedirect, code, cliState ?? undefined));
         return;
       }
 

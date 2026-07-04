@@ -46,13 +46,18 @@ export function startCallbackServer(expectedState: string): Promise<{ port: numb
       // State binding: a missing or mismatched state means this request is NOT
       // the redirect for the login we started. Reject it and stay listening so
       // an injected request can't consume the window before the real one lands.
-      if (url.searchParams.get('state') !== expectedState) {
+      const receivedState = url.searchParams.get('state');
+      if (receivedState !== expectedState) {
+        // No state at all most likely means the backend predates secure CLI
+        // login binding — give an actionable hint instead of a bare "mismatch".
+        const message = receivedState === null
+          ? 'Authentication failed: the server did not include a login state. ' +
+            'Your SkillSpell backend may predate secure CLI login — ask your admin to ' +
+            'upgrade the backend, or downgrade the CLI to match it.'
+          : 'Authentication failed: state mismatch. This response does not belong to ' +
+            'the login this CLI started.';
         res.writeHead(400, { 'Content-Type': 'text/html' });
-        res.end(
-          '<html><body>' +
-          '<p>Authentication failed: state mismatch. This response does not belong to the login this CLI started.</p>' +
-          '</body></html>',
-        );
+        res.end(`<html><body><p>${message}</p></body></html>`);
         return;
       }
 
