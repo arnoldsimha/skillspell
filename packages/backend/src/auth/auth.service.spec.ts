@@ -12,16 +12,19 @@ import * as bcrypt from 'bcryptjs';
 jest.mock('bcryptjs', () => ({
   compare: jest.fn(),
   hash: jest.fn().mockResolvedValue('$2a$10$hashed'),
+  hashSync: jest.fn().mockReturnValue('$2a$10$dummyhash'),
 }));
 
 import {
   USER_REPOSITORY,
   CREDENTIAL_REPOSITORY,
   AUTH_TOKEN_REPOSITORY,
+  PAT_REPOSITORY,
   ORGANIZATION_REPOSITORY,
   type IUserRepository,
   type ICredentialRepository,
   type IAuthTokenRepository,
+  type IPersonalAccessTokenRepository,
   type IOrganizationRepository,
   type User,
   type Organization,
@@ -83,6 +86,7 @@ describe('AuthService', () => {
   let userRepo: jest.Mocked<IUserRepository>;
   let credentialRepo: jest.Mocked<ICredentialRepository>;
   let authTokenRepo: jest.Mocked<IAuthTokenRepository>;
+  let patRepo: jest.Mocked<IPersonalAccessTokenRepository>;
   let orgRepo: jest.Mocked<IOrganizationRepository>;
   let tokenService: jest.Mocked<TokenService>;
 
@@ -118,6 +122,16 @@ describe('AuthService', () => {
       getSsoLinks: jest.fn(),
       removeSsoLink: jest.fn(),
     } as jest.Mocked<IAuthTokenRepository>;
+
+    patRepo = {
+      create: jest.fn(),
+      findByTokenHash: jest.fn(),
+      findByUserId: jest.fn(),
+      findById: jest.fn(),
+      revoke: jest.fn(),
+      revokeAllByUserId: jest.fn(),
+      updateLastUsedAt: jest.fn(),
+    } as jest.Mocked<IPersonalAccessTokenRepository>;
 
     orgRepo = {
       findSingleton: jest.fn(),
@@ -159,6 +173,7 @@ describe('AuthService', () => {
         { provide: USER_REPOSITORY, useValue: userRepo },
         { provide: CREDENTIAL_REPOSITORY, useValue: credentialRepo },
         { provide: AUTH_TOKEN_REPOSITORY, useValue: authTokenRepo },
+        { provide: PAT_REPOSITORY, useValue: patRepo },
         { provide: ORGANIZATION_REPOSITORY, useValue: orgRepo },
       ],
     })
@@ -209,6 +224,20 @@ describe('AuthService', () => {
       await expect(
         service.validateLocalUser('unknown@test.com', 'password'),
       ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should run a dummy bcrypt compare when user not found (timing equalization)', async () => {
+      orgRepo.findSingleton.mockResolvedValue(TEST_ORG);
+      userRepo.findByEmail.mockResolvedValue(null);
+      (bcrypt.compare as jest.Mock).mockClear();
+
+      await expect(
+        service.validateLocalUser('unknown@test.com', 'password'),
+      ).rejects.toThrow(UnauthorizedException);
+
+      // The no-user path must still call bcrypt.compare so it does not return
+      // measurably faster than the wrong-password path (user enumeration).
+      expect(bcrypt.compare).toHaveBeenCalledTimes(1);
     });
 
     it('should throw ForbiddenException when account is deactivated', async () => {
@@ -628,6 +657,16 @@ describe('AuthService', () => {
         passwordHash: 'new-hash',
       });
       expect(authTokenRepo.revokeAllRefreshTokens).toHaveBeenCalledWith('user-1');
+    });
+
+    it('should revoke all personal access tokens on password change', async () => {
+      credentialRepo.getCredential.mockResolvedValue(TEST_CREDENTIAL);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      (bcrypt.hash as jest.Mock).mockResolvedValue('new-hash');
+
+      await service.changePassword('user-1', 'OldPass1!', 'NewPass1!');
+
+      expect(patRepo.revokeAllByUserId).toHaveBeenCalledWith('user-1');
     });
 
     it('should throw BadRequestException for SSO-only accounts', async () => {

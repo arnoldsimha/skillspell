@@ -228,7 +228,12 @@ export class AuthController {
   /**
    * Change the current user's password.
    * Requires the current password for verification.
+   *
+   * Tightly throttled: the current-password check is a bcrypt comparison that is
+   * not tied into the login lockout counter, so without this an attacker holding
+   * a hijacked session could brute-force the password online.
    */
+  @Throttle({ short: { limit: 3, ttl: 1000 }, medium: { limit: 5, ttl: 60000 } })
   @Post('change-password')
   @HttpCode(HttpStatus.OK)
   async changePassword(

@@ -1,7 +1,8 @@
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { ForbiddenException } from '@nestjs/common';
+import { JwtAuthGuard, isPatAllowedPath } from './jwt-auth.guard';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 /**
@@ -142,5 +143,62 @@ describe('JwtAuthGuard', () => {
     guard.canActivate(context);
 
     expect(superCanActivateSpy).toHaveBeenCalledWith(context);
+  });
+
+  // ── PAT scope enforcement (handleRequest) ────────────────────────────────
+
+  describe('PAT scope', () => {
+    const PAT_USER = { id: 'u1' };
+
+    // Bypass Passport's parent handleRequest so we exercise only our scope logic.
+    beforeEach(() => {
+      superHandleRequestSpy = jest
+        .spyOn(Object.getPrototypeOf(Object.getPrototypeOf(guard)), 'handleRequest')
+        .mockImplementation((_e, user) => user);
+    });
+    let superHandleRequestSpy: jest.SpyInstance;
+    afterEach(() => superHandleRequestSpy?.mockRestore());
+
+    const call = (req: Record<string, unknown>) =>
+      guard.handleRequest(null, PAT_USER, null, makeContext(req));
+
+    it('allows a JWT (non-PAT) request on any route', () => {
+      expect(call({ method: 'POST', path: '/api/skills', _patAuthenticated: false })).toBe(PAT_USER);
+    });
+
+    it('allows a PAT GET on an allowlisted route', () => {
+      expect(call({ method: 'GET', path: '/api/auth/me', _patAuthenticated: true })).toBe(PAT_USER);
+      expect(call({ method: 'GET', path: '/api/public/skills', _patAuthenticated: true })).toBe(PAT_USER);
+      expect(call({ method: 'GET', path: '/api/skills/discover', _patAuthenticated: true })).toBe(PAT_USER);
+    });
+
+    it('blocks a PAT non-GET request (read-only)', () => {
+      expect(() =>
+        call({ method: 'POST', path: '/api/public/skills', _patAuthenticated: true }),
+      ).toThrow(ForbiddenException);
+    });
+
+    it('blocks a PAT GET on a non-allowlisted route', () => {
+      expect(() =>
+        call({ method: 'GET', path: '/api/admin/users', _patAuthenticated: true }),
+      ).toThrow(ForbiddenException);
+    });
+  });
+});
+
+describe('isPatAllowedPath', () => {
+  it('allows the CLI routes (with and without trailing slash)', () => {
+    expect(isPatAllowedPath('/api/auth/me')).toBe(true);
+    expect(isPatAllowedPath('/api/skills/discover')).toBe(true);
+    expect(isPatAllowedPath('/api/public/skills')).toBe(true);
+    expect(isPatAllowedPath('/api/public/skills/123/download')).toBe(true);
+    expect(isPatAllowedPath('/api/public/')).toBe(true);
+  });
+
+  it('rejects everything else', () => {
+    expect(isPatAllowedPath('/api/admin/users')).toBe(false);
+    expect(isPatAllowedPath('/api/skills')).toBe(false);
+    expect(isPatAllowedPath('/api/auth/tokens')).toBe(false);
+    expect(isPatAllowedPath('/api/publicity')).toBe(false); // must not prefix-match /api/public
   });
 });

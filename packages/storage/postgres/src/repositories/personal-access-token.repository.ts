@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import type { PersonalAccessToken, IPersonalAccessTokenRepository } from '@skillspell/shared';
 import { PersonalAccessTokenEntity } from '../entities/personal-access-token.entity';
 
@@ -58,6 +58,18 @@ export class PostgresPersonalAccessTokenRepository
     if (result.affected === 0) {
       throw new NotFoundException(`Personal access token not found`);
     }
+  }
+
+  /**
+   * Revoke all active (non-revoked) tokens for a user.
+   * Called on password change to sever CLI-token persistence after a reset.
+   */
+  async revokeAllByUserId(userId: string): Promise<number> {
+    const result = await this.repo.update(
+      { userId, revokedAt: IsNull() },
+      { revokedAt: new Date() },
+    );
+    return result.affected ?? 0;
   }
 
   /**

@@ -151,6 +151,30 @@ describe('OidcController (OIDC-01)', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
+    it('OIDC-01a: rejects userinfo bypass (localhost:x@evil.com)', async () => {
+      const controller = await buildController();
+      const res = buildResponse();
+
+      // This string passes a naive startsWith('http://localhost:') check but the
+      // real host is evil.com — it must be rejected to prevent SSO code leakage.
+      await expect(
+        controller.oidcLoginCli({ cli_redirect: 'http://localhost:1@evil.com/callback' }, res as any),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('OIDC-01b: CLI flow accepts loopback 127.0.0.1 cli_redirect', async () => {
+      const oidcAuthServiceMock = buildOidcAuthServiceMock();
+      const controller = await buildController(oidcAuthServiceMock, buildOrgRepoMock('oidc'));
+      const res = buildResponse();
+
+      const result = await controller.oidcLoginCli(
+        { cli_redirect: 'http://127.0.0.1:5000/callback' },
+        res as any,
+      );
+
+      expect(result).toEqual({ redirectUrl: 'https://idp.example.com/authorize?state=test-state' });
+    });
+
     it('OIDC-01b: CLI flow accepts localhost cli_redirect and returns redirectUrl', async () => {
       const oidcAuthServiceMock = buildOidcAuthServiceMock();
       const orgRepoMock = buildOrgRepoMock('oidc');
@@ -306,6 +330,29 @@ describe('OidcController (OIDC-01)', () => {
       );
       expect(res.redirect).toHaveBeenCalledWith(
         expect.stringContaining('http://localhost:7777/callback?code='),
+      );
+    });
+
+    it('re-validates stored cli_redirect on callback and rejects a bypass URL', async () => {
+      const oidcAuthServiceMock = buildOidcAuthServiceMock();
+      // A malicious cli_redirect that somehow reached the state store must not
+      // receive the one-time code — the callback re-validates before redirecting.
+      oidcAuthServiceMock.consumeOidcState.mockReturnValue({
+        code_verifier: 'verifier',
+        cliRedirect: 'http://localhost:1@evil.com/callback',
+        expiresAt: Date.now() + 60_000,
+      });
+      const controller = await buildController(oidcAuthServiceMock);
+      const res = buildResponse();
+      const req = buildRequest();
+
+      await controller.oidcCallback('code', 'state', req as any, res as any);
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        'https://app.example.com/sso-callback#error=invalid_redirect',
+      );
+      expect(res.redirect).not.toHaveBeenCalledWith(
+        expect.stringContaining('evil.com'),
       );
     });
 
