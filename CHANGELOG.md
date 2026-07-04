@@ -6,6 +6,35 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-04
+
+### Added
+
+- **Public landing page** — marketing site served from `site/` at [arnoldsimha.github.io/skillspell](https://arnoldsimha.github.io/skillspell/), deployed by a GitHub Actions Pages workflow on push to `main`; dark-to-light design built from the app's design tokens, living constellation canvas background, self-typing CLI terminal (verified against real `@skillspell/cli` behavior), SEO/Open Graph meta, and footer copyright
+- **Blinded-split warning** — Test Cases tab shows a non-blocking banner when a skill has fewer than 5 eval cases, warning that the optimization loop cannot hold out a blinded test set and runs unblinded (overfitting risk); threshold extracted to `MIN_EVAL_CASES_FOR_BLINDED_SPLIT` in `@skillspell/shared` as the single source of truth
+- **Brand wordmark** — new logo assets (`logo-white.png` / `logo-black.png`) replace the placeholder sparkle icon in the app top bar, auth pages, and landing page
+
+### Security
+
+- **IDOR in suggestions endpoint (Medium):** `POST /api/generate/suggestions` took `skillId` in the request body, bypassing the route-level ownership guard — any authenticated user could read another user's private skill content via LLM-derived suggestions; ownership now enforced before loading the skill, `skillId` tightened to `@IsUUID()`
+- **Mermaid stored XSS (High, LLM-gated):** diagrams rendered with `securityLevel: 'loose'` behind a regex sanitizer that missed slash-separated event handlers and `javascript:`/`data:` URLs; now `securityLevel: 'strict'` plus a hardened fallback sanitizer
+- **Owner role-hierarchy fix:** `SkillOwnerGuard` used a raw `=== 'admin'` check that locked the higher-privileged platform `owner` out of ownership-guarded routes; now uses `isAtLeast(role, 'admin')`, matching `RolesGuard`
+
+### CI
+
+- **Automated CLI publishing** — merges to `main` touching `packages/cli/**` publish `@skillspell/cli` to npm via OIDC trusted publishing (no token) with provenance; publishes only when the version isn't already on npm; tarball trimmed to `dist/` + `README.md`; `--version` string injected from `package.json` at build time so it can't drift
+- CI now gates on build, tests, and lint; heals Linux native binaries missing from the lockfile
+- GitHub Pages workflow actions bumped to Node 24 majors (`checkout@v7`, `configure-pages@v6`, `upload-pages-artifact@v5`, `deploy-pages@v5`)
+
+### Docs
+
+- Mintlify documentation site: guides aligned with code, quickstart restructured as a step-by-step wizard, Roadmap section added, internal docs pruned
+- OSS scaffolding: issue/PR templates, Dependabot config, editorconfig, README badges
+
+### Dependencies
+
+- Routine Dependabot bumps: `@nestjs/common`, `react-dom`, `openid-client`, `@opentelemetry/*`, `@tanstack/react-query-devtools`, `actions/checkout`
+
 ## [1.0.0] - 2026-05-01
 
 ### Added
