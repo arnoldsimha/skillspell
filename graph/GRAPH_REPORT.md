@@ -1,15 +1,16 @@
-# Graph Report - .  (2026-07-04)
+# Graph Report - skillspell  (2026-07-04)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 694 files · ~376,492 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4471 nodes · 8069 edges · 363 communities (206 shown, 157 thin omitted)
+- 4451 nodes · 8050 edges · 360 communities (207 shown, 153 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `97cd1fee`
+- Built from commit: `40fe3774`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -221,7 +222,6 @@
 - [[_COMMUNITY_Zip Upload Test Fixtures|Zip Upload Test Fixtures]]
 - [[_COMMUNITY_Batch Trigger Simulation Prompt|Batch Trigger Simulation Prompt]]
 - [[_COMMUNITY_Trigger Simulation Prompt|Trigger Simulation Prompt]]
-- [[_COMMUNITY_Skill Category Repository|Skill Category Repository]]
 - [[_COMMUNITY_Dev Dependencies|Dev Dependencies]]
 - [[_COMMUNITY_AI Test Suggestions|AI Test Suggestions]]
 - [[_COMMUNITY_Test Results Outputs Tab|Test Results Outputs Tab]]
@@ -350,12 +350,8 @@
 - [[_COMMUNITY_Output Contract Reference|Output Contract Reference]]
 - [[_COMMUNITY_SkillSpell Creator Skill|SkillSpell Creator Skill]]
 - [[_COMMUNITY_Rate Limit Retry|Rate Limit Retry]]
-- [[_COMMUNITY_Skill Export UI|Skill Export UI]]
 - [[_COMMUNITY_Package Metadata|Package Metadata]]
 - [[_COMMUNITY_Strands Config Schema|Strands Config Schema]]
-- [[_COMMUNITY_Marketplace Submission UI|Marketplace Submission UI]]
-- [[_COMMUNITY_Marketplace Sort Bar|Marketplace Sort Bar]]
-- [[_COMMUNITY_SAML Config Storage|SAML Config Storage]]
 - [[_COMMUNITY_SMTP Config Storage|SMTP Config Storage]]
 
 ## God Nodes (most connected - your core abstractions)
@@ -379,25 +375,25 @@
   scripts/seed-dev.ts → packages/storage/postgres/src/entities/user.entity.ts
 - `buildController()` --indirect_call--> `OidcAuthService`  [INFERRED]
   packages/backend/src/auth/oidc.controller.spec.ts → packages/backend/src/auth/strategies/oidc.strategy.ts
-- `buildService()` --indirect_call--> `EncryptionService`  [INFERRED]
-  packages/backend/src/auth/strategies/oidc.strategy.spec.ts → packages/backend/src/common/services/encryption.service.ts
+- `buildService()` --indirect_call--> `OidcAuthService`  [INFERRED]
+  packages/backend/src/auth/strategies/oidc.strategy.spec.ts → packages/backend/src/auth/strategies/oidc.strategy.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (363 total, 157 thin omitted)
+## Communities (360 total, 153 thin omitted)
 
 ### Community 0 - "LLM Transport Port"
-Cohesion: 0.21
-Nodes (7): LlmModule, LLM_TRANSPORT, LlmTransport, AgentQueryOptions, AgentQueryResult, LightQueryOptions, ToolSchema
+Cohesion: 0.05
+Nodes (28): configFactory(), createStrandsConfig(), LLM_PROVIDERS, LlmProvider, resolveProvider(), StrandsConfig, StrandsConfigSchema, LlmModule (+20 more)
 
 ### Community 1 - "Admin Skill Review UI"
-Cohesion: 0.05
-Nodes (50): AdminReviewTabBarProps, AdminReviewView, AdminSkillReviewPage(), ApprovedSkillRow(), Props, RejectState, Props, RemovalRequestsTab() (+42 more)
+Cohesion: 0.04
+Nodes (49): AdminReviewTabBarProps, AdminReviewView, AdminSkillReviewPage(), ApprovedSkillRow(), Props, RejectState, Props, RemovalRequestsTab() (+41 more)
 
 ### Community 2 - "Skill Builder UI"
 Cohesion: 0.06
-Nodes (56): jszip, CreationInputProps, CreationMode, SecretWarningBannerProps, BuilderState, SkillBuilder(), SkillBuilderProps, OptState (+48 more)
+Nodes (52): CreationInputProps, CreationMode, SecretWarningBannerProps, BuilderState, SkillBuilder(), SkillBuilderProps, OptState, SkillOptimizer() (+44 more)
 
 ### Community 3 - "Strands Agent SDK Types"
 Cohesion: 0.03
@@ -408,23 +404,23 @@ Cohesion: 0.05
 Nodes (55): InviteUsersDialogProps, MarketplaceSettingsSection(), Props, DEFAULT_SMTP_FORM, DEFAULT_SSO_FORM, GeneralSectionProps, isAtLeast(), MembersSectionProps (+47 more)
 
 ### Community 5 - "API Client & Security UI"
-Cohesion: 0.09
-Nodes (28): ChangePasswordView(), SecurityView, ApiError, buildHeaders(), doFetch(), generateDiagram(), exportSkillZip(), generateSkill() (+20 more)
+Cohesion: 0.07
+Nodes (35): ChangePasswordView(), SecurityView, DiffFileEntry, getFileContent(), getFileKeys(), mergeFileKeys(), VersionDiffViewer(), VersionDiffViewerProps (+27 more)
 
 ### Community 6 - "Analytics & Eval Charts"
-Cohesion: 0.07
-Nodes (27): DownloadsChartProps, SkillsChartProps, UserGrowthChartProps, EvalCaseListProps, EvalCaseRow(), DATE_FORMAT_OPTIONS, DetailsSection(), DetailsSectionProps (+19 more)
+Cohesion: 0.13
+Nodes (12): DownloadsChartProps, SkillsChartProps, UserGrowthChartProps, EvalCaseList(), EvalCaseListProps, EvalCaseRow(), dateFormatter, dateTimeFormatter (+4 more)
 
 ### Community 7 - "Request Context & Skill Utils"
-Cohesion: 0.08
-Nodes (12): RequestContext, updateFrontMatterName(), GenerationService, SessionService, DiagramService, ALLOWED_FRONTMATTER_KEYS, ValidationResult, SkillOwnerGuard (+4 more)
+Cohesion: 0.11
+Nodes (11): RequestContext, GenerationService, SessionService, DiagramService, ALLOWED_FRONTMATTER_KEYS, ValidationResult, SkillOwnerGuard, OwnershipService (+3 more)
 
 ### Community 8 - "Org Guard & SMTP Encryption"
-Cohesion: 0.06
-Nodes (9): OrganizationContextGuard, EncryptionService, SaveSmtpConfigDto, TestSmtpEmailDto, OidcConfigController, OrganizationController, OrganizationService, SmtpConfigController (+1 more)
+Cohesion: 0.07
+Nodes (11): OrganizationContextGuard, SaveSmtpConfigDto, TestSmtpEmailDto, CreateOrganizationDto, UpdateOrganizationDto, OidcConfigController, OrganizationController, OrganizationService (+3 more)
 
 ### Community 9 - "Analytics & Category Repositories"
-Cohesion: 0.06
+Cohesion: 0.05
 Nodes (43): ADMIN_ANALYTICS_REPOSITORY, AnalyticsCategoryCount, AnalyticsDatePoint, AnalyticsFunnel, AnalyticsGranularity, AnalyticsKpiRaw, AnalyticsTopSkill, Category (+35 more)
 
 ### Community 10 - "Backend Dependencies"
@@ -433,111 +429,103 @@ Nodes (59): dependencies, @anthropic-ai/foundry-sdk, archiver, bcryptjs, cache-m
 
 ### Community 11 - "Generation & Eval Dialogs"
 Cohesion: 0.06
-Nodes (44): GenerationProgress(), GenerationProgressProps, ASSERTION_TYPES, EditableCase, GenerateLoadingView(), GenerateTestEvalsDialogProps, Phase, DescriptionOptimizer() (+36 more)
-
-### Community 12 - "Auth Pages & Layout"
-Cohesion: 0.06
-Nodes (17): AuthLayoutProps, BrandTitle(), NotFoundPageProps, AuthApiError, AuthChangeCallback, authRequest(), AuthSDK, AuthState (+9 more)
+Nodes (43): GenerationProgress(), GenerationProgressProps, EvalRunProgress(), Props, ASSERTION_TYPES, EditableCase, GenerateLoadingView(), GenerateTestEvalsDialogProps (+35 more)
 
 ### Community 13 - "CLI Authentication"
-Cohesion: 0.08
+Cohesion: 0.09
 Nodes (18): CliAuthController, CliAuthService, CliCodeEntry, cacheStore, mockCacheManager, Public(), CliExchangeDto, CliRefreshDto (+10 more)
 
 ### Community 14 - "Skill DTOs & WS Guard"
-Cohesion: 0.12
-Nodes (14): WsJwtGuard, normalizeSkillName(), GenerateSkillDto, SkillFileItemDto, SkillStatus, validateDto(), UpdateSkillDto, CancelPayload (+6 more)
+Cohesion: 0.26
+Nodes (7): normalizeSkillName(), GenerateSkillDto, CreateSkillDto, SkillFileItemDto, SkillStatus, validateDto(), UpdateSkillDto
 
 ### Community 15 - "LLM Response Parsing"
-Cohesion: 0.16
-Nodes (20): buildSkillResult(), countTableColumns(), extractArrayFromJson(), extractBalancedArray(), extractBalancedJson(), extractGeneratedTestEvalsJson(), extractSuggestionsJson(), extractTestSuggestionsJson() (+12 more)
+Cohesion: 0.18
+Nodes (19): buildSkillResult(), countTableColumns(), extractArrayFromJson(), extractBalancedArray(), extractBalancedJson(), extractGeneratedTestEvalsJson(), extractSuggestionsJson(), logger (+11 more)
 
 ### Community 16 - "CLI Package Manifest"
 Cohesion: 0.04
 Nodes (45): author, bin, skillspell, bugs, url, dependencies, @clack/prompts, commander (+37 more)
 
 ### Community 17 - "Auth Context & Readiness Hooks"
-Cohesion: 0.08
-Nodes (33): ReadinessData, SkillReadinessBarProps, StepKey, STEPS, AuthContext, AuthContextValue, AuthProvider(), OptConfig (+25 more)
+Cohesion: 0.09
+Nodes (29): ReadinessData, SkillReadinessBarProps, StepKey, STEPS, AuthContext, AuthContextValue, AuthProvider(), EvalStatus (+21 more)
 
 ### Community 18 - "Shared User & Session Types"
-Cohesion: 0.09
-Nodes (41): SessionMessage, ApiToken, AuthProvider, AuthUser, ChangeEmailRequest, CreateUserData, DownloadLog, EmailChangeRequest (+33 more)
+Cohesion: 0.08
+Nodes (42): SessionMessage, ApiToken, AuthProvider, AuthUser, ChangeEmailRequest, CreateUserData, DownloadLog, EmailChangeRequest (+34 more)
 
 ### Community 19 - "SSE & Controller Plumbing"
-Cohesion: 0.07
-Nodes (17): SkillFileItemDto, ParseVersionPipe, SseConnection, SseService, DescriptionOptimizerController, DescriptionOptimizerService, ApplyOptimizedDescriptionDto, GenerateTriggerEvalsDto (+9 more)
+Cohesion: 0.09
+Nodes (15): ParseVersionPipe, onClientDisconnect(), SseConnection, SseService, ExportFormat, VALID_FORMATS, DescriptionOptimizerController, DescriptionOptimizerService (+7 more)
 
 ### Community 20 - "Eval Runner & Error Utils"
-Cohesion: 0.10
-Nodes (12): formatError(), shuffleArray(), EvalRunnerService, GraderResponse, SavedDraft, ServicePrivate, WithBuildPrompt, COMPETING_SKILLS (+4 more)
+Cohesion: 0.14
+Nodes (7): shuffleArray(), GraderResponse, COMPETING_SKILLS, TriggerDecision, TriggerEvaluatorService, LlmService, PromptLoaderService
 
 ### Community 21 - "Admin Marketplace Controller"
-Cohesion: 0.07
-Nodes (11): AdminMarketplaceController, AdminRemoveSkillDto, ApproveRejectDto, mockAdminUser, mockExportService, mockGenerationService, mockMarketplaceService, mockSubmissionService (+3 more)
+Cohesion: 0.17
+Nodes (3): AdminRemoveSkillDto, ApproveRejectDto, MarketplaceGuard
 
 ### Community 22 - "Skill Generation Service"
-Cohesion: 0.06
-Nodes (9): ShareController, CheckNameDto, CreateSkillDto, SkillDetailDto, SkillListItemDto, SkillSummaryDto, UpdateSkillMetadataDto, SkillsController (+1 more)
+Cohesion: 0.19
+Nodes (6): CheckNameDto, SkillDetailDto, SkillListItemDto, SkillSummaryDto, UpdateSkillMetadataDto, SkillsController
 
 ### Community 23 - "File Tree & Markdown Viewers"
 Cohesion: 0.07
 Nodes (25): FileEntry, FileGroup, FileIcon(), FolderIcon(), groupFiles(), TreeFileItem(), MarkdownToggleViewerProps, SourcePreviewToggle() (+17 more)
 
 ### Community 24 - "Marketplace Submission Logic"
-Cohesion: 0.10
-Nodes (3): MarketplaceSubmissionService, IMarketplaceListingRepository, IMarketplaceSubmissionRepository
+Cohesion: 0.11
+Nodes (3): AdminMarketplaceController, MarketplaceSubmissionService, IMarketplaceRemovalRequestRepository
 
 ### Community 25 - "Toasts & Admin Routing"
-Cohesion: 0.07
-Nodes (30): MarketplaceSubmissionsSection(), GeneralSection(), MembersSection(), AdminRoute(), Toast(), TYPE_STYLES, ToastContext, ToastContextValue (+22 more)
+Cohesion: 0.06
+Nodes (34): MarketplaceSubmissionsSection(), AdminRoute(), SocketStatusMonitor(), Toast(), TYPE_STYLES, ToastContext, ToastContextValue, ToastMessage (+26 more)
 
 ### Community 26 - "OIDC SSO Flow"
-Cohesion: 0.08
-Nodes (12): OidcAuthService, baseOidcConfig, buildService(), cacheStore, mockCacheManager, mockDiscoveryConfig, mockOrg, mockServerMetadata (+4 more)
+Cohesion: 0.13
+Nodes (4): OidcAuthService, IOidcConfigRepository, OIDC_CONFIG_REPOSITORY, OidcProviderConfig
 
 ### Community 27 - "Taxonomy & Dropdown UI"
-Cohesion: 0.07
-Nodes (26): SubsectionProps, TaxonomyItem, TaxonomySection(), DropdownMenuDivider, DropdownMenuEntry, DropdownMenuItem, DropdownMenuProps, MultiSelectComboboxProps (+18 more)
+Cohesion: 0.06
+Nodes (29): SubsectionProps, TaxonomyItem, TaxonomySection(), MarketplaceFilterSidebarProps, MarketplaceGridProps, MarketplacePagination(), Props, MarketplaceSkillCardProps (+21 more)
 
 ### Community 28 - "Backend Dev Tooling"
 Cohesion: 0.06
 Nodes (36): devDependencies, eslint, eslint-config-prettier, @eslint/eslintrc, @eslint/js, eslint-plugin-prettier, globals, jest (+28 more)
 
 ### Community 29 - "Email Templates & Invites"
-Cohesion: 0.10
-Nodes (5): EmailTemplateLoaderService, CompleteInviteDto, SendInvitesDto, InviteController, InviteService
+Cohesion: 0.13
+Nodes (3): EmailTemplateLoaderService, InviteController, InviteService
 
 ### Community 30 - "Category Management API"
 Cohesion: 0.11
 Nodes (10): AdminCategoriesController, AdminCategoriesReadController, CategoryModule, CategoryService, CreateCategoryDto, UpdateCategoryDto, mockAdminUser, mockCategoryService (+2 more)
 
 ### Community 31 - "Batching & Draft Store"
-Cohesion: 0.07
-Nodes (13): runInBatches(), DRAFT_STORE, IDraftStore, InMemoryDraftStore, IterationIndex, RedisDraftStore, CASES, Event (+5 more)
-
-### Community 32 - "Strands Transport Layer"
-Cohesion: 0.18
-Nodes (7): Anthropic, @anthropic-ai/sdk, anthropicConfig(), AnyConfig, strandsConfig(), ZOD_TOOL, PromptDumpService
+Cohesion: 0.05
+Nodes (25): WsJwtGuard, runInBatches(), EvalRunnerService, DRAFT_STORE, IDraftStore, InMemoryDraftStore, IterationIndex, RedisDraftStore (+17 more)
 
 ### Community 33 - "Auth Controller & Cookies"
 Cohesion: 0.09
-Nodes (11): AuthController, calculateExpiry(), clearRefreshTokenCookie(), DURATION_MULTIPLIERS, parseDurationToMs(), setRefreshTokenCookie(), LoginDto, LogoutDto (+3 more)
+Nodes (13): calculateExpiry(), clearRefreshTokenCookie(), DURATION_MULTIPLIERS, parseDurationToMs(), setRefreshTokenCookie(), CurrentUser, LoginDto, LogoutDto (+5 more)
 
 ### Community 34 - "Postgres Package Manifest"
 Cohesion: 0.06
 Nodes (32): dependencies, dotenv, @nestjs/common, @nestjs/typeorm, pg, typeorm, uuid, description (+24 more)
 
 ### Community 35 - "App Module & Middleware"
-Cohesion: 0.14
-Nodes (16): backendRoot, frontendDistPath, AuthModule, RequestContextModule, AllExceptionsFilter, LoggingInterceptor, validateEnv(), EvalModule (+8 more)
+Cohesion: 0.12
+Nodes (17): backendRoot, frontendDistPath, AuthModule, RequestContextModule, AllExceptionsFilter, LoggingInterceptor, validateEnv(), EvalModule (+9 more)
 
 ### Community 37 - "Root NPM Scripts"
 Cohesion: 0.07
 Nodes (29): scripts, backend:build, backend:dev, build, cli:build, db:postgres:down, db:postgres:migrate, db:postgres:up (+21 more)
 
 ### Community 38 - "Eval Benchmark UI"
-Cohesion: 0.07
-Nodes (14): Sparkline, SparklineProps, SparklineWithLabel, AssertionReplacementDialog(), AssertionReplacementDialogProps, EvalBenchmarkTabProps, EvalNavigation(), EvalNavigationProps (+6 more)
+Cohesion: 0.09
+Nodes (12): Sparkline, SparklineProps, SparklineWithLabel, EvalBenchmarkTab(), EvalBenchmarkTabProps, EvalNavigation(), EvalNavigationProps, VersionComparisonView (+4 more)
 
 ### Community 39 - "Observability & Infrastructure"
 Cohesion: 0.40
@@ -556,12 +544,12 @@ Cohesion: 0.12
 Nodes (9): AdminAnalyticsController, stubResponse, AnalyticsKpis, AnalyticsPeriod, AnalyticsQueryDto, AnalyticsResponseDto, AdminAnalyticsModule, AdminAnalyticsService (+1 more)
 
 ### Community 43 - "Core Auth Service"
-Cohesion: 0.08
-Nodes (11): AuthService, TEST_CREDENTIAL, TEST_ORG, TEST_USER, LocalStrategy, EmailModule, OrganizationModule, UsersModule (+3 more)
+Cohesion: 0.07
+Nodes (9): AuthController, AuthService, TEST_CREDENTIAL, TEST_ORG, TEST_USER, LocalStrategy, UsersService, IUserRepository (+1 more)
 
 ### Community 44 - "Login & Route Guards"
-Cohesion: 0.07
-Nodes (30): ErrorAlert(), LoginPage(), MarketplaceRouteGuard(), Props, ProtectedRoute(), PublicRoute(), sanitizeReturnUrl(), SetupWizard() (+22 more)
+Cohesion: 0.17
+Nodes (11): MarketplaceRouteGuard(), Props, ProtectedRoute(), PublicRoute(), sanitizeReturnUrl(), defaultProps, mockNavigate, TopBar() (+3 more)
 
 ### Community 45 - "Shared Eval Types"
 Cohesion: 0.07
@@ -572,12 +560,12 @@ Cohesion: 0.07
 Nodes (27): Alternatives Considered, API Design, Assumptions, Component 1: [Name], Component 2: [Name], Consequences, Constraints, Context (+19 more)
 
 ### Community 47 - "Postgres Storage Module"
-Cohesion: 0.18
-Nodes (6): POSTGRES_STORAGE_OPTIONS, PostgresStorageOptions, PostgresOptionsModule, PostgresStorageAsyncOptions, PostgresStorageModule, PostgresOrganizationRepository
+Cohesion: 0.17
+Nodes (6): POSTGRES_STORAGE_OPTIONS, PostgresStorageOptions, PostgresOptionsModule, PostgresStorageAsyncOptions, PostgresStorageModule, PostgresSamlConfigRepository
 
 ### Community 48 - "Eval Execution API"
 Cohesion: 0.15
-Nodes (5): EvalRunConfigDto, RunEvalsDto, EvalExecutionController, EvalExecutionService, ExplainFailureService
+Nodes (4): EvalRunConfigDto, RunEvalsDto, EvalExecutionController, EvalExecutionService
 
 ### Community 49 - "Postgres Category Storage"
 Cohesion: 0.13
@@ -592,12 +580,12 @@ Cohesion: 0.08
 Nodes (25): 1. Sign assertions is Off in Keycloak (most common), 2. Certificate mismatch — container recreated (new keys generated), Admin UI not accessible after `saml:up`, Container not starting / port 8080 already in use, How It All Fits Together, "Invalid requester" on the Keycloak login page, Key Details, Local SAML SSO Testing with Keycloak (+17 more)
 
 ### Community 52 - "LLM Tool Schemas"
-Cohesion: 0.10
+Cohesion: 0.11
 Nodes (20): EVAL_CASE_ITEM_SCHEMA, EVAL_CASE_ITEM_ZOD_SCHEMA, GENERATE_TEST_EVALS_TOOL_SCHEMA, GENERATE_TEST_EVALS_ZOD_SCHEMA, SUGGEST_GAP_COUNTS_TOOL_SCHEMA, SUGGEST_GAP_COUNTS_ZOD_SCHEMA, TEST_SUGGESTIONS_TOOL_SCHEMA, TEST_SUGGESTIONS_ZOD_SCHEMA (+12 more)
 
 ### Community 53 - "Run Progress & Token Modal"
-Cohesion: 0.11
-Nodes (15): EvalRunProgress(), Props, ExpiryPreset, GenerateTokenModal(), GenerateTokenModalProps, ModalPhase, PRESET_LABELS, tomorrowDateString() (+7 more)
+Cohesion: 0.06
+Nodes (29): SmartSuggestions(), SmartSuggestionsProps, ASSERTION_TYPES, EvalCaseEditor(), EvalCaseEditorProps, AuthenticatedContext, AuthenticatedLayout(), ExpiryPreset (+21 more)
 
 ### Community 54 - "Architecture Doc Template"
 Cohesion: 0.08
@@ -612,7 +600,7 @@ Cohesion: 0.12
 Nodes (3): MarketplaceSubmissionEntity, MarketplaceSubmissionStatus, PostgresMarketplaceSubmissionRepository
 
 ### Community 59 - "Marketplace DTOs"
-Cohesion: 0.15
+Cohesion: 0.17
 Nodes (7): MarketplaceBrowseResponseDto, MarketplaceListItemDto, MarketplaceListQueryDto, MarketplaceSkillDetailDto, MySubmissionDto, RequestRemovalDto, MarketplaceController
 
 ### Community 60 - "Public Skills API"
@@ -624,8 +612,8 @@ Cohesion: 0.15
 Nodes (18): logoutCommand(), clearCredential(), clearSsoCredential(), CRED_FILE, execFileAsync, readCredential(), readSsoCredential(), resolveToken() (+10 more)
 
 ### Community 62 - "Eval Viewer UI"
-Cohesion: 0.14
-Nodes (16): EvalBenchmarkTab(), EvalCaseList(), COLOR_MAP, EvalHelpDialog(), EvalHelpDialogProps, EvalOutputsTab(), EvalViewer, EvalViewerComponent() (+8 more)
+Cohesion: 0.08
+Nodes (11): AssertionReplacementDialog(), AssertionReplacementDialogProps, EvalFeedback(), EvalFeedbackProps, COLOR_MAP, EvalHelpDialog(), EvalHelpDialogProps, EvalOutputsTab() (+3 more)
 
 ### Community 63 - "Frontend App TSConfig"
 Cohesion: 0.09
@@ -636,12 +624,12 @@ Cohesion: 0.10
 Nodes (22): ApplyOptimizedDescriptionRequest, ApproveOptimizationRequest, DescriptionOptimizationResult, GenerateSkillRequest, GenerateTriggerEvalsRequest, GenerateTriggerEvalsResponse, GenerationStats, OptimizationIteration (+14 more)
 
 ### Community 66 - "Eval Case DTOs"
-Cohesion: 0.22
-Nodes (8): BulkCreateEvalCasesDto, CreateEvalCaseDto, EvalAssertionDto, OptimizeSkillDto, GapItemDto, SuggestTestCaseCountDto, SuggestTestPromptsDto, UpdateEvalCaseDto
+Cohesion: 0.26
+Nodes (7): BulkCreateEvalCasesDto, CreateEvalCaseDto, EvalAssertionDto, OptimizeSkillDto, SuggestTestCaseCountDto, SuggestTestPromptsDto, UpdateEvalCaseDto
 
 ### Community 67 - "Frontend Dependencies"
 Cohesion: 0.09
-Nodes (22): dependencies, dompurify, fetch-event-stream, @heroicons/react, mermaid, @microsoft/fetch-event-source, react, react-diff-viewer-continued (+14 more)
+Nodes (23): dependencies, dompurify, fetch-event-stream, @heroicons/react, jszip, mermaid, @microsoft/fetch-event-source, react (+15 more)
 
 ### Community 68 - "Frontend Dev Tooling"
 Cohesion: 0.09
@@ -656,7 +644,7 @@ Cohesion: 0.14
 Nodes (10): AppModule, createAppLogger(), devFormat, LEVEL_COLOR, buildHttpsRedirectTarget(), httpsRedirectMiddleware(), bootstrap(), StreamingAdapter (+2 more)
 
 ### Community 72 - "Submission Requirements Checking"
-Cohesion: 0.13
+Cohesion: 0.10
 Nodes (6): SubmitSkillDto, BaselineEvalRunChecker, CheckContext, RequirementChecker, RequirementsCheckerService, SubmissionSnapshot
 
 ### Community 73 - "CLI Install Receipts"
@@ -669,23 +657,23 @@ Nodes (13): InfoTip(), InfoTipProps, ClaimsSection(), ClaimsSectionProps, TYPE_C
 
 ### Community 75 - "Eval Outputs Tab"
 Cohesion: 0.12
-Nodes (6): EvalOutputsTabProps, EvalTab, SECTION_ICONS, SummaryTab(), computeDelta(), sortAssertions()
+Nodes (7): EvalOutputsTabProps, EvalTab, SECTION_ICONS, SummaryTab(), TimingInfo(), computeDelta(), sortAssertions()
 
 ### Community 76 - "Eval Run List Panel"
-Cohesion: 0.14
-Nodes (11): EvalRunListPanel(), EvalRunListPanelProps, RunGroup, useEvalViewer(), UseEvalViewerOptions, UseEvalViewerReturn, useRunComparison(), UseRunComparisonOptions (+3 more)
+Cohesion: 0.11
+Nodes (20): EvalRunComparison, EvalRunListPanel(), EvalRunListPanelProps, RunGroup, EvalViewerComponent(), EvalViewerProps, SkillTestsPage(), SkillTestsPageProps (+12 more)
 
 ### Community 77 - "JWT & PAT Guards"
 Cohesion: 0.12
 Nodes (7): JwtAuthGuard, PatPassportStrategy, PatStrategy, mockPat, mockPatService, mockUser, mockUserRepo
 
 ### Community 78 - "Eval Feedback API"
-Cohesion: 0.13
-Nodes (9): onClientDisconnect(), GenerateTestEvalsDto, SuggestGapCountsDto, EvalFeedbackController, EvalFeedbackService, truncate(), EvalSuggestionService, extractJson() (+1 more)
+Cohesion: 0.09
+Nodes (11): GenerateTestEvalsDto, SaveFeedbackDto, GapItemDto, SuggestGapCountsDto, EvalFeedbackController, EvalFeedbackService, truncate(), EvalSuggestionService (+3 more)
 
 ### Community 79 - "Skill Export Service"
-Cohesion: 0.19
-Nodes (7): buildFlatMarkdown(), stripFrontmatter(), ExportController, ExportFormat, VALID_FORMATS, ExportService, sanitizePath()
+Cohesion: 0.17
+Nodes (10): buildFlatMarkdown(), stripFrontmatter(), ExportService, sanitizePath(), mockAdminUser, mockExportService, mockGenerationService, mockMarketplaceService (+2 more)
 
 ### Community 80 - "CLI Login Flow"
 Cohesion: 0.17
@@ -696,12 +684,12 @@ Cohesion: 0.10
 Nodes (19): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib, module, moduleDetection, moduleResolution, noEmit (+11 more)
 
 ### Community 82 - "CLI Security Review Findings"
-Cohesion: 0.10
-Nodes (19): 10. LOW — `skillspell config url` accepts arbitrary URLs, no https enforcement, 11. LOW — SSO refresh token and PAT stored in plaintext on disk, 12. INFO — CLI-supplied PKCE `code_verifier` is security-neutral, 1. HIGH — OIDC `cli_redirect` open redirect enables SSO code theft / account takeover, 2. MEDIUM — SAML IdP-initiated flow bypasses CSRF nonce; no assertion replay protection, 3. MEDIUM — CLI callback server accepts any code with no state binding, 4. MEDIUM — User enumeration via login error messages and timing, 5. MEDIUM — Password change does not revoke Personal Access Tokens (+11 more)
+Cohesion: 0.09
+Nodes (25): GeneralSection(), MembersSection(), DATE_FORMAT_OPTIONS, DetailsSection(), DetailsSectionProps, MENU_ITEMS, MenuItem, PreferencesSection() (+17 more)
 
 ### Community 83 - "SAML SSO Flow"
-Cohesion: 0.10
-Nodes (9): AttributeMappingDto, ImportMetadataDto, SaveSamlConfigDto, SamlAuthService, TEST_ORG, TEST_SAML_CONFIG, SsoConfigControllerPrivate, SsoConfigController (+1 more)
+Cohesion: 0.11
+Nodes (8): AttributeMappingDto, ImportMetadataDto, SaveSamlConfigDto, SamlAuthService, TEST_ORG, TEST_SAML_CONFIG, SsoConfigControllerPrivate, SsoConfigController
 
 ### Community 84 - "TypeScript Build Config"
 Cohesion: 0.11
@@ -728,12 +716,12 @@ Cohesion: 0.13
 Nodes (14): colors, dark, light, primary, footer, socials, name, navbar (+6 more)
 
 ### Community 91 - "RBAC Roles & Org DTOs"
-Cohesion: 0.17
-Nodes (7): Roles(), AttributeMappingDto, SaveOidcConfigDto, RolesGuard, CreateOrganizationDto, UpdateOrganizationDto, DiscoverEndpointsDto
+Cohesion: 0.15
+Nodes (6): AuthLayoutProps, BrandTitle(), ErrorAlert(), LoginPage(), SetupWizard(), NotFoundPageProps
 
 ### Community 92 - "Eval Grading Service"
-Cohesion: 0.21
-Nodes (3): service, DETERMINISTIC_TYPES, GradingService
+Cohesion: 0.15
+Nodes (4): service, ExplainFailureService, DETERMINISTIC_TYPES, GradingService
 
 ### Community 95 - "CLI Config & Entrypoint"
 Cohesion: 0.20
@@ -756,8 +744,8 @@ Cohesion: 0.13
 Nodes (9): KpiTilesProps, PeriodPicker(), PeriodPickerProps, PRESETS, stubResponse, AnalyticsKpis, AnalyticsPeriod, AnalyticsResponse (+1 more)
 
 ### Community 101 - "Marketplace UI Tests"
-Cohesion: 0.12
-Nodes (13): baseItem, mockAddToast, mockNavigate, mockToggleFavorite, mockToggleUpvote, renderCard(), renderWithProvider(), mockGetSkill (+5 more)
+Cohesion: 0.11
+Nodes (11): ErrorBoundary, ErrorBoundaryProps, ErrorBoundaryState, renderCard(), renderWithProvider(), mockGetSkill, mockNavigate, mockToggleFavorite (+3 more)
 
 ### Community 102 - "Root Package Manifest"
 Cohesion: 0.17
@@ -768,7 +756,7 @@ Cohesion: 0.13
 Nodes (14): Compile and run the project, Custom providers, Deployment, Description, Example: switch to Azure AI Foundry, How it works, License, Multi-Provider LLM Support (+6 more)
 
 ### Community 105 - "Skill Generation & Refinement"
-Cohesion: 0.23
+Cohesion: 0.19
 Nodes (4): SkillGenerationService, extractSectionHeadings(), extractSections(), SkillSection
 
 ### Community 106 - "ADR Template"
@@ -795,10 +783,6 @@ Nodes (4): SetupRoute(), LifecycleService, HealthController, RedisHealthIndicato
 Cohesion: 0.18
 Nodes (12): assertSafePath(), resolveSlugToId(), updateCommand(), UpdateOptions, InstalledReceiptEntry, PublicSkillDownload, PublicSkillSummary, mockFetch (+4 more)
 
-### Community 112 - "Eval Case Editing UI"
-Cohesion: 0.21
-Nodes (9): SmartSuggestions(), SmartSuggestionsProps, ASSERTION_TYPES, EvalCaseEditor(), EvalCaseEditorProps, useDebounce(), useSuggestions(), UseSuggestionsReturn (+1 more)
-
 ### Community 114 - "Package Manifest"
 Cohesion: 0.15
 Nodes (13): default, description, exports, import, license, main, name, private (+5 more)
@@ -818,6 +802,10 @@ Nodes (4): MarketplaceRemovalRequestEntity, RemovalRequestScope, RemovalRequestS
 ### Community 118 - "Skill Testing Guide"
 Cohesion: 0.15
 Nodes (13): AI-Explained Mode, Core Concepts, Failure Explanations, Feedback System, Glossary, How Testing Works at a High Level, Overview, Rating Runs (+5 more)
+
+### Community 119 - "Skill Download & Versions"
+Cohesion: 0.07
+Nodes (3): MarketplaceService, IMarketplaceSubmissionRepository, ISkillDownloadEventRepository
 
 ### Community 120 - "Skills Grid UI"
 Cohesion: 0.17
@@ -872,8 +860,8 @@ Cohesion: 0.29
 Nodes (6): EvalOutputFile(), EvalOutputFileProps, formatFileSize(), isCodeFile(), isMarkdownFile(), isYamlFile()
 
 ### Community 137 - "Eval Run Comparison UI"
-Cohesion: 0.24
-Nodes (6): EvalRunComparison, EvalRunComparisonProps, DescriptionDiff(), computeWordDiff(), DiffSegment, tokenize()
+Cohesion: 0.28
+Nodes (5): EvalRunComparisonProps, DescriptionDiff(), computeWordDiff(), DiffSegment, tokenize()
 
 ### Community 138 - "Implementation Plan Template"
 Cohesion: 0.20
@@ -911,6 +899,10 @@ Nodes (9): Automated Skill Optimization, Cost Tracking, Feedback Integration, Ho
 Cohesion: 0.22
 Nodes (9): moduleNameMapper, ^(\\.{1,2}/.*)\\.js$, ^@anthropic-ai/sdk$, ^@strands-agents/sdk$, ^@strands-agents/sdk/models/anthropic$, ^@strands-agents/sdk/models/bedrock$, ^@strands-agents/sdk/models/google$, ^@strands-agents/sdk/models/openai$ (+1 more)
 
+### Community 149 - "Skill Validation Service"
+Cohesion: 0.11
+Nodes (3): formatError(), GenerationController, SkillValidatorService
+
 ### Community 150 - "Problem Statement Validation"
 Cohesion: 0.22
 Nodes (8): Before/After Examples, Common Mistakes Reference, Example 1: Solution-Focused Language, Example 2: Vague Scope, Example 3: Missing Urgency, Example 4: Too Long / Context Bleed, Problem Statement Quality Checklist, Quality Checklist
@@ -940,12 +932,12 @@ Cohesion: 0.25
 Nodes (8): Configuration, Environment Variables, How Config Flows, NestJS Module Configuration, Options Interface, `PostgresStorageModule.forRoot(options)` — Synchronous, `PostgresStorageModule.forRootAsync(options)` — Async (recommended), What the Module Provides
 
 ### Community 159 - "React Error Boundary"
-Cohesion: 0.25
-Nodes (3): ErrorBoundary, ErrorBoundaryProps, ErrorBoundaryState
+Cohesion: 0.21
+Nodes (5): FakeEmitter, Handler, { mockIo }, triggerConnect(), triggerConnectError()
 
 ### Community 160 - "Version Diff Viewer"
-Cohesion: 0.32
-Nodes (7): DiffFileEntry, getFileContent(), getFileKeys(), mergeFileKeys(), VersionDiffViewer(), VersionDiffViewerProps, fetchVersionHistory()
+Cohesion: 0.24
+Nodes (7): AuthApiError, AuthChangeCallback, authRequest(), AuthState, decodeJwtPayload(), getTokenExpiry(), getUserFromToken()
 
 ### Community 161 - "Diagram Selection Guide"
 Cohesion: 0.25
@@ -979,13 +971,17 @@ Nodes (6): Commands, Examples, Install, License, Quick start, @skillspell/cli
 Cohesion: 0.29
 Nodes (7): scripts, build, dev, lint, preview, test, test:watch
 
+### Community 171 - "Strands Transport Adapter"
+Cohesion: 0.48
+Nodes (4): SkillFileItemDto, DraftContextDto, OptimizeDraftDto, ApproveOptimizationDto
+
 ### Community 172 - "Authenticated App Layout"
-Cohesion: 0.08
-Nodes (30): AuthenticatedContext, AuthenticatedLayout(), ProfileSection, useSkills(), OrganizationSettingsPage(), ProfilePageWrapper(), SecuritySubsection, VALID_PROFILE_SECTIONS (+22 more)
+Cohesion: 0.10
+Nodes (27): ProfileSection, OrganizationSettingsPage(), ProfilePageWrapper(), SecuritySubsection, VALID_PROFILE_SECTIONS, VALID_SECURITY_SUBSECTIONS, DescriptionOptimizer, DescriptionOptimizerPage() (+19 more)
 
 ### Community 174 - "User Management API"
-Cohesion: 0.20
-Nodes (5): CurrentUser, CreateUserDto, UpdateUserDto, UserResponseDto, UsersController
+Cohesion: 0.13
+Nodes (9): Roles(), AttributeMappingDto, SaveOidcConfigDto, RolesGuard, DiscoverEndpointsDto, CreateUserDto, UpdateUserDto, UserResponseDto (+1 more)
 
 ### Community 175 - "Skill Improvement Rules"
 Cohesion: 0.29
@@ -1026,6 +1022,14 @@ Nodes (5): collection, compilerOptions, deleteOutDir, $schema, sourceRoot
 ### Community 184 - "Minimal Package Manifest"
 Cohesion: 0.33
 Nodes (5): license, name, private, type, version
+
+### Community 186 - "Non-Discriminating Help Dialog"
+Cohesion: 0.52
+Nodes (5): authenticatedSse(), fetchSse(), FetchSseOptions, get429Delay(), sleep()
+
+### Community 187 - "SMTP Email Service"
+Cohesion: 0.09
+Nodes (13): baseOidcConfig, buildService(), cacheStore, mockCacheManager, mockDiscoveryConfig, mockOrg, mockServerMetadata, mockUser (+5 more)
 
 ### Community 188 - "Grading Request Prompt"
 Cohesion: 0.33
@@ -1104,52 +1108,40 @@ Cohesion: 0.50
 Nodes (3): Checklist, Type of change, What & why
 
 ### Community 264 - "Skill Detail Tabs"
-Cohesion: 0.29
-Nodes (5): SkillReadinessBar(), SkillDetailView, SkillTabBarProps, Tab, TABS
+Cohesion: 0.08
+Nodes (17): DropdownMenuDivider, DropdownMenuEntry, DropdownMenuItem, DropdownMenuProps, MultiSelectComboboxProps, MultiSelectOption, DEFAULT_STATUS, SkillDetailProps (+9 more)
 
 ### Community 355 - "Rate Limit Retry"
-Cohesion: 0.36
-Nodes (5): isRateLimitError(), logger, rateLimitSleep(), withRateLimitRetry(), withTimeout()
-
-### Community 356 - "Skill Export UI"
-Cohesion: 0.36
-Nodes (6): EXPORT_FORMATS, ExportDialog(), ExportDialogProps, FORMAT_ICONS, useExport(), UseExportReturn
+Cohesion: 0.33
+Nodes (5): baseItem, mockAddToast, mockNavigate, mockToggleFavorite, mockToggleUpvote
 
 ### Community 357 - "Package Metadata"
 Cohesion: 0.29
 Nodes (6): author, description, license, name, private, version
 
 ### Community 358 - "Strands Config Schema"
-Cohesion: 0.33
-Nodes (6): configFactory(), createStrandsConfig(), LLM_PROVIDERS, resolveProvider(), StrandsConfig, StrandsConfigSchema
-
-### Community 359 - "Marketplace Submission UI"
-Cohesion: 0.29
-Nodes (3): Props, SubmitToMarketplaceModalProps, fetchSubmissionEligibility()
-
-### Community 360 - "Marketplace Sort Bar"
-Cohesion: 0.33
-Nodes (4): MarketplaceSortBar(), Props, SORT_OPTIONS, SortValue
+Cohesion: 0.50
+Nodes (4): isAtLeast(), ROLE_HIERARCHY, UserMenu(), UserMenuProps
 
 ## Knowledge Gaps
-- **1468 isolated node(s):** `$schema`, `theme`, `name`, `primary`, `light` (+1463 more)
+- **1451 isolated node(s):** `$schema`, `theme`, `name`, `primary`, `light` (+1446 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **157 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **153 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `request()` connect `Organization Settings UI` to `Version Diff Viewer`, `Admin Skill Review UI`, `CLI Listing Commands`, `Admin Analytics Dashboard`, `API Client & Security UI`, `Eval Benchmark UI`, `Analytics & Eval Charts`, `Marketplace Submission UI`, `Eval Claims & Grades UI`, `Generation & Eval Dialogs`, `Authenticated App Layout`, `Auth Context & Readiness Hooks`, `Toasts & Admin Routing`, `Taxonomy & Dropdown UI`, `Eval Viewer UI`?**
-  _High betweenness centrality (0.184) - this node is a cross-community bridge._
+- **Why does `request()` connect `Organization Settings UI` to `Admin Skill Review UI`, `CLI Listing Commands`, `Admin Analytics Dashboard`, `API Client & Security UI`, `Eval Benchmark UI`, `Skill Detail Tabs`, `Eval Claims & Grades UI`, `Generation & Eval Dialogs`, `Eval Run List Panel`, `Authenticated App Layout`, `Auth Context & Readiness Hooks`, `Run Progress & Token Modal`, `Toasts & Admin Routing`, `Non-Discriminating Help Dialog`, `Taxonomy & Dropdown UI`?**
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._
 - **Why does `createApiClient()` connect `CLI Listing Commands` to `CLI Install Command`, `CLI Login Flow`, `Organization Settings UI`, `CLI Update Command`?**
-  _High betweenness centrality (0.177) - this node is a cross-community bridge._
+  _High betweenness centrality (0.070) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `Backend Dependencies` to `Strands Transport Layer`, `Package Metadata`?**
-  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+  _High betweenness centrality (0.060) - this node is a cross-community bridge._
 - **What connects `$schema`, `theme`, `name` to the rest of the system?**
-  _1468 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1451 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `LLM Transport Port` be split into smaller, more focused modules?**
+  _Cohesion score 0.05389942788316772 - nodes in this community are weakly interconnected._
 - **Should `Admin Skill Review UI` be split into smaller, more focused modules?**
-  _Cohesion score 0.04538341158059468 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04477611940298507 - nodes in this community are weakly interconnected._
 - **Should `Skill Builder UI` be split into smaller, more focused modules?**
-  _Cohesion score 0.05502392344497608 - nodes in this community are weakly interconnected._
-- **Should `Strands Agent SDK Types` be split into smaller, more focused modules?**
-  _Cohesion score 0.02666666666666667 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06169772256728778 - nodes in this community are weakly interconnected._
