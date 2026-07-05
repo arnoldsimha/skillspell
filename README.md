@@ -8,6 +8,12 @@
 
 SkillSpell is a web platform that helps teams build high-quality AI agent skills: structured instruction sets that make Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, and other AI coding tools better at specific tasks. Describe what you need in plain English — SkillSpell generates, refines, evaluates, and distributes the skill for you.
 
+<p align="center">
+  <video src="https://github.com/arnoldsimha/skillspell/raw/main/assets/walkthrough.webm" width="820" controls muted autoplay loop playsinline>
+    <a href="https://github.com/arnoldsimha/skillspell/raw/main/assets/walkthrough.webm">▶ Watch the SkillSpell walkthrough</a> — generate, evaluate, and export an AI agent skill from plain English.
+  </video>
+</p>
+
 ---
 
 ## Why SkillSpell?
