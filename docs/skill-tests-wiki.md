@@ -685,6 +685,8 @@ The system splits your test cases into two groups:
 This split prevents **overfitting** — the skill can't be tuned to pass specific tests while failing on new ones. The test set acts as an independent validation.
 
 > **Important**: A proper blinded train/test split requires **at least 5 test cases**. With fewer than 5, the holdout would be too small to produce a meaningful score, so the loop falls back to using the **full set for both phases** — the improvement AI effectively sees every case, so the overfitting protection above does **not** apply. Add 5 or more test cases to get a genuine independent validation.
+>
+> The Test Cases tab surfaces this as a non-blocking hint when you have 1–4 cases so you know before you launch optimization that the run will be unblinded.
 
 ### Real-Time Progress
 
