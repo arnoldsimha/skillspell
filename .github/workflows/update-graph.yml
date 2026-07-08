@@ -1,0 +1,49 @@
+name: Update Knowledge Graph
+
+# Updates the project knowledge graph on merge to main.
+# The graph reflects the actual codebase architecture and is committed to the repo.
+#
+# Uses `graphify update` (AST-only re-extraction) — no LLM backend or API key
+# needed. New communities keep "Community N" placeholder names until someone
+# runs `graphify label` with an LLM backend; doc/paper/image changes require a
+# manual `graphify extract` for semantic re-extraction.
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: update-graph
+  cancel-in-progress: false
+
+jobs:
+  update-graph:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for graphify context
+
+      - name: Install graphify
+        run: pipx install graphifyy
+
+      - name: Update graph (AST-only, no LLM)
+        env:
+          GRAPHIFY_OUT: graph
+          # Full checkout — allow node-count decreases after code deletions
+          GRAPHIFY_FORCE: "1"
+        run: graphify update .
+
+      - name: Commit graph changes
+        run: |
+          if [ -n "$(git status --porcelain graph/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add graph/
+            git commit -m "chore: update knowledge graph"
+            git push
+          else
+            echo "No changes to graph"
+          fi

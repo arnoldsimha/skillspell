@@ -59,11 +59,13 @@ description: "Create test cases, grade skills, run benchmarks, and use the optim
   - [Assertion Replacement Suggestions](#assertion-replacement-suggestions)
 - [Automated Skill Optimization](#automated-skill-optimization)
   - [How the Optimization Loop Works](#how-the-optimization-loop-works)
+  - [Regression Protection](#regression-protection)
   - [Train/Test Split](#traintest-split)
   - [Real-Time Progress](#real-time-progress)
   - [Feedback Integration](#feedback-integration)
   - [Optimization Configuration](#optimization-configuration)
   - [Cost Tracking](#cost-tracking)
+  - [When Optimization Completes](#when-optimization-completes)
 - [End-to-End Workflow](#end-to-end-workflow)
 - [Glossary](#glossary)
 
@@ -144,7 +146,7 @@ To create a test case, navigate to a skill's **Tests** page and click **"Add Tes
 | **Prompt** | Yes | The input that will be sent to the AI model. This is what the model will respond to while following your skill's instructions. |
 | **Expected Output** | No | A reference answer. Used by the AI grader as comparison context — it doesn't need to be an exact match. |
 | **Assertions** | No (but recommended) | Rules that the output must satisfy. Without assertions, the test auto-passes. |
-| **Context** | No | Additional background/scenario setup for the test. This is **not** inert documentation: at run time the context is prepended to the user message, wrapped in a `<context>...</context>` block, before the prompt. The same context is included in **both** the with-skill and baseline runs, so the comparison stays fair. |
+| **Context** | No | Optional background for the scenario. At run time it is sent to the model **before the prompt** (wrapped in a `<context>...</context>` block), in both the with-skill and baseline runs — so it shapes the output, and the comparison stays fair. |
 
 ### Assertions — The Heart of Testing
 
@@ -192,7 +194,7 @@ Uses AI to determine if the output **satisfies a semantic condition**.
 |----------|---------|
 | **Value** | `"The code follows the repository pattern with clear separation of concerns"` |
 | **Passes when** | The AI grader determines the output meets the described quality criterion |
-| **Grading** | AI-powered (uses a separate Claude call) |
+| **Grading** | AI-powered (uses a separate grading call) |
 
 **When to use**: Checking qualitative aspects like code architecture, writing style, completeness, or adherence to design principles. This is the most powerful assertion type — it can evaluate things that simple text matching cannot.
 
@@ -276,7 +278,7 @@ One of the most powerful features is **baseline comparison**. When enabled (via 
 1. **With skill** — The prompt is sent with your skill as the system prompt (the normal run)
 2. **Without skill** — The same prompt is sent with **no system prompt** (the baseline)
 
-Both outputs are graded independently. This lets you answer a critical question: **"Does my skill actually improve the output compared to bare Claude?"**
+Both outputs are graded independently. This lets you answer a critical question: **"Does my skill actually improve the output compared to the model on its own?"**
 
 If an assertion passes both with and without the skill, it may be "non-discriminating" — meaning it doesn't actually test anything specific to your skill.
 
@@ -322,7 +324,7 @@ The `contains`, `not_contains`, and `regex` assertion types are evaluated **loca
 
 ### AI-Powered Grading
 
-The `semantic` and `custom` assertion types require an AI grader. The grading service sends the following to Claude:
+The `semantic` and `custom` assertion types require an AI grader. The grading service sends the following to the grading model:
 
 - The original prompt
 - The actual output
@@ -335,7 +337,7 @@ The AI grader returns:
 - **Evidence** explaining why it passed or failed
 - **Confidence score** (0–1) for its assessment
 
-Each AI grading pass makes a fresh Claude call — grading results are **not cached**, so re-running an evaluation always re-grades the output. (Prompt caching is used within a run to reduce the token cost of repeatedly sending the grader instructions and skill content, but this is a token optimization, not a results cache: the model is still invoked each time.)
+Each AI grading pass makes a fresh model call — grading results are **not cached**, so re-running an evaluation always re-grades the output. (Prompt caching reduces the token cost of re-sending the grader instructions and skill content within a run, but it's a token optimization, not a results cache: the model is still invoked each time.)
 
 ### Grading Results
 
@@ -407,7 +409,7 @@ Each run shows:
 
 ### Output Comparison Modes
 
-When baseline comparison is enabled, the Outputs tab shows the skill output and baseline output for side-by-side review. This lets you visually compare what the skill adds versus bare Claude.
+When baseline comparison is enabled, the Outputs tab shows the skill output and baseline output for side-by-side review. This lets you see at a glance what your skill adds.
 
 If baseline comparison was not enabled, you'll see a hint suggesting you turn it on: *"Run evals with the Baseline checkbox enabled to compare with-skill vs. without-skill outputs side by side."*
 
@@ -479,7 +481,7 @@ This is one of the most powerful analytical features. When you run tests with ba
 | **Broken** | Both pass rates are very low (both ≤ 5%) — the check fails in both configurations | ❌ The assertion may be testing beyond the model's capability or have an incorrect expected value |
 | **Inconclusive** | No baseline data, or the gap between pass rates is within ±10 points and neither "both high" nor "both low" applies | Run tests with baseline comparison enabled (and enough runs) to get a clearer classification |
 
-> **How the thresholds combine**: the system first checks the extremes — both pass rates ≥ 95% is **Non-Discriminating**, both ≤ 5% is **Broken**. Otherwise it looks at the delta: a with-skill lead greater than 10 points is **Skill Adds Value**, a baseline lead greater than 10 points is **Skill Hurts**. Anything else (including a difference of 10 points or less) is **Inconclusive**.
+> **How the thresholds combine**: extremes are checked first — both pass rates ≥ 95% → **Non-Discriminating**; both ≤ 5% → **Broken**. Otherwise the delta decides: with-skill leads by more than 10 points → **Skill Adds Value**; baseline leads by more than 10 → **Skill Hurts**. Everything else → **Inconclusive**.
 
 **Why this matters**: Non-discriminating assertions waste evaluation resources and give a false sense of coverage. If 5 out of 8 assertions are non-discriminating, your skill might not be as well-tested as it appears.
 
@@ -490,11 +492,11 @@ The benchmark system automatically generates **human-readable observations** abo
 1. **Non-discriminating assertions** — Identifies assertions that pass regardless of skill
 2. **Skill-hurts assertions** — Flags assertions that perform worse with the skill
 3. **Broken assertions** — Flags assertions that fail everywhere
-4. **High variance in pass rate** — Alerts to flaky or inconsistent tests
-5. **Score variance** — Highlights when runs score inconsistently
-6. **Consistently hard/easy cases** — Identifies test cases that always fail or always pass
-7. **Duration/token tradeoffs** — Notes if the skill adds significant processing time
-8. **Statistical outliers** — Flags runs that are more than 2 standard deviations from the mean
+4. **High variance in pass rate** — Alerts to flaky or inconsistent tests (fires when pass-rate standard deviation exceeds **20 points**)
+5. **Score variance** — Highlights when runs score inconsistently (fires when score standard deviation exceeds **15 points**)
+6. **Consistently hard/easy cases** — Flags a case as *hard* when its pass rate is **below 30%** with **at least 2 runs**; the *easy* note appears only when **every** case passes **100%** of the time
+7. **Duration/token tradeoffs** — Notes when the skill runs meaningfully slower (with-skill duration more than **2×** baseline) or uses more tokens (more than **1.5×** baseline)
+8. **Statistical outliers** — Flags runs more than 2 standard deviations from the mean (requires **at least 3 runs** to compute)
 
 These notes appear as cards at the bottom of the benchmark tab, providing actionable insights without requiring you to interpret raw statistics.
 
@@ -508,11 +510,13 @@ Each iteration shows:
 - **Win/loss/tie** compared to the previous iteration
 - **Delta** — how much the pass rate and score changed
 
+The **win/loss/tie** verdict uses a **±1 point** threshold on *either* the pass rate or the average score: it's a **win** if pass rate or score rose by more than 1 point, a **loss** if either fell by more than 1 point, and a **tie** otherwise (both changes within ±1).
+
 ```
 Iteration 1 (v1) — 60% pass rate, score 72     [Baseline]
 Iteration 2 (v2) — 75% pass rate, score 85     [Won: +15%, +13]
-Iteration 3 (v3) — 73% pass rate, score 84     [Tied: -2%, -1]
-Iteration 4 (v4) — 90% pass rate, score 93     [Won: +17%, +9]
+Iteration 3 (v3) — 74% pass rate, score 84     [Tied: -1%, -1]
+Iteration 4 (v4) — 90% pass rate, score 93     [Won: +16%, +9]
 ```
 
 This timeline makes it easy to see if your changes are actually improving the skill.
@@ -552,10 +556,12 @@ After reviewing a test run's output, you can provide feedback:
 
 ### Suggested Fixes
 
-When you provide a suggested fix with your feedback, it gets stored alongside the run data. This information is later used by:
+When you provide a suggested fix with your feedback, it gets stored alongside the run data. It is later fed into skill improvement through the **automated optimization loop**:
 
-- The **"Improve from Feedback"** feature — which reads all negative/neutral feedback and attempts to fix the skill automatically
-- The **automated optimization loop** — which optionally includes user feedback in its first improvement iteration
+- Enabling the **"Include feedback"** option (surfaced in the UI as **"Improve from Feedback"**) gathers all negative/neutral feedback and failed/partial runs and injects them into the loop's **first** improvement iteration.
+- Subsequent iterations use only fresh eval failures from the current loop.
+
+> **Note**: "Improve from Feedback" is not a separate one-shot action — it is the same optimization loop described below, run with the feedback option turned on. Feedback influences skill improvement only through this loop.
 
 ---
 
@@ -665,6 +671,10 @@ Each iteration goes through these steps:
 5. **Run test evals** — Execute the test set (never shown to the improvement AI) to measure real improvement
 6. **Save and compare** — Record scores and determine if this iteration is better than previous ones
 
+### Regression Protection
+
+The loop keeps the **best-scoring draft** it has seen, not the most recent one. If an iteration's test score drops below the best so far, you'll see a **"Regression detected"** notice and the loop reverts to the best draft before continuing. A worse iteration can never overwrite a better one.
+
 ### Train/Test Split
 
 The system splits your test cases into two groups:
@@ -674,13 +684,13 @@ The system splits your test cases into two groups:
 
 This split prevents **overfitting** — the skill can't be tuned to pass specific tests while failing on new ones. The test set acts as an independent validation.
 
-> **Important**: You need at least 3 test cases for this feature (2 for training, 1 for testing).
+> **Important**: A proper blinded train/test split requires **at least 5 test cases**. With fewer than 5, the holdout would be too small to produce a meaningful score, so the loop falls back to using the **full set for both phases** — the improvement AI effectively sees every case, so the overfitting protection above does **not** apply. Add 5 or more test cases to get a genuine independent validation.
 
 ### Real-Time Progress
 
-The optimization loop streams progress events in real time via Server-Sent Events (SSE). You'll see:
+The optimization loop streams progress live to your browser. You'll see:
 
-- Which step is currently executing (running train evals, analyzing, improving, running test evals)
+- Which step is running (train evals → analyzing → improving → test evals)
 - Train/test pass counts and scores as they complete
 - Accumulated cost
 - Duration per iteration
@@ -699,9 +709,14 @@ This ensures that user knowledge captured through the feedback system is incorpo
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| **Max Iterations** | 3 | Maximum number of improve → eval cycles |
-| **Target Pass Rate** | 100% | Stop early if the training pass rate reaches this threshold |
-| **Include Feedback** | Off | Whether to include user feedback in the first iteration |
+| **Max Iterations** | 3 | Maximum number of improve → eval cycles (1–5) |
+| **Target Pass Rate** | 100% | Stop early when the **test** (holdout) pass rate reaches this threshold **and** the result is stable — see note below |
+| **Include Feedback** | On when you have negative feedback, otherwise off | Whether to include user feedback in the first iteration |
+
+> **Notes**:
+> - Optimization requires at least **3 test cases** to start, and at least **5** for a blinded train/test split (see above).
+> - If you include feedback with Max Iterations set to 1, the loop automatically runs 2 iterations — one to apply the feedback, one to measure the result.
+> - **Early stopping**: the loop stops when the **test** pass rate (not the training pass rate) reaches the target — but not on the very iteration that sets a new best score. It runs one more iteration to confirm the gain holds before stopping. It also stops on a detected plateau.
 
 ### Cost Tracking
 
@@ -722,7 +737,9 @@ After the loop finishes (either by reaching the target pass rate, hitting the ma
 3. Shows the improvement delta (how much better the best iteration is vs. the starting point)
 4. Lets you **approve** the improved skill or discard it
 
-A plateau is detected when the test score shows no improvement across a 3-iteration window (this requires at least 3 completed iterations): the loop compares the newest iteration's test score to the one from two iterations earlier, and if the newest is no higher, it stops — at that point, further iterations are unlikely to help.
+> **If no iteration beats the starting score**, there is nothing to apply — you'll see a message that your skill is already performing well against its current tests. Keep in mind that with a small test suite this can also mean the holdout was too small to register the change. Adding more test cases (or fixing coverage gaps when prompted) gives the loop more room to demonstrate improvement.
+
+A **plateau** means the test score hasn't improved across the last 3 iterations (the newest score is no higher than the score from two iterations earlier). At that point, further iterations are unlikely to help, so the loop stops.
 
 ---
 
@@ -796,6 +813,7 @@ Repeat steps 3–7 until you're satisfied with the skill's performance. The iter
 | **Non-discriminating** | An assertion that passes both with and without the skill — it doesn't test skill-specific behavior |
 | **Optimization loop** | The automated process of iteratively improving a skill based on test failures |
 | **Pass rate** | The percentage of test runs where all assertions passed |
+| **Regression protection** | During optimization, the loop reverts to the best draft whenever a new iteration scores worse on the test set |
 | **Score** | A 0–100 value representing the percentage of individual assertions that passed in a single run |
 | **Self-critique** | The AI grader's meta-analysis of the test suite quality, suggesting improvements to assertions |
 | **Semantic assertion** | An assertion type evaluated by AI to check qualitative or meaning-based criteria |

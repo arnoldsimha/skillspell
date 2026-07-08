@@ -20,6 +20,15 @@ export interface SkillOptimizationConfig {
   evalModel?: 'main' | 'light';
 }
 
+/**
+ * Minimum number of eval cases required for a blinded train/test split during
+ * optimization. Below this, the holdout would be too small to produce a
+ * meaningful score, so the loop falls back to running unblinded on the full set
+ * (weakening its protection against overfitting). Single source of truth shared
+ * by the backend split logic and the frontend "add more cases" hint.
+ */
+export const MIN_EVAL_CASES_FOR_BLINDED_SPLIT = 5;
+
 // ── Iteration State ────────────────────────────────────────────────────
 
 /** Sub-step labels within a single iteration. */

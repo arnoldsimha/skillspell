@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v4
         with:
@@ -19,6 +19,31 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # The committed package-lock.json was generated on macOS, so it records
+      # only the *darwin* variants of every native optional dep. npm won't add
+      # optionals absent from the lockfile (npm/cli#4828), and regenerating the
+      # lockfile bumps pinned versions into peer-dep conflicts — so `npm ci`
+      # leaves the ubuntu runner without any Linux native binaries and the build
+      # fails with MODULE_NOT_FOUND (on main and every PR, Dependabot included).
+      # Install the Linux (x64-gnu) binaries the runner needs, each pinned to its
+      # already-installed parent's version (napi platform packages are versioned
+      # in lockstep). Covers frontend build (rolldown, lightningcss,
+      # @tailwindcss/oxide, esbuild, rollup), backend (@swc/core) and lint
+      # (unrs-resolver). Runner is always ubuntu-latest = linux-x64-gnu.
+      # Long-term fix: commit a multi-platform lockfile.
+      - name: Install Linux native binaries missing from the macOS lockfile
+        run: |
+          set -eu
+          ver() { node -p "require('./node_modules/$1/package.json').version"; }
+          npm install --no-save --no-audit --no-fund \
+            "@rolldown/binding-linux-x64-gnu@$(ver rolldown)" \
+            "lightningcss-linux-x64-gnu@$(ver lightningcss)" \
+            "@tailwindcss/oxide-linux-x64-gnu@$(ver @tailwindcss/oxide)" \
+            "@esbuild/linux-x64@$(ver esbuild)" \
+            "@rollup/rollup-linux-x64-gnu@$(ver rollup)" \
+            "@swc/core-linux-x64-gnu@$(ver @swc/core)" \
+            "@unrs/resolver-binding-linux-x64-gnu@$(ver unrs-resolver)"
 
       - name: Build
         run: npm run build

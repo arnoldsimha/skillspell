@@ -1,0 +1,85 @@
+name: Release CLI
+
+# Publishes @skillspell/cli when CLI changes land on main.
+# Versioning is explicit: bump packages/cli/package.json in your PR
+# (`npm version patch|minor|major` from packages/cli). On merge, this
+# workflow publishes ONLY if that version isn't already on npm — so a
+# CLI change without a bump is a safe no-op, and there's never a 403
+# from publishing over an existing version.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/cli/**'
+      - '.github/workflows/release-cli.yml'
+
+concurrency:
+  group: release-cli
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write        # required for OIDC trusted publishing + provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+          cache: npm
+
+      # OIDC trusted publishing requires npm >= 11.5.1; Node 20 ships npm 10.x.
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
+
+      - name: Check whether this version is already published
+        id: check
+        run: |
+          set -eu
+          LOCAL=$(node -p "require('./packages/cli/package.json').version")
+          PUBLISHED=$(npm view @skillspell/cli version 2>/dev/null || echo "none")
+          echo "local=$LOCAL"
+          echo "published=$PUBLISHED"
+          if [ "$LOCAL" = "$PUBLISHED" ]; then
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::@skillspell/cli@$LOCAL already published — nothing to do. Bump the version in packages/cli to release."
+          else
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Publishing @skillspell/cli@$LOCAL (registry has $PUBLISHED)."
+          fi
+
+      - name: Install dependencies
+        if: steps.check.outputs.should_publish == 'true'
+        run: npm ci
+
+      # The committed package-lock.json is macOS-only (see ci.yml), so the
+      # Linux native binaries the CLI build (esbuild, via tsup) and tests
+      # (@swc/core, via jest) need are absent on the ubuntu runner. Install
+      # them pinned to their already-installed parent's version.
+      - name: Install Linux native binaries missing from the macOS lockfile
+        if: steps.check.outputs.should_publish == 'true'
+        run: |
+          set -eu
+          ver() { node -p "require('./node_modules/$1/package.json').version"; }
+          npm install --no-save --no-audit --no-fund \
+            "@esbuild/linux-x64@$(ver esbuild)" \
+            "@swc/core-linux-x64-gnu@$(ver @swc/core)"
+
+      - name: Build
+        if: steps.check.outputs.should_publish == 'true'
+        run: npm run build -w @skillspell/cli
+
+      - name: Test
+        if: steps.check.outputs.should_publish == 'true'
+        run: npm test -w @skillspell/cli
+
+      # npm >= 11.5.1 auto-detects OIDC when id-token: write is present, so no
+      # NODE_AUTH_TOKEN is needed and provenance is attached automatically.
+      - name: Publish to npm
+        if: steps.check.outputs.should_publish == 'true'
+        run: npm publish -w @skillspell/cli

@@ -13,6 +13,7 @@ import { TriggerEvaluatorService } from './description-optimizer/trigger-evaluat
 import { DescriptionOptimizerService } from './description-optimizer/description-optimizer.service.js';
 import { DescriptionOptimizerController } from './description-optimizer/description-optimizer.controller.js';
 import { LlmModule } from './llm/llm.module.js';
+import { OwnershipModule } from '../ownership/ownership.module.js';
 
 /**
  * Generation module — handles LLM-based skill generation and refinement.
@@ -24,7 +25,9 @@ import { LlmModule } from './llm/llm.module.js';
  * work across multiple server instances and survive container restarts.
  *
  * Ownership is enforced at the route level by the global SkillOwnerGuard
- * (via @CheckOwnership decorator) — no OwnershipModule import needed.
+ * (via @CheckOwnership decorator). The /suggestions route takes skillId in the
+ * request body rather than a route param, so it enforces ownership
+ * programmatically via OwnershipService (hence the OwnershipModule import).
  *
  * Provides:
  * - PromptLoaderService: loads prompt templates from .md files at startup
@@ -37,7 +40,7 @@ import { LlmModule } from './llm/llm.module.js';
  * - GenerationController: REST endpoints for generation and refinement
  */
 @Module({
-  imports: [ConfigModule, LlmModule],
+  imports: [ConfigModule, LlmModule, OwnershipModule],
   controllers: [GenerationController, DescriptionOptimizerController],
   providers: [
     SseService,
