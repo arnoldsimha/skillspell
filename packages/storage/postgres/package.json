@@ -17,7 +17,7 @@
     "docker:down": "docker compose -f ../../docker/docker-compose.yml down"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.27",
+    "@nestjs/common": "^11.1.28",
     "@nestjs/typeorm": "^11.0.0",
     "dotenv": "^17.3.1",
     "typeorm": "^0.3.20",
