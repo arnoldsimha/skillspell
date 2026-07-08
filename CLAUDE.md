@@ -2,7 +2,7 @@
 
 **SkillSpell**
 
-SkillSpell is a full-stack web platform for creating, refining, evaluating, and exporting AI agent skills powered by Anthropic Claude. Teams use it to build reusable Claude Code skills — structured instruction sets that make Claude better at specific tasks — through an iterative generate → test → optimize loop.
+SkillSpell is a full-stack web platform for creating, refining, evaluating, and exporting AI agent skills powered by Anthropic Claude. Teams use it to build reusable AI agent skills — structured instruction sets for Claude models — through an iterative generate → test → optimize loop. Skills export to multiple IDE tools: Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code.
 
 **Core Value:** Skills that actually work: the evaluation and optimization loop must surface real quality signals and improve skills reliably. Everything else serves this.
 

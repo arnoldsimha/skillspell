@@ -6,7 +6,7 @@
 
 **Create, refine, and manage AI agent skills using natural language — no CLI required.**
 
-SkillSpell is a web platform that helps teams build high-quality AI agent skills: structured instruction sets that make Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, and other AI coding tools better at specific tasks. Describe what you need in plain English — SkillSpell generates, refines, evaluates, and distributes the skill for you.
+SkillSpell is a web platform that helps teams build high-quality AI agent skills: structured instruction sets for Claude. Describe what you need in plain English — SkillSpell generates, refines, evaluates, and distributes the skill. Deploy to any AI coding assistant.
 
 <p align="center">
   <video src="https://github.com/arnoldsimha/skillspell/raw/main/assets/walkthrough.webm" width="820" controls muted autoplay loop playsinline>
@@ -45,7 +45,7 @@ SkillSpell is a web platform that helps teams build high-quality AI agent skills
 - 📊 **Eval System** — create test cases, run evaluations, get automated grading & benchmarks
 - 📈 **Smart Suggestions** — AI recommends improvements based on your skill content
 - ⚡ **Draft Optimization** — AI analyzes and suggests optimizations before you commit
-- 📦 **Multi-Format Export** — export as Claude Code, Cursor, Windsurf, GitHub Copilot, or Roo Code format
+- 📦 **Multi-Format Export** — export your AI agent skill to Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, or other formats
 - 🔀 **Version History** — full version snapshots with diff viewer and benchmark tracking
 - 🏢 **Organizations & SSO** — multi-tenant with SAML and OIDC SSO, role-based access (owner/admin/user)
 - 📧 **Email Invitations** — invite team members with configurable SMTP
@@ -81,7 +81,7 @@ skillspell update my-skill
 skillspell uninstall my-skill
 ```
 
-Install targets supported: Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code.
+Install targets supported: Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code (export your AI agent skill to any tool).
 
 ---
 

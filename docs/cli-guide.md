@@ -5,7 +5,7 @@ description: "Install and manage SkillSpell skills from your terminal with @skil
 
 # SkillSpell CLI Guide
 
-The `skillspell` CLI lets you browse, install, update, and remove AI agent skills from the SkillSpell registry into your local coding environment. Skills are installed as instruction files that your AI coding tool (Claude Code, Cursor, Windsurf, GitHub Copilot, or Roo Code) reads automatically.
+The `skillspell` CLI lets you browse, install, update, and remove AI agent skills from the SkillSpell registry into your local coding environment. Skills are installed as instruction files for your AI coding tool to read — compatible with Claude Code, Cursor, Windsurf, GitHub Copilot, Roo Code, and others.
 
 > **Audience**: Developers who want to install published SkillSpell skills into their local environment, or automate skill management in CI pipelines.
 
