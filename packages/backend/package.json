@@ -68,7 +68,7 @@
     "nest-winston": "1.10.2",
     "nestjs-cls": "^6.2.0",
     "nestjs-otel": "^8.0.2",
-    "nodemailer": "^8.0.5",
+    "nodemailer": "^9.0.3",
     "openai": "^6.45.0",
     "openid-client": "6.8.4",
     "passport": "^0.7.0",
