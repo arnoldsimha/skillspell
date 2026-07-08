@@ -54,13 +54,13 @@
     "open": "^11.0.0"
   },
   "devDependencies": {
-    "@swc/core": "^1.15.26",
+    "@swc/core": "^1.15.43",
     "@swc/jest": "^0.2.39",
-    "@types/diff": "^7.0.2",
+    "@types/diff": "^8.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "^26.1.1",
     "jest": "^30.0.0",
     "tsup": "8.5.1",
-    "typescript": "^5.7.3"
+    "typescript": "^6.0.3"
   }
 }
