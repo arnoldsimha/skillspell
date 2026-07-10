@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -26,6 +25,7 @@ import { OidcAuthService } from './strategies/oidc.strategy.js';
 import { CliAuthService } from './cli-auth.service.js';
 import { Public } from './decorators/public.decorator.js';
 import { setRefreshTokenCookie } from './cookie.utils.js';
+import { assertLoopbackCliRedirect } from './cli-redirect.util.js';
 
 /**
  * OIDC SSO controller.
@@ -102,9 +102,10 @@ export class OidcController {
     const { cli_redirect: cliRedirect, cli_code_verifier: cliCodeVerifier } = body;
     this.logger.log(`OIDC CLI login initiated: cli_redirect=${cliRedirect ?? 'none'}`);
 
-    // Only localhost cli_redirect accepted
-    if (cliRedirect !== undefined && !cliRedirect.startsWith('http://localhost:')) {
-      throw new BadRequestException('cli_redirect must target localhost only');
+    // Only loopback cli_redirect accepted. Parse the URL and check the real
+    // hostname — a prefix check is bypassable via userinfo (localhost:x@evil.com).
+    if (cliRedirect !== undefined) {
+      assertLoopbackCliRedirect(cliRedirect);
     }
 
     // Only active OIDC protocol allowed
@@ -173,7 +174,17 @@ export class OidcController {
       const { accessToken, refreshToken } = tokenPair;
 
       if (pendingState.cliRedirect) {
-        // CLI flow — generate one-time code, redirect to cli_redirect
+        // CLI flow — generate one-time code, redirect to cli_redirect.
+        // Defense in depth: re-validate the stored redirect before leaking the
+        // code to it, even though oidcLoginCli already checked it at issue time.
+        try {
+          assertLoopbackCliRedirect(pendingState.cliRedirect);
+        } catch {
+          this.logger.warn('OIDC callback: stored cli_redirect failed re-validation — rejecting');
+          res.redirect(`${frontendBaseUrl}/sso-callback#error=invalid_redirect`);
+          return;
+        }
+
         const code = randomBytes(32).toString('hex');
         await this.cliAuthService.storeCliCode(code, {
           userId: result.user.id,

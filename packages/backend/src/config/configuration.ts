@@ -121,6 +121,13 @@ export const envSchema = z.object({
   // Server
   PORT: z.coerce.number().int().positive().default(3000),
   PORTLESS_URL: z.string().optional(),
+  /**
+   * Number of trusted reverse-proxy hops in front of the app (Express `trust proxy`).
+   * Required for the rate limiter to key on the real client IP rather than the
+   * proxy's. Default 1 = trust the immediate proxy (typical single ingress/LB).
+   * Set to the actual hop count for your topology; 0 disables proxy trust.
+   */
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).default(1),
 
   // Debug: dump full prompts to disk before sending to the LLM provider (dev only)
   DEBUG_DUMP_PROMPTS: z

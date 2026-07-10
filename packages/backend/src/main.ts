@@ -42,6 +42,16 @@ async function bootstrap() {
   // Register HTTPS redirect before NestJS initializes so it runs ahead of
   // ServeStaticModule's express.static middleware (which is added during AppModule init).
   const server = express();
+
+  // Trust the reverse proxy/LB so `req.ip` reflects the real client (via
+  // X-Forwarded-For) instead of the proxy address. Without this the rate limiter
+  // buckets every request under one IP — a global DoS and useless brute-force
+  // protection. Hop count is deployment-specific; default 1 = one proxy.
+  const trustProxyHops = Number(process.env.TRUST_PROXY_HOPS ?? 1);
+  if (Number.isFinite(trustProxyHops) && trustProxyHops > 0) {
+    server.set('trust proxy', trustProxyHops);
+  }
+
   if (process.env.NODE_ENV === 'production') {
     server.use(httpsRedirectMiddleware);
   }

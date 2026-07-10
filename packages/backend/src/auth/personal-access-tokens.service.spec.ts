@@ -12,6 +12,7 @@ const mockPatRepo: jest.Mocked<IPersonalAccessTokenRepository> = {
   findByUserId: jest.fn(),
   findById: jest.fn(),
   revoke: jest.fn(),
+  revokeAllByUserId: jest.fn(),
   updateLastUsedAt: jest.fn(),
 };
 

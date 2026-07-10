@@ -17,6 +17,8 @@ import {
   type ICredentialRepository,
   AUTH_TOKEN_REPOSITORY,
   type IAuthTokenRepository,
+  PAT_REPOSITORY,
+  type IPersonalAccessTokenRepository,
   ORGANIZATION_REPOSITORY,
   type IOrganizationRepository,
   type User,
@@ -41,6 +43,13 @@ export class AuthService {
   private readonly passwordMinLength: number;
   private readonly lockoutThreshold: number;
   private readonly lockoutDurationMinutes: number;
+  /**
+   * A throwaway bcrypt hash used to equalize timing on the user-not-found login
+   * path. Comparing against it costs ~the same as a real password check, so an
+   * attacker cannot distinguish "no such user" from "wrong password" by response
+   * time (user enumeration). Computed once with the configured cost factor.
+   */
+  private readonly dummyPasswordHash: string;
 
   constructor(
     private readonly configService: ConfigService<AppConfig, true>,
@@ -51,6 +60,8 @@ export class AuthService {
     private readonly credentialRepo: ICredentialRepository,
     @Inject(AUTH_TOKEN_REPOSITORY)
     private readonly authTokenRepo: IAuthTokenRepository,
+    @Inject(PAT_REPOSITORY)
+    private readonly patRepo: IPersonalAccessTokenRepository,
     @Inject(ORGANIZATION_REPOSITORY)
     private readonly orgRepo: IOrganizationRepository,
   ) {
@@ -59,6 +70,7 @@ export class AuthService {
     this.passwordMinLength = authConfig.passwordMinLength;
     this.lockoutThreshold = authConfig.lockoutThreshold;
     this.lockoutDurationMinutes = authConfig.lockoutDurationMinutes;
+    this.dummyPasswordHash = bcrypt.hashSync('timing-equalizer-not-a-secret', this.bcryptRounds);
   }
 
   /**
@@ -78,6 +90,9 @@ export class AuthService {
     const user = await this.userRepo.findByEmail(email.toLowerCase().trim());
 
     if (!user) {
+      // Equalize timing with the wrong-password path (which runs bcrypt.compare)
+      // so response time does not reveal whether the email exists.
+      await bcrypt.compare(password, this.dummyPasswordHash);
       throw new UnauthorizedException('Invalid email or password');
     }
 
@@ -418,6 +433,11 @@ export class AuthService {
     // Revoke all refresh tokens — forces re-login on all devices.
     // This prevents a stolen refresh token from being used after a password change.
     await this.authTokenRepo.revokeAllRefreshTokens(userId);
+
+    // Also revoke all personal access tokens. A password change is the user's
+    // lever to cut off a suspected compromise; leaving long-lived PATs valid
+    // would let an attacker retain read access for up to a year.
+    await this.patRepo.revokeAllByUserId(userId);
   }
 
   /**

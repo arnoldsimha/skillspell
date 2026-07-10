@@ -177,16 +177,21 @@ describe('PatStrategy', () => {
 // ---------------------------------------------------------------------------
 // JwtAuthGuard — PAT read-only scope enforcement
 //
-// PATs are read-only: GET requests are allowed on any route,
-// POST/PUT/PATCH/DELETE are blocked with 403 Forbidden.
+// PATs are read-only AND limited to the CLI route allowlist: GET requests on
+// allowlisted routes are permitted; POST/PUT/PATCH/DELETE and off-allowlist
+// routes are blocked with 403 Forbidden.
 // ---------------------------------------------------------------------------
 
 describe('JwtAuthGuard — PAT read-only scope enforcement', () => {
   let guard: JwtAuthGuard;
   let superHandleRequestSpy: jest.SpyInstance;
 
-  function makeContext(method: string, patAuthenticated = false): ExecutionContext {
-    const request = { method, _patAuthenticated: patAuthenticated, headers: {} };
+  function makeContext(
+    method: string,
+    patAuthenticated = false,
+    path = '/api/public/skills',
+  ): ExecutionContext {
+    const request = { method, path, _patAuthenticated: patAuthenticated, headers: {} };
     return {
       switchToHttp: () => ({ getRequest: () => request }),
       getHandler: () => jest.fn(),
@@ -207,8 +212,14 @@ describe('JwtAuthGuard — PAT read-only scope enforcement', () => {
 
   afterEach(() => superHandleRequestSpy.mockRestore());
 
-  it('allows PAT GET requests', () => {
+  it('allows PAT GET requests on allowlisted routes', () => {
     expect(() => guard.handleRequest(null, mockUser, null, makeContext('GET', true))).not.toThrow();
+  });
+
+  it('blocks PAT GET requests on off-allowlist routes', () => {
+    expect(() =>
+      guard.handleRequest(null, mockUser, null, makeContext('GET', true, '/api/admin/users')),
+    ).toThrow(ForbiddenException);
   });
 
   it('blocks PAT POST requests', () => {

@@ -24,6 +24,12 @@ export interface IPersonalAccessTokenRepository {
    */
   revoke(id: string, userId: string): Promise<void>;
   /**
+   * Revoke every active (non-revoked) PAT for a user in one operation.
+   * Used on password change so a reset severs attacker persistence via stolen PATs.
+   * Returns the number of tokens revoked. Idempotent — revoking zero tokens is fine.
+   */
+  revokeAllByUserId(userId: string): Promise<number>;
+  /**
    * Update lastUsedAt to now. Called non-blocking after successful PAT authentication.
    * Should not throw — errors are caught and logged by the caller (D-06).
    */
