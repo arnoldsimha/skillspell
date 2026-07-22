@@ -40,8 +40,8 @@
     "docker:prod:down": "docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml --profile app down"
   },
   "devDependencies": {
-    "concurrently": "^9.0.0",
-    "portless": "^0.7.2"
+    "concurrently": "^10.0.3",
+    "portless": "^0.15.4"
   },
   "overrides": {
     "@angular-devkit/core": {
